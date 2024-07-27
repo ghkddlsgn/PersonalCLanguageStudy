@@ -1,0 +1,5 @@
+﻿  Study.cpp
+E:\Program\PersonalCLanguageStudy\CStudySolution\Project1\Study.cpp(14,36): warning C4474: 'scanf_s' : too many arguments passed for format string
+E:\Program\PersonalCLanguageStudy\CStudySolution\Project1\Study.cpp(14,36): message : placeholders and their parameters expect 1 variadic arguments, but 2 were provided
+E:\Program\PersonalCLanguageStudy\CStudySolution\Project1\Study.cpp(47,15): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  Project1.vcxproj -> E:\Program\PersonalCLanguageStudy\CStudySolution\x64\Debug\Project1.exe
