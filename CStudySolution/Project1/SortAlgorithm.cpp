@@ -13,27 +13,40 @@ void SelectSort(int arr[], int length, bool MinToMax)
 {
 	if (arr == NULL || length <= 0)
 	{
-		printf("\nError : Invalied array param in function SelectSort");
+		printf("\nError : Invalid array param in function SelectSort");
 		return;
 	}
-	for (int i = 0; i < length - 1; i++)
+	if (length == 1)
 	{
-		for (int j = i; j < length; j++)
+		printf("array length is 1, no need to sort");
+	}
+
+	int i,j;
+	int TargetIndex = 0;
+	
+	for (i = 0; i < length - 1; i++)
+	{
+		TargetIndex = i;
+		for (j = i+1; j < length; j++)
 		{
-			if (MinToMax == false)
+			if (MinToMax == true)
 			{
-				if (arr[i] < arr[j])
+				if (arr[TargetIndex] > arr[j])
 				{
-					SimpleIntSwap(&i, &j);
+					TargetIndex = j; //Store Minimum value's Index
 				}
 			}
 			else
 			{
-				SimpleIntSwap(&i, &j);
+				if (arr[TargetIndex] < arr[j])
+				{
+					TargetIndex = j; //Store Maximum value's Index
+				}
 			}
 		}
+		SimpleIntSwap(&arr[TargetIndex], &arr[i]);
 	}
-
+	
 	return;
 }
 
