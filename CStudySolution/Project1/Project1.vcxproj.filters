@@ -18,5 +18,11 @@
     <ClCompile Include="Study.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SortAlgorithm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SortAlgorithm.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

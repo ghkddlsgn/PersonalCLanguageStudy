@@ -127,6 +127,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SortAlgorithm.h" />
+    <ClCompile Include="SortAlgorithm.cpp" />
     <ClCompile Include="Study.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

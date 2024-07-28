@@ -1,0 +1,77 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Program\\PersonalCLanguageStudy\\CStudySolution\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B934F302-F320-4769-AE38-222618B662CC}|Project1\\Project1.vcxproj|C:\\Program\\PersonalCLanguageStudy\\CStudySolution\\Project1\\SortAlgorithm.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B934F302-F320-4769-AE38-222618B662CC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\SortAlgorithm.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B934F302-F320-4769-AE38-222618B662CC}|Project1\\Project1.vcxproj|C:\\Program\\PersonalCLanguageStudy\\CStudySolution\\Project1\\Study.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B934F302-F320-4769-AE38-222618B662CC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Study.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B934F302-F320-4769-AE38-222618B662CC}|Project1\\Project1.vcxproj|C:\\Program\\PersonalCLanguageStudy\\CStudySolution\\Project1\\SortAlgorithm.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B934F302-F320-4769-AE38-222618B662CC}|Project1\\Project1.vcxproj|solutionrelative:Project1\\SortAlgorithm.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 299,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SortAlgorithm.h",
+              "DocumentMoniker": "C:\\Program\\PersonalCLanguageStudy\\CStudySolution\\Project1\\SortAlgorithm.h",
+              "RelativeDocumentMoniker": "Project1\\SortAlgorithm.h",
+              "ToolTip": "C:\\Program\\PersonalCLanguageStudy\\CStudySolution\\Project1\\SortAlgorithm.h",
+              "RelativeToolTip": "Project1\\SortAlgorithm.h",
+              "ViewState": "AQIAAAQAAAAAAAAAAAAowDsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-07-27T14:41:45.784Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 301,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Study.cpp",
+              "DocumentMoniker": "C:\\Program\\PersonalCLanguageStudy\\CStudySolution\\Project1\\Study.cpp",
+              "RelativeDocumentMoniker": "Project1\\Study.cpp",
+              "ToolTip": "C:\\Program\\PersonalCLanguageStudy\\CStudySolution\\Project1\\Study.cpp",
+              "RelativeToolTip": "Project1\\Study.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-07-27T14:08:25.631Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SortAlgorithm.cpp",
+              "DocumentMoniker": "C:\\Program\\PersonalCLanguageStudy\\CStudySolution\\Project1\\SortAlgorithm.cpp",
+              "RelativeDocumentMoniker": "Project1\\SortAlgorithm.cpp",
+              "ToolTip": "C:\\Program\\PersonalCLanguageStudy\\CStudySolution\\Project1\\SortAlgorithm.cpp",
+              "RelativeToolTip": "Project1\\SortAlgorithm.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAEAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-07-27T14:19:21.321Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

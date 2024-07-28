@@ -1,5 +1,6 @@
-﻿  Study.cpp
-E:\Program\PersonalCLanguageStudy\CStudySolution\Project1\Study.cpp(14,36): warning C4474: 'scanf_s' : too many arguments passed for format string
-E:\Program\PersonalCLanguageStudy\CStudySolution\Project1\Study.cpp(14,36): message : placeholders and their parameters expect 1 variadic arguments, but 2 were provided
-E:\Program\PersonalCLanguageStudy\CStudySolution\Project1\Study.cpp(47,15): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  Project1.vcxproj -> E:\Program\PersonalCLanguageStudy\CStudySolution\x64\Debug\Project1.exe
+﻿  SortAlgorithm.h
+x64\Debug\SortAlgorithm.obj : warning LNK4042: object specified more than once; extras ignored
+Study.obj : error LNK2005: "void __cdecl PrintIntArray(int * const,int)" (?PrintIntArray@@YAXQEAHH@Z) already defined in SortAlgorithm.obj
+Study.obj : error LNK2005: "void __cdecl SelectSort(int * const,int,bool)" (?SelectSort@@YAXQEAHH_N@Z) already defined in SortAlgorithm.obj
+Study.obj : error LNK2005: "void __cdecl SimpleIntSwap(int *,int *)" (?SimpleIntSwap@@YAXPEAH0@Z) already defined in SortAlgorithm.obj
+C:\Program\PersonalCLanguageStudy\CStudySolution\x64\Debug\Project1.exe : fatal error LNK1169: one or more multiply defined symbols found
