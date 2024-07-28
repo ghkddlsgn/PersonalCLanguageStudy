@@ -23,6 +23,7 @@ void SelectSort(int arr[], int length, bool MinToMax)
 
 	int i,j;
 	int TargetIndex = 0;
+
 	
 	for (i = 0; i < length - 1; i++)
 	{

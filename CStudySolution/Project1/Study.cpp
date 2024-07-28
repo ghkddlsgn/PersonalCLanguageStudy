@@ -1,14 +1,37 @@
 #include <stdio.h>
-#include "SortAlgorithm.h"
+#include <stdarg.h>
 
-#define ARRAY_LENGTH(x) {sizeof(x)/sizeof(int)}
+double my_sum(const char* format, ...)
+{
+    va_list fp;
+    va_start(fp, format);
+    double sum = 0;
+    
+    while(*format)
+    {
+        if (*format == 'd')
+        {
+            sum += va_arg(fp, int); 
+        }
+        else if (*format == 'f')
+        {
+            sum += va_arg(fp, double);
+        }
+
+        format++;
+    }
+
+    va_end(fp);
+    return sum;
+}
 
 int main()
 {
-	int IntArray[] = {2,6,3,7,5,4,7,7,4,9};
-	
-	SelectSort(IntArray, ARRAY_LENGTH(IntArray), false);
-	PrintIntArray(IntArray, ARRAY_LENGTH(IntArray));
+    double res;
 
-	return 0;
+    res = my_sum("%d %d %d %f", 32, 60, 54, 35.2);
+    printf("%f", res);
+
+    return 0;
+    
 }
