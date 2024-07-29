@@ -1,9 +1,10 @@
-#include <stdio.h>
+#include <iostream>
 #include "SortAlgorithm.h"
 
-void SimpleIntSwap(int* a, int* b)
+template <typename T>
+inline void SimpleSwap(T* a, T* b)
 {
-	int temp;
+	T temp;
 	temp = *a;
 	*a = *b;
 	*b = temp;
@@ -13,12 +14,12 @@ void SelectSort(int arr[], int length, bool MinToMax)
 {
 	if (arr == NULL || length <= 0)
 	{
-		printf("\nError : Invalid array param in function SelectSort");
+		std::cout<<"\nError : Invalid array param in function SelectSort";
 		return;
 	}
 	if (length == 1)
 	{
-		printf("array length is 1, no need to sort");
+		std::cout<<"array length is 1, no need to sort";
 	}
 
 	int i,j;
@@ -45,7 +46,7 @@ void SelectSort(int arr[], int length, bool MinToMax)
 				}
 			}
 		}
-		SimpleIntSwap(&arr[TargetIndex], &arr[i]);
+		SimpleSwap(&arr[TargetIndex], &arr[i]);
 	}
 	
 	return;
@@ -55,15 +56,15 @@ void PrintIntArray(int arr[], int length)
 {
 	if (arr == NULL || length <= 0)
 	{
-		printf("Error : Invalid array on PrintIntArray function");
+		std::cout<<"Error : Invalid array on PrintIntArray function";
 		return;
 	}
-	printf("array value is : {");
+	std::cout<<"array value is : {";
 	for (int i = 0; i < length; i++)
 	{
-		printf(" %d", arr[i]);
+		std::cout<<arr[i];
 	}
-	printf("}\n");
+	std::cout<<"\n";
 
 	return;
 }

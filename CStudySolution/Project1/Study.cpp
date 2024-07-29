@@ -1,37 +1,40 @@
-#include <stdio.h>
-#include <stdarg.h>
+#include <iostream>
 
-double my_sum(const char* format, ...)
+using namespace std;
+
+struct point
 {
-    va_list fp;
-    va_start(fp, format);
-    double sum = 0;
-    
-    while(*format)
-    {
-        if (*format == 'd')
-        {
-            sum += va_arg(fp, int); 
-        }
-        else if (*format == 'f')
-        {
-            sum += va_arg(fp, double);
-        }
+    int xpos;
+    int ypos;
 
-        format++;
+public:
+    void MovePos(int x, int y)
+    {
+        xpos += x;
+        ypos += y;
     }
 
-    va_end(fp);
-    return sum;
-}
+    void AddPoint(point ptr)
+    {
+        xpos += ptr.xpos;
+        ypos += ptr.ypos;
+    }
+
+    void ShowPosition() const
+    {
+        cout<<"("<<xpos<<" ,"<<ypos<<")"<<endl;
+    }
+};
 
 int main()
 {
-    double res;
+    point pos1 = {12,4};
+    point pos2 = {20, 30};
 
-    res = my_sum("%d %d %d %f", 32, 60, 54, 35.2);
-    printf("%f", res);
+    pos1.MovePos(-7,10);
+    pos1.ShowPosition();
 
+    pos1.AddPoint(pos2);
+    pos1.ShowPosition();
     return 0;
-    
 }

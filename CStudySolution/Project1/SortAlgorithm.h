@@ -3,7 +3,8 @@
 #ifndef SORT_ALGORITHM_H
 #define SORT_ALGORITHM_H
 
-void SimpleIntSwap(int* a, int* b);
+template <typename T>
+inline void SimpleSwap(T* a, T* b);
 
 void SelectSort(int arr[], int length, bool MinToMax);
 
