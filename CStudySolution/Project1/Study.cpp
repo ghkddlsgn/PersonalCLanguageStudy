@@ -1,40 +1,35 @@
 #include <iostream>
-
 using namespace std;
 
-struct point
+class Point
 {
-    int xpos;
-    int ypos;
+private:
+    int xpos = 0, ypos = 0;
 
 public:
-    void MovePos(int x, int y)
+    Point(const int x, const int y)
     {
-        xpos += x;
-        ypos += y;
+        xpos = x;
+        ypos = y;
+    }
+};
+
+class Rectangle
+{
+private:
+    Point UpLeft, DownRight;
+
+public:
+    Rectangle(int x1, int y1, int x2, int y2):UpLeft(x1,y1), DownRight(x2, y2)
+    {
+        
     }
 
-    void AddPoint(point ptr)
-    {
-        xpos += ptr.xpos;
-        ypos += ptr.ypos;
-    }
-
-    void ShowPosition() const
-    {
-        cout<<"("<<xpos<<" ,"<<ypos<<")"<<endl;
-    }
+    
+    
 };
 
 int main()
 {
-    point pos1 = {12,4};
-    point pos2 = {20, 30};
-
-    pos1.MovePos(-7,10);
-    pos1.ShowPosition();
-
-    pos1.AddPoint(pos2);
-    pos1.ShowPosition();
     return 0;
 }
