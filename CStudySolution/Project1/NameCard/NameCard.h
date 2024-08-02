@@ -53,9 +53,21 @@ public:
         strcpy_s(PhoneNumber,sizeof(char)*(strlen(Input_PhoneNumber)+1), Input_PhoneNumber);
         Position = (int)Input_position;
     }
+    NameCard(const NameCard& InputNameCard)
+    {
+        name = new char[sizeof(char)*(strlen(InputNameCard.name)+1)];
+        OfficeName = new char[sizeof(char)*(strlen(InputNameCard.OfficeName)+1)];
+        PhoneNumber = new char[sizeof(char)*(strlen(InputNameCard.PhoneNumber)+1)];
+
+        strcpy_s(name,sizeof(char)*(strlen(InputNameCard.name)+1) ,InputNameCard.name);
+        strcpy_s(OfficeName,sizeof(char)*(strlen(InputNameCard.OfficeName)+1), InputNameCard.OfficeName);
+        strcpy_s(PhoneNumber,sizeof(char)*(strlen(InputNameCard.PhoneNumber)+1), InputNameCard.PhoneNumber);
+        Position = (int)InputNameCard.Position;
+    }
 
     ~NameCard()
     {
+        cout<<"destructor called"<<endl;
         delete []name;
         delete []OfficeName;
         delete []PhoneNumber;
@@ -68,17 +80,18 @@ public:
         PrintEnumAsString();
     }
 };
-
 /*
 int main()
 {
     NameCard manClerk("Lee", "ABCEng", "010-1111-2222", Position::CLERK);
     NameCard manSenior("Hong", "OrangeEng", "010-3333-4444", Position::SENIOR);
     NameCard manAssist("Kim", "SoGoodComp", "010-5555-6666", Position::ASSIST);
-
+    NameCard manAssist2 = manAssist;
+    
     manClerk.ShowNameCardInfo();
     manSenior.ShowNameCardInfo();
     manAssist.ShowNameCardInfo();
+    manAssist2.ShowNameCardInfo();
 
     return 0;
 }
