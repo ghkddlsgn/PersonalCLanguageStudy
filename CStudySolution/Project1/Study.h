@@ -5,6 +5,13 @@
 
 using namespace std;
 
+enum E_Risk
+{
+    Risk_A,
+    Risk_B,
+    Risk_C
+};
+
 class Employee
 {
 private:
@@ -86,6 +93,48 @@ public:
         cout<<"Salary : "<<GetPay()<<endl;
     }
 };
+
+class ForeignSalesWorker : public SalesWorker
+{
+private:
+    const E_Risk Risk = E_Risk::Risk_A;
+    float Risk_Bonus_Ratio = 0;
+    
+    
+public:
+    ForeignSalesWorker(const char * name, int money, double ratio, E_Risk risk):SalesWorker(name, money, ratio), Risk(risk)
+    {
+        switch (Risk)
+        {
+        case Risk_A :
+            Risk_Bonus_Ratio = 0.3f;
+            break;
+        case Risk_B :
+            Risk_Bonus_Ratio = 0.2f;
+            break;
+        case Risk_C:
+            Risk_Bonus_Ratio = 0.1f;
+            break;
+        default:
+            cout<<"input Wrong Risk ratio"<<endl;
+        }
+    }
+
+    virtual int GetPay() const
+    {
+        float OriginalPay = (float)SalesWorker::GetPay();
+        return (int)(OriginalPay + OriginalPay*Risk_Bonus_Ratio);
+    }
+
+    virtual void ShowSalaryInfo() const
+    {
+        ShowYourName();
+        cout<<"salary : "<< SalesWorker::GetPay()<<endl;
+        cout<<"Risk pay : "<< (float)SalesWorker::GetPay()*Risk_Bonus_Ratio<<endl;
+        cout<<"sum : "<<GetPay()<<endl;
+    }
+};
+
 class EmployeeHandler
 {
 private:
@@ -129,14 +178,26 @@ int main()
     handler.AddEmployee(new PermanentWorker("KIM", 1000));
     handler.AddEmployee(new PermanentWorker("LEE", 1500));
     handler.AddEmployee(new PermanentWorker("JUN", 2000));
-
+    
     TemporaryWorker * alba = new TemporaryWorker("JUNG", 700);
     alba->AddWorkTime(5);
     handler.AddEmployee(alba);
-
+    
     SalesWorker * seller=new SalesWorker("Hong", 1000, 0.1);
     seller->AddSalesResult(7000);
     handler.AddEmployee(seller);
+
+    ForeignSalesWorker * fSeller1 = new ForeignSalesWorker("AAA", 1000, 0.1, Risk_A);
+    ForeignSalesWorker * fSeller2 = new ForeignSalesWorker("BBB", 1000, 0.1, Risk_B);
+    ForeignSalesWorker * fSeller3 = new ForeignSalesWorker("CCC", 1000, 0.1, Risk_C);
+
+    fSeller1->AddSalesResult(7000);
+    fSeller2->AddSalesResult(7000);
+    fSeller3->AddSalesResult(7000);
+
+    handler.AddEmployee(fSeller1);
+    handler.AddEmployee(fSeller2);
+    handler.AddEmployee(fSeller3);
     
     handler.ShowAllSalaryInfo();
     handler.ShowTotalSalary();
