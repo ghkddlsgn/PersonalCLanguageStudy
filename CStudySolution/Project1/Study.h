@@ -1,124 +1,97 @@
 ﻿#pragma once
-
 #include <iostream>
+#include <cstdlib>
+
 using namespace std;
 
 class Point
 {
 private:
-    int x = 0, y = 0;
+    int x, y;
 public:
-    Point(int xpos, int ypos):x(xpos), y(ypos){}
-    Point(){}
+    Point(int a=0, int b=0):x(a),y(b){}
 
-    Point operator-() const
+    void ShowPointInfo()
     {
-        return {-x, -y};
+        cout<<"("<<x<<" "<<y<<")"<<endl;
     }
 
-    Point operator+(const Point &ref) const
+    Point& operator=(const Point& ref)
     {
-        return {x+ref.x,y+ref.y};
-    }
-    Point operator-(const Point &ref)
-    {
-        return {x-ref.x, y-ref.y};
-    }
-    Point& operator+=(const Point &ref)
-    {
-        x = x+ref.x;
-        y = y+ref.y;
-        
+        x = ref.x;
+        y = ref.y;
         return *this;
-    }
-    Point& operator-=(const Point &ref)
-    {
-        x = x-ref.x;
-        y = y-ref.y;
-
-        return *this;
-    }
-    Point& operator++()
-    {
-        x++;
-        y++;
-        return *this;
-    }
-    Point operator++(int)
-    {
-        const Point ReturnValue(x,y);
-        x++;
-        y++;
-        return ReturnValue;
-    }
-    Point& operator--()
-    {
-        x--;
-        y--;
-        return *this;
-    }
-    Point operator*(int a) const
-    {
-        const Point ReturnValue(x*a, y*a);
-        return ReturnValue;
-    }
-    const Point operator--(int)
-    {
-        const Point ReturnValue(*this);
-        x--;
-        y--;
-        return ReturnValue;
-    }
-    bool operator==(const Point &ref) const
-    {
-        if (x == ref.x && y == ref.y)
-        {
-            return true;
-        }
-        return false;
-    }
-    bool operator!=(const Point &ref) const
-    {
-        return !operator==(ref);
     }
     
-    void ShowPosition() const
-    {
-        cout<<"{"<<x<<" "<<y<<"}"<<endl;
-    }
-
-    friend Point operator~(const Point &ref);
-    friend ostream& operator<<(ostream& os, const Point &pos);
-    friend istream& operator>>(istream& is, Point &pos);
+    friend ostream& operator<<(ostream & os,const Point & ref);
 };
 
-Point operator~(const Point &ref)
+ostream& operator<<(ostream & os,const Point & ref)
 {
-    return {~ref.x, ~ref.y};
+    cout<<"("<<ref.x<<" "<<ref.y<<")";
+    return os; 
 }
-Point operator*(int a, const Point &ref)
-{
-    Point returnValue(ref);
-    return ref.operator*(a);
-}
-ostream& operator<<(ostream& os, const Point &pos)
-{
-    os<<"["<<pos.x<<" "<<pos.y<<"]";
-    return os;
-}
-istream& operator>>(istream& is, Point &pos)
-{
-    is>>pos.x>>pos.y;
 
-    return is;
-}
+typedef Point* POINT_PTR; 
+
+class TArray
+{
+private:
+    POINT_PTR * arr;
+    int length;
+
+    TArray& operator= (const TArray& ref){}
+    TArray(const TArray&ref){}
+    
+public:
+    TArray(int len):length(len)
+    {
+        arr = new POINT_PTR[len];
+    }
+
+    int adder(int a, int b);
+    POINT_PTR& operator[](int index)
+    {
+        if (index <0 || length <length)
+        {
+            cout<<"Tried to access wrong index in Point arr"<<endl;
+            exit(1);
+        }
+
+        return arr[index];
+    }
+    POINT_PTR& operator[](int index) const
+    {
+        if (index <0 || index < length)
+        {
+            cout<<"Tried to access wrong index in Point arr"<<endl;
+            exit(1);
+        }
+
+        return arr[index];
+    }
+
+    ~TArray()
+    {
+        delete []arr;
+    }
+};
 
 int main()
 {
-    Point pt_A(10,20);
+    TArray arr(5);
+    for (int i = 0; i <5;i++)
+    {
+        arr[i] = new Point(i,i*2);
+        cout<<*arr[i]<<endl;
+    }
 
-    cin>>pt_A;
-    cout<<pt_A;
+    for (int i = 0; i <5;i++)
+    {
+        delete []arr[i];
+    }
     
     return 0;
 }
+
+//463
