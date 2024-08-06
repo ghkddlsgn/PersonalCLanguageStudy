@@ -201,6 +201,7 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="CommonClass\Point.cpp" />
     <ClCompile Include="NameCard\NameCard.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -281,6 +282,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bank\Bank.h" />
+    <ClInclude Include="CommonClass\Point.h" />
     <ClInclude Include="NameCard\NameCard.h" />
     <ClInclude Include="Study.h" />
   </ItemGroup>
