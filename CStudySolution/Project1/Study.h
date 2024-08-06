@@ -4,94 +4,132 @@
 
 using namespace std;
 
-class Point
+class BoundCheck1DIntArray
 {
 private:
-    int x, y;
+    int *arr;
+    int length;
 public:
-    Point(int a=0, int b=0):x(a),y(b){}
-
-    void ShowPointInfo()
+    BoundCheck1DIntArray():length(-1)
     {
-        cout<<"("<<x<<" "<<y<<")"<<endl;
+        arr = nullptr;
     }
-
-    Point& operator=(const Point& ref)
+    BoundCheck1DIntArray(int len) : length(len)
     {
-        x = ref.x;
-        y = ref.y;
+        arr = new int[len];
+    }
+    BoundCheck1DIntArray(const BoundCheck1DIntArray& ref) : length(ref.length)
+    {
+        delete []arr;
+        arr = new int[length];
+    }
+    BoundCheck1DIntArray & operator=(const BoundCheck1DIntArray& ref)
+    {
+        delete []arr;
+        length = ref.length;
+        arr = new int[length];
         return *this;
     }
-    
-    friend ostream& operator<<(ostream & os,const Point & ref);
-};
 
-ostream& operator<<(ostream & os,const Point & ref)
-{
-    cout<<"("<<ref.x<<" "<<ref.y<<")";
-    return os; 
-}
-
-typedef Point* POINT_PTR; 
-
-class TArray
-{
-private:
-    POINT_PTR * arr;
-    int length;
-
-    TArray& operator= (const TArray& ref){}
-    TArray(const TArray&ref){}
-    
-public:
-    TArray(int len):length(len)
+    int& operator[](int index) const
     {
-        arr = new POINT_PTR[len];
-    }
-
-    int adder(int a, int b);
-    POINT_PTR& operator[](int index)
-    {
-        if (index <0 || length <length)
-        {
-            cout<<"Tried to access wrong index in Point arr"<<endl;
-            exit(1);
-        }
-
-        return arr[index];
-    }
-    POINT_PTR& operator[](int index) const
-    {
-        if (index <0 || index < length)
-        {
-            cout<<"Tried to access wrong index in Point arr"<<endl;
-            exit(1);
-        }
-
         return arr[index];
     }
 
-    ~TArray()
+    // ostream& operator<<(ostream& os, BoundCheck1DIntArray & ref)
+    // {
+    //     cout<<
+    //     return os;
+    // }
+    
+    void ResizeArray(int NewLen)
+    {
+        delete []arr;
+        length = NewLen;
+        arr = new int[NewLen];
+    }
+    void SetValue(int index, int Value)
+    {
+        if (index<0 && length<index)
+        {
+            cout<<"tried to access wrong address in SetValue function, access index is : "<<index<<endl;
+            exit(1);
+        }
+        arr[index] = Value;
+    }
+    ~BoundCheck1DIntArray()
     {
         delete []arr;
     }
 };
 
-int main()
+class BoundCheck2DIntArray
 {
-    TArray arr(5);
-    for (int i = 0; i <5;i++)
+private:
+    BoundCheck1DIntArray * Arr1D;
+    int length_1DArray;
+    int length_2DArray;
+public:
+    BoundCheck2DIntArray(int len_x, int len_y) : length_1DArray(len_x), length_2DArray(len_y)
     {
-        arr[i] = new Point(i,i*2);
-        cout<<*arr[i]<<endl;
+        Arr1D = new BoundCheck1DIntArray[length_2DArray];
+        for (int i = 0; i <length_2DArray; i++)
+        {
+            Arr1D[i] = BoundCheck1DIntArray(len_x);
+            for (int j = 0; j <length_1DArray; j++)
+            {
+                Arr1D[i].SetValue(j, i*j);
+            }
+        }
+    }
+    BoundCheck2DIntArray(const BoundCheck2DIntArray & ref)
+    {
+        BoundCheck2DIntArray(ref.length_1DArray, ref.length_2DArray);
+    }
+    BoundCheck1DIntArray& operator[] (int index) const
+    {
+        return Arr1D[index];
+    }
+    BoundCheck2DIntArray& operator= (const BoundCheck2DIntArray & ref)
+    {
+        delete []Arr1D;
+        BoundCheck2DIntArray(ref.length_1DArray, ref.length_2DArray);
+        return *this;
     }
 
-    for (int i = 0; i <5;i++)
+    void ShowElment() const
     {
-        delete []arr[i];
+        for (int i = 0; i < length_2DArray; i++)
+        {
+            cout<<i<<"st line : ";
+            for (int j = 0; j < length_1DArray; j++)
+            {
+                cout<<Arr1D[i][j]<<" ";
+            }
+            cout<<endl;
+        }
     }
+
+    ~BoundCheck2DIntArray()
+    {
+        delete []Arr1D;
+    }
+};
+
+int main()
+{
+    BoundCheck2DIntArray Arr(5,5);
+    Arr.ShowElment();
+
+    for(int i=0; i<5;i++)
+    {
+        for(int j=0; j<5; j++)
+        {
+            Arr[i][j] = 10*i*j;
+        }
+    }
+    cout<<"After input"<<endl;
+    Arr.ShowElment();
     
     return 0;
 }
-
-//463
