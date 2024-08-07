@@ -9,12 +9,17 @@ class Point
 private:
     int x,y;
 public:
-    Point(int a, int b):x(a),y(b){}
-
+    Point(int a = 0, int b= 0):x(a),y(b){}
+    
     void * operator new(size_t size)
     {
         void * ptr = new char[size];
         return ptr;
+    }
+    void SetValue(int a, int b)
+    {
+        x = a;
+        y = b;
     }
     void operator delete(void* adr)
     {
