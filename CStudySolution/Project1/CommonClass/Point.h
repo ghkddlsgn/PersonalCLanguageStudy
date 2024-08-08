@@ -3,28 +3,20 @@
 #include <cstdlib>
 
 
-
+template <typename T>
 class Point
 {
 private:
-    int x,y;
+    T x,y;
 public:
-    Point(int a = 0, int b= 0):x(a),y(b){}
+    Point(T a = 0, T b= 0):x(a),y(b){}
     
-    void * operator new(size_t size)
-    {
-        void * ptr = new char[size];
-        return ptr;
-    }
-    void SetValue(int a, int b)
+    void SetValue(T a, T b)
     {
         x = a;
         y = b;
     }
-    void operator delete(void* adr)
-    {
-        delete []((char*)adr);
-    }
+    
     Point* operator->()
     {
         return this;
@@ -33,16 +25,29 @@ public:
     {
         return *this;
     }
+    Point operator+(const Point& ref) const
+    {
+        return Point(x + ref.x, y +ref.y);
+    }
+    Point& operator+=(const Point& ref)
+    {
+        x += ref.x;
+        y += ref.y;
+        return *this;
+    }
     void PrintString()
     {
         std::cout<<"function Called"<< std::endl;
     }
-    
-    friend std::ostream& operator<<(std::ostream& os ,const Point& ref); 
+
+    template <typename U>
+    friend std::ostream& operator<<(std::ostream& os ,const Point<U>& ref); 
 };
 
-inline std::ostream& operator<<(std::ostream& os ,const Point& ref)
+template <typename T>
+inline std::ostream& operator<<(std::ostream& os ,const Point<T>& ref)
 {
-    std::cout<<"("<<ref.x<<" "<<ref.y<<")";
+    os<<"("<<ref.x<<" "<<ref.y<<")";
     return os;
 }
+
