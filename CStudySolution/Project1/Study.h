@@ -1,49 +1,45 @@
-﻿#include <iostream>
-#include <typeinfo>
+﻿#pragma once
 
-class Base {
-public:
-    virtual ~Base() {}
-};
+#include <iostream>
+#include "CommonClass/CustomVector.h"
 
-class Derived1 : public Base {
-public:
-    void Method1() {
-        std::cout << "Method1 in Derived1 called" << std::endl;
+using namespace std;
+
+int main()
+{
+    CustomVector<float> v;
+    v.PushBack(30);
+    v.PushBack(40);
+    v.PushBack(50);
+    v.PushBack(30);
+    v.PushBack(40);
+    v.PushBack(50);
+    v.PushBack(30);
+    v.PushBack(40);
+    v.PushBack(30);
+    v.PushBack(40);
+    v.PushBack(50);
+    v.PushBack(30);
+    v.PushBack(40);
+    v.PushBack(50);
+    v.PushBack(30);
+    v.PushBack(40);
+    v.PushBack(30);
+    v.PushBack(40);
+    v.PushBack(50);
+    v.PushBack(50);
+    v.PushBack(99);
+    v.PopBack();
+    v.Erase(2);
+
+    CustomVector<float> w;
+    w = v;
+
+    for (int i = 0; i<w.Size(); i++)
+    {
+        cout<<w[i]<<" ";
     }
-};
-
-class Derived2 : public Base {
-public:
-    void Method2() {
-        std::cout << "Method2 in Derived2 called" << std::endl;
-    }
-};
-
-void TestDynamicCast(Base* basePtr) {
-    Derived1* derived1Ptr = dynamic_cast<Derived1*>(basePtr);
-    if (derived1Ptr) {
-        derived1Ptr->Method1();
-    } else {
-        std::cout << "Failed to cast to Derived1" << std::endl;
-    }
-
-    Derived2* derived2Ptr = dynamic_cast<Derived2*>(basePtr);
-    if (derived2Ptr) {
-        derived2Ptr->Method2();
-    } else {
-        std::cout << "Failed to cast to Derived2" << std::endl;
-    }
-}
-
-int main() {
-    Base* basePtr1 = new Derived1;
-    TestDynamicCast(basePtr1);
-    delete basePtr1;
-
-    Base* basePtr2 = new Derived2;
-    TestDynamicCast(basePtr2);
-    delete basePtr2;
-
+    cout<<endl;
+    cout<<"Size : "<<v.Size()<<" Capacity : "<<v.Capacity()<<endl;
     return 0;
 }
