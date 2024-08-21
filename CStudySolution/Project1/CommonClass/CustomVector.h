@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <vector>
+#include <iostream>
 
 const int DEFAULT_VECTOR_SIZE = 10;
 
@@ -142,3 +144,14 @@ public:
         size = 0;
     }
 };
+
+template <typename T>
+void PrintElements(std::vector<T> ref)
+{
+    std::cout<<"Vector Element : ";
+    for (int i = 0; i < ref.size(); i++)
+    {
+        std::cout<<ref[i]<<", ";
+    }
+    std::cout<<std::endl;
+}

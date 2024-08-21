@@ -1,45 +1,62 @@
 ﻿#pragma once
 
 #include <iostream>
+#include <string>
+#include <vector>
+
 #include "CommonClass/CustomVector.h"
 
-using namespace std;
+using namespace  std;
+
+class Solution {
+public:
+    vector<string> fizzBuzz(int n)
+    {
+        vector<string> ReturnValue;
+        ReturnValue.resize(n);
+
+        int Fizz = 1;
+        int Buzz = 1;
+        
+        for (int i = 0; i < n; i++)
+        {
+            if (Fizz == 3)
+            {
+                Fizz = 0;
+                if (Buzz == 5)
+                {
+                    Buzz = 0;
+                    ReturnValue[i] = "FizzBuzz";
+                }
+                else
+                {
+                    ReturnValue[i] = "Fizz";
+                }
+            }
+            else if(Buzz == 5)
+            {
+                Buzz = 0;
+                ReturnValue[i] = "Buzz";
+            }
+            else
+            {
+                ReturnValue[i] = to_string(i+1);
+            }
+            Fizz++;
+            Buzz++;
+        }
+        return ReturnValue;
+    }
+};
 
 int main()
 {
-    CustomVector<float> v;
-    v.PushBack(30);
-    v.PushBack(40);
-    v.PushBack(50);
-    v.PushBack(30);
-    v.PushBack(40);
-    v.PushBack(50);
-    v.PushBack(30);
-    v.PushBack(40);
-    v.PushBack(30);
-    v.PushBack(40);
-    v.PushBack(50);
-    v.PushBack(30);
-    v.PushBack(40);
-    v.PushBack(50);
-    v.PushBack(30);
-    v.PushBack(40);
-    v.PushBack(30);
-    v.PushBack(40);
-    v.PushBack(50);
-    v.PushBack(50);
-    v.PushBack(99);
-    v.PopBack();
-    v.Erase(2);
+    Solution AAA;
+    int n = 15;
 
-    CustomVector<float> w;
-    w = v;
+    vector<string> StringVector = AAA.fizzBuzz(n);
 
-    for (int i = 0; i<w.Size(); i++)
-    {
-        cout<<w[i]<<" ";
-    }
-    cout<<endl;
-    cout<<"Size : "<<v.Size()<<" Capacity : "<<v.Capacity()<<endl;
+    PrintElements(StringVector);
+    
     return 0;
 }
