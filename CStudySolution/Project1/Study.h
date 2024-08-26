@@ -1,27 +1,22 @@
 ﻿#pragma once
 
 #include <iostream>
-#include <string>
-#include <vector>
 
-#include "CommonClass/CustomVector.h"
+using namespace std;
 
-using namespace  std;
 
-class Solution {
-public:
-    int numberOfSteps(int num) {
-        return (num & ~0);
+void fun(int n)
+{
+    if(n>0)
+    {
+        cout<<n<<endl;
+        fun(n-1);
     }
-};
+}
 
 int main()
 {
-    Solution AAA;
-    
-    cout<<AAA.numberOfSteps(14)<<endl;;
-    cout<<AAA.numberOfSteps(8)<<endl;
-    cout<<AAA.numberOfSteps(123)<<endl;
+    fun(3);
     
     return 0;
 }
