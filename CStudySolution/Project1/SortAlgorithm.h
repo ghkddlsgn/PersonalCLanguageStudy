@@ -16,6 +16,8 @@ int power(int Basement, int exponential);
 int FibWithLoop(int n);
 int FibWithRecursion(int n);
 
+void Hanoi(int DiskNum, int Pillar_From, int Pillar_Target, int Pillar_Auxilary);
+
 template <typename T>
 void PrintVector(std::vector<T> ref)
 {

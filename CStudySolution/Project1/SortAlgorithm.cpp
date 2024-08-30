@@ -145,3 +145,17 @@ int FibWithLoop(int n)
 
 	return n_0;
 }
+
+void Hanoi(int DiskNum, int Pillar_From, int Pillar_Target, int Pillar_Auxilary)
+{
+	if (DiskNum <= 0) return;
+	if (DiskNum == 1)
+	{
+		std::cout<<"("<<Pillar_From<<", "<<Pillar_Target<<")"<<std::endl;
+		return;
+	}
+
+	Hanoi(DiskNum-1, Pillar_From, Pillar_Auxilary, Pillar_Target);
+	std::cout<<"("<<Pillar_From<<", "<<Pillar_Target<<")"<<std::endl;
+	Hanoi(DiskNum-1, Pillar_Auxilary, Pillar_Target, Pillar_From);
+}
