@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <vector>
 #include <iostream>
+#include <valarray>
 
 const int DEFAULT_VECTOR_SIZE = 10;
 
@@ -12,6 +13,7 @@ private:
     int capacity;
     T* elements;
 public:
+    //constructor and destructor
     CustomVector()
     {
         size = 0;
@@ -38,16 +40,17 @@ public:
             elements[i] = ref[i];
         }
     }
-
     ~CustomVector()
     {
         delete[] elements;
     }
 
+    //Getter
     int Size() const {return size;}
     int Capacity() const {return capacity;}
     bool IsEmpty() const {return size == 0;}
 
+    //operator
     T& operator[](int index)
     {
         return elements[index];
@@ -71,7 +74,8 @@ public:
         }
         return *this;
     }
-    
+
+    //basic function
     void PushBack(const T object)
     {
         if (size == capacity)
@@ -88,7 +92,6 @@ public:
         elements[size] = object;
         size++;
     }
-    
     void PopBack()
     {
         if(size>0)
@@ -143,6 +146,121 @@ public:
     {
         size = 0;
     }
+    void Print() const
+    {
+        std::cout<<"CustomVector Elements : ";
+        for (int i = 0; i<size; i++)
+        {
+            std::cout<<elements[i]<<" ";
+        }
+        std::cout<<std::endl;
+    }
+    T LinearSearch(T Target)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            if (Target == elements[i])
+            {
+                return elements[i];
+            }
+        }
+
+        if (size <= 0)
+        {
+            std::cout<<"execute Linear Search function in empty vector"<<std::endl;
+            return Target;
+        }
+    }
+
+    //advanced function
+    void rotation()
+    {
+        if (size <= 1) return;
+        T FirstValue = elements[0];
+        for (int i = 1; i<size; i++)
+        {
+            elements[i] = elements[i+1];
+        }
+        elements[size-1] = FirstValue;
+    }
+    void Sort()
+    {
+        T temp;
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = i; j <size; j++)
+            {
+                if(elements[i] > elements[j]) //swap
+                {
+                    temp = elements[j];
+                    elements[j] = elements[i];
+                    elements[i] = temp;
+                }
+            }
+        }
+    }
+    bool IsSorted()
+    {
+        for (int i = 0; i<size-1; i++)
+        {
+            if(elements[i]>elements[i+1])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    template<>
+    int BinaryTreeSearch(int Target)
+    {
+        //assertion handle
+        if (IsSorted()==false)
+        {
+            std::cout<<"vector is not sorted"<<std::endl;
+            return Target;
+        }
+        if (size <= 0)
+        {
+            std::cout<<"execute Linear Search function in empty vector"<<std::endl;
+            return Target;
+        }
+        
+        int TargetIndex = (size/2) + 1;
+        int RangeMinIndex = 0;
+        int RangeMaxIndex = size-1;
+        int TreeSearchCount = 0;
+        while(1)
+        {
+            if (RangeMaxIndex<RangeMinIndex) break;
+            
+            TreeSearchCount++;
+            TargetIndex = (RangeMaxIndex+RangeMinIndex)/2; //Target index update
+            if (TargetIndex % 2 == 1) //Handle odd number, if i not add +1, then i'll lose right edge index in search range
+            {
+                TargetIndex++;
+            }
+            
+            std::cout<< TreeSearchCount <<"th searching Index : "<<TargetIndex<<std::endl;
+            
+            if (elements[TargetIndex] == Target) 
+            {
+                std::cout<<"Found Target in Index : "<<TargetIndex<<std::endl;
+                std::cout<<"Tree Count Num : "<<TreeSearchCount<<std::endl;
+                return elements[TargetIndex];
+            }
+            else if (elements[TargetIndex]<Target) //Move to left Tree center
+            {
+                RangeMaxIndex = TargetIndex-1;   
+            }
+            else //Move to right Tree center
+            {
+                RangeMinIndex = TargetIndex+1;
+            }
+        }
+        std::cout<<"Tree Search Fail"<<std::endl;
+        return Target;
+    }
+    
 };
 
 template <typename T>
