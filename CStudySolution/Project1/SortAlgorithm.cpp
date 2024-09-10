@@ -113,6 +113,8 @@ int power(int Basement, int exponential)
 		}
 		return ReturnValue;
 	}
+	std::cout<<"Error on function power, return -1"<<std::endl;
+	return -1;
 }
 
 int FibWithRecursion(int n)

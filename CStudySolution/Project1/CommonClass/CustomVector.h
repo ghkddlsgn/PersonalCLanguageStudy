@@ -210,8 +210,8 @@ public:
         }
         return true;
     }
-    template<>
-    int BinaryTreeSearch(int Target)
+    
+    T BinaryTreeSearch(T Target)
     {
         //assertion handle
         if (IsSorted()==false)
@@ -225,42 +225,42 @@ public:
             return Target;
         }
         
-        int TargetIndex = (size/2) + 1;
+        int RangeMid = (size/2);
         int RangeMinIndex = 0;
         int RangeMaxIndex = size-1;
         int TreeSearchCount = 0;
-        while(1)
-        {
-            if (RangeMaxIndex<RangeMinIndex) break;
-            
+        while(RangeMinIndex<=RangeMaxIndex)
+        {            
             TreeSearchCount++;
-            TargetIndex = (RangeMaxIndex+RangeMinIndex)/2; //Target index update
-            if (TargetIndex % 2 == 1) //Handle odd number, if i not add +1, then i'll lose right edge index in search range
+            if ((RangeMaxIndex+RangeMinIndex)%2==1) //subtree length = even? 
             {
-                TargetIndex++;
+                RangeMid = ((RangeMaxIndex+RangeMinIndex)/2) + 1; //Handle odd length number, if i not add +1, then i'll lose right edge index in search range
+            }
+            else
+            {
+                 RangeMid = (RangeMaxIndex+RangeMinIndex)/2;
             }
             
-            std::cout<< TreeSearchCount <<"th searching Index : "<<TargetIndex<<std::endl;
+            std::cout<< TreeSearchCount <<"th Target Index : "<<RangeMid<<std::endl;
             
-            if (elements[TargetIndex] == Target) 
+            if (elements[RangeMid] == Target) 
             {
-                std::cout<<"Found Target in Index : "<<TargetIndex<<std::endl;
+                std::cout<<"Found Target in Index : "<<RangeMid<<std::endl;
                 std::cout<<"Tree Count Num : "<<TreeSearchCount<<std::endl;
-                return elements[TargetIndex];
+                return elements[RangeMid];
             }
-            else if (elements[TargetIndex]<Target) //Move to left Tree center
+            else if (Target<elements[RangeMid]) //Move to left subtree
             {
-                RangeMaxIndex = TargetIndex-1;   
+                RangeMaxIndex = RangeMid-1;   
             }
-            else //Move to right Tree center
+            else //Move to right subtree
             {
-                RangeMinIndex = TargetIndex+1;
+                RangeMinIndex = RangeMid+1;
             }
         }
         std::cout<<"Tree Search Fail"<<std::endl;
         return Target;
     }
-    
 };
 
 template <typename T>

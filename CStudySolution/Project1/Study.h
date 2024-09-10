@@ -23,7 +23,7 @@ int main()
     arr1.Print();
 
     
-    arr1.BinaryTreeSearch(10);
+    arr1.BinaryTreeSearch(2308);
     
     return 0;
 }
