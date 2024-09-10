@@ -8,22 +8,9 @@
 
 int main()
 {
-    CustomVector<int> arr1;
-    
-    arr1.PushBack(10);
-    arr1.PushBack(235);
-    arr1.PushBack(11);
-    arr1.PushBack(69);
-    arr1.PushBack(10);
-    arr1.PushBack(2308);
-    arr1.PushBack(48);
-    arr1.PushBack(89);
+    std::vector<int> arr1 = {1,3,4,5,8,9,12,13,14,17,18,19};
 
-    arr1.Sort();
-    arr1.Print();
-
-    
-    arr1.BinaryTreeSearch(2308);
-    
+    PrintVector(CheckLinear(arr1));
+      
     return 0;
 }
