@@ -203,6 +203,7 @@
     </ClCompile>
     <ClCompile Include="CommonClass\BoundCheckArray.cpp" />
     <ClCompile Include="CommonClass\CustomVector.cpp" />
+    <ClCompile Include="CommonClass\InhuLinkedList.cpp" />
     <ClCompile Include="CommonClass\Point.cpp" />
     <ClCompile Include="CommonClass\String.cpp" />
     <ClCompile Include="NameCard\NameCard.cpp">
@@ -287,6 +288,7 @@
     <ClInclude Include="Bank\Bank.h" />
     <ClInclude Include="CommonClass\BoundCheckArray.h" />
     <ClInclude Include="CommonClass\CustomVector.h" />
+    <ClInclude Include="CommonClass\InhuLinkedList.h" />
     <ClInclude Include="CommonClass\Point.h" />
     <ClInclude Include="CommonClass\String.h" />
     <ClInclude Include="NameCard\NameCard.h" />
