@@ -6,16 +6,15 @@ class InhuLinkedList;
 struct LinkedList
 {
     int Value;
-    LinkedList * NextLink;
+    LinkedList * NextLink = nullptr;
 };
 class InhuLinkedList
 {
 private:
     LinkedList * head = nullptr;
-    LinkedList * tail = nullptr;
     int size = 0;
 public:
-    InhuLinkedList(LinkedList* NewHead, LinkedList* NewTail, int length) :head(NewHead), tail(NewTail), size(length)
+    InhuLinkedList(LinkedList* NewHead, int length) :head(NewHead), size(length)
     {
         
     }
@@ -32,25 +31,19 @@ public:
         }
     }
     
-    void AddNewLink(int Input_Value)
+    void AddNewLink(int Input_Value) //Add new link on head
     {
-        LinkedList * NewList = new LinkedList; //Make new linked list
+        LinkedList * NewList = new LinkedList;
         NewList->Value = Input_Value;
-        NewList->NextLink = nullptr;
 
-        if (head == nullptr) //Is this the first element?
+        if (head != nullptr)
         {
-            head = NewList;
-            tail = NewList;
+            NewList->NextLink = head;
         }
-        else
-        {
-            tail->NextLink = NewList; //update tail
-            tail = NewList;    
-        }
-
+        head = NewList;
         size++;
     }
+
     void RemoveTargetValue(int Value)
     {
         if (head == nullptr)
@@ -63,7 +56,6 @@ public:
         if (head->Value == Value)
         {
             LinkedList * NewHead = head->NextLink;
-            if (head==tail)tail = nullptr;
             delete head;
             head = NewHead;
             size--;
@@ -112,4 +104,8 @@ public:
         }
         std::cout<<std::endl;
     }
+    
+    void Insert(int Input_Value);
+    void Init(LinkedList ref);
+    int SetSortRule(LinkedList ref1, LinkedList ref2);
 };
