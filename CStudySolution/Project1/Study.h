@@ -4,9 +4,17 @@
 
 using namespace std;
 
+int PrintPermutation(int arr[], int len, int TargetIndex)
+{
+    int i = 0;
+    int k = 0;
+
+    if (arr[TargetIndex] == )
+}
+
 int main()
 {
-    InhuLinkedList A(1,2,3,4,5,67,8,9,113,57,924);
-    A.PrintList();
+
     return 0;
 }
+

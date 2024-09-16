@@ -5,7 +5,7 @@ class InhuLinkedList;
 
 struct LinkedList
 {
-    int Value;
+    int Value = -1;
     LinkedList * NextLink = nullptr;
 };
 class InhuLinkedList
@@ -93,7 +93,11 @@ public:
         }
         std::cout<<std::endl;
     }
-    
+
+    bool GetData()
+    {
+        
+    }
     void Insert(int Input_Value);
     void Init(LinkedList ref);
     int SetSortRule(LinkedList ref1, LinkedList ref2);
