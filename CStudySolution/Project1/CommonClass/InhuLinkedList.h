@@ -14,23 +14,6 @@ private:
     LinkedList * head = nullptr;
     int size = 0;
 public:
-    InhuLinkedList(LinkedList* NewHead, int length) :head(NewHead), size(length)
-    {
-        
-    }
-    InhuLinkedList(){}
-    ~InhuLinkedList()
-    {
-        LinkedList* cur = head;
-
-        while (cur!=nullptr)
-        {
-            LinkedList* Next = cur->NextLink;
-            delete cur;
-            cur = Next;
-        }
-    }
-    
     void AddNewLink(int Input_Value) //Add new link on head
     {
         LinkedList * NewList = new LinkedList;
@@ -44,6 +27,13 @@ public:
         size++;
     }
 
+    template<typename... Args>
+    void AddNewLink(int a, Args... args)
+    {
+        AddNewLink(a);
+        AddNewLink(args...);
+    }
+    
     void RemoveTargetValue(int Value)
     {
         if (head == nullptr)
@@ -108,4 +98,28 @@ public:
     void Insert(int Input_Value);
     void Init(LinkedList ref);
     int SetSortRule(LinkedList ref1, LinkedList ref2);
+
+public: //constructor and destructor
+    InhuLinkedList(int a)
+    {
+        AddNewLink(a);
+    }
+    template<typename... Args>
+    InhuLinkedList(int a, Args... args)
+    {
+        AddNewLink(a);
+        AddNewLink(args...);
+    }
+    InhuLinkedList(){}
+    ~InhuLinkedList()
+    {
+        LinkedList* cur = head;
+
+        while (cur!=nullptr)
+        {
+            LinkedList* Next = cur->NextLink;
+            delete cur;
+            cur = Next;
+        }
+    }
 };

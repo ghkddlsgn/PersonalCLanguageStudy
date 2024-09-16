@@ -6,17 +6,7 @@ using namespace std;
 
 int main()
 {
-    InhuLinkedList A;
-    for (int i = 0; i<10; i++)
-    {
-        A.AddNewLink(i);
-    }
-    
+    InhuLinkedList A(1,2,3,4,5,67,8,9,113,57,924);
     A.PrintList();
-    A.RemoveTargetValue(9);
-    A.RemoveTargetValue(10);
-    A.RemoveTargetValue(11);
-    A.PrintList();
-    
     return 0;
 }
