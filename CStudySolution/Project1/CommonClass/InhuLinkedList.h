@@ -11,19 +11,40 @@ struct LinkedList
 class InhuLinkedList
 {
 private:
-    LinkedList * head = nullptr;
+    LinkedList Dummy;
+    LinkedList * head = &Dummy;
     int size = 0;
 public:
+    InhuLinkedList(int a)
+    {
+        AddNewLink(a);
+    }
+    template<typename... Args>
+    InhuLinkedList(int a, Args... args)
+    {
+        AddNewLink(a);
+        AddNewLink(args...);
+    }
+    InhuLinkedList(){}
+    ~InhuLinkedList()
+    {
+        LinkedList* cur = head->NextLink;
+
+        while (cur!=nullptr)
+        {
+            LinkedList* Next = cur->NextLink;
+            delete cur;
+            cur = Next;
+        }
+    }
+    
     void AddNewLink(int Input_Value) //Add new link on head
     {
-        LinkedList * NewList = new LinkedList;
+        LinkedList * NewList = new LinkedList; //add new list
         NewList->Value = Input_Value;
-
-        if (head != nullptr)
-        {
-            NewList->NextLink = head;
-        }
-        head = NewList;
+        NewList->NextLink = head->NextLink;
+        
+        head->NextLink = NewList; //update dummy
         size++;
     }
 
@@ -36,30 +57,8 @@ public:
     
     void RemoveTargetValue(int Value)
     {
-        if (head == nullptr)
-        {
-            std::cout<<"Remove fail, List is empty"<<std::endl;
-        }
-        LinkedList* cur = head;
-
-        //step 1 : check 1st list
-        if (head->Value == Value)
-        {
-            LinkedList * NewHead = head->NextLink;
-            delete head;
-            head = NewHead;
-            size--;
-            return;
-        }
-        else if (head->NextLink == nullptr)
-        {
-            std::cout<<"Search Fail, Target Value : "<<Value<<std::endl;
-            return;
-        }
-        
-        //step 2 : check whole list
+        LinkedList * cur = head->NextLink;
         LinkedList * PastList = head;
-        cur = head->NextLink;
         
         while(1)
         {
@@ -86,7 +85,7 @@ public:
             std::cout<<"There's nothing to print on Linked List"<<std::endl;
             return;
         }
-        LinkedList* cur = head;
+        LinkedList* cur = head->NextLink;
         while(cur != nullptr)
         {
             std::cout<<cur->Value<<" ";
@@ -98,28 +97,4 @@ public:
     void Insert(int Input_Value);
     void Init(LinkedList ref);
     int SetSortRule(LinkedList ref1, LinkedList ref2);
-
-public: //constructor and destructor
-    InhuLinkedList(int a)
-    {
-        AddNewLink(a);
-    }
-    template<typename... Args>
-    InhuLinkedList(int a, Args... args)
-    {
-        AddNewLink(a);
-        AddNewLink(args...);
-    }
-    InhuLinkedList(){}
-    ~InhuLinkedList()
-    {
-        LinkedList* cur = head;
-
-        while (cur!=nullptr)
-        {
-            LinkedList* Next = cur->NextLink;
-            delete cur;
-            cur = Next;
-        }
-    }
 };
