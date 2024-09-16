@@ -3,12 +3,18 @@
 #include <iostream>
 
 #include "DataStructure/Matrix/DiagonalMatrix.h"
+#include "DataStructure/Matrix/LowerTriangularMatrix.h"
 
 using namespace std;
 
 int main()
 {
-    DiagonalMatrix A(10,20,30,40,50,60,70);
+    LowerTriangularMatrix A;
+
+    for (int i = 0; i<15; i++)
+    {
+        A.AddElement(i);
+    }
     A.Print();
     return 0;
 }
