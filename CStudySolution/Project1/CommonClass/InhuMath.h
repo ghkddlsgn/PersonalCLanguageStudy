@@ -16,9 +16,9 @@ public:
     {
         delete[] Hashmap; //init values
         Hashmap = new int[TargetIntArray.size()];
-        for (int A : Hashmap)
+        for (int i;  i<TargetIntArray.size(); i++)
         {
-            Hashmap[A] = 0;
+            Hashmap[i] = 0;
         }
     }
 

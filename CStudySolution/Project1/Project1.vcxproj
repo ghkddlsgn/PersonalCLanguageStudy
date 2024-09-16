@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -207,6 +208,7 @@
     <ClCompile Include="CommonClass\InhuMath.cpp" />
     <ClCompile Include="CommonClass\Point.cpp" />
     <ClCompile Include="CommonClass\String.cpp" />
+    <ClCompile Include="DataStructure\Matrix\DiagonalMatrix.cpp" />
     <ClCompile Include="NameCard\NameCard.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -293,6 +295,7 @@
     <ClInclude Include="CommonClass\InhuMath.h" />
     <ClInclude Include="CommonClass\Point.h" />
     <ClInclude Include="CommonClass\String.h" />
+    <ClInclude Include="DataStructure\Matrix\DiagonalMatrix.h" />
     <ClInclude Include="NameCard\NameCard.h" />
     <ClInclude Include="Study.h" />
   </ItemGroup>

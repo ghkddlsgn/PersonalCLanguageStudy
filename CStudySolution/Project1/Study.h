@@ -1,20 +1,15 @@
 ﻿#pragma once
-#include "CommonClass/InhuLinkedList.h"
+
 #include <iostream>
+
+#include "DataStructure/Matrix/DiagonalMatrix.h"
 
 using namespace std;
 
-int PrintPermutation(int arr[], int len, int TargetIndex)
-{
-    int i = 0;
-    int k = 0;
-
-    if (arr[TargetIndex] == )
-}
-
 int main()
 {
-
+    DiagonalMatrix A(10,20,30,40,50,60,70);
+    A.Print();
     return 0;
 }
 

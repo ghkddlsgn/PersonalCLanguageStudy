@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Debug\\SortAlgorithm.h.obj",
+            "outputs": [
+                "C:\\Program1\\PersonalCLanguageStudy\\CStudySolution\\Project1\\x64\\Debug\\vc143.pdb",
+                "x64\\Debug\\",
+                "C:\\Program1\\PersonalCLanguageStudy\\CStudySolution\\Project1\\x64\\Debug\\SortAlgorithm.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "SortAlgorithm.h",
+                    "source-path": "c:\\program1\\personalclanguagestudy\\cstudysolution\\project1\\sortalgorithm.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}
