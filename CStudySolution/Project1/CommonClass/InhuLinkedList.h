@@ -1,64 +1,68 @@
 ﻿#pragma once
 #include <iostream>
+#include <limits>
 
 class InhuLinkedList;
 
-struct LinkedList
+struct Node
 {
     int Value = -1;
-    LinkedList * NextLink = nullptr;
+    Node * NextNode = nullptr;
+public:
+    Node(){}
+    Node(int i):Value(i){}
 };
 class InhuLinkedList
 {
 private:
-    LinkedList Dummy;
-    LinkedList * head = &Dummy;
+    Node Dummy;
+    Node * head = &Dummy;
     int size = 0;
 public:
     InhuLinkedList(int a)
     {
-        AddNewLink(a);
+        AddNewNode(a);
     }
     template<typename... Args>
     InhuLinkedList(int a, Args... args)
     {
-        AddNewLink(a);
-        AddNewLink(args...);
+        AddNewNode(a);
+        AddNewNode(args...);
     }
     InhuLinkedList(){}
     ~InhuLinkedList()
     {
-        LinkedList* cur = head->NextLink;
+        Node* cur = head->NextNode;
 
         while (cur!=nullptr)
         {
-            LinkedList* Next = cur->NextLink;
+            Node* Next = cur->NextNode;
             delete cur;
             cur = Next;
         }
     }
     
-    void AddNewLink(int Input_Value) //Add new link on head
+    void AddNewNode(int Input_Value) //Add new link on head
     {
-        LinkedList * NewList = new LinkedList; //add new list
+        Node * NewList = new Node; //add new list
         NewList->Value = Input_Value;
-        NewList->NextLink = head->NextLink;
+        NewList->NextNode = head->NextNode;
         
-        head->NextLink = NewList; //update dummy
+        head->NextNode = NewList; //update dummy
         size++;
     }
 
     template<typename... Args>
-    void AddNewLink(int a, Args... args)
+    void AddNewNode(int a, Args... args)
     {
-        AddNewLink(a);
-        AddNewLink(args...);
+        AddNewNode(a);
+        AddNewNode(args...);
     }
     
     void RemoveTargetValue(int Value)
     {
-        LinkedList * cur = head->NextLink;
-        LinkedList * PastList = head;
+        Node * cur = head->NextNode;
+        Node * PastList = head;
         
         while(1)
         {
@@ -69,13 +73,13 @@ public:
             }
             if (cur->Value==Value) //Search Success, begin remove
             {
-                PastList->NextLink = cur->NextLink;
+                PastList->NextNode = cur->NextNode;
                 delete cur;
                 size--;
                 break;
             }
             PastList = cur;
-            cur = cur->NextLink;
+            cur = cur->NextNode;
         }        
     }
     void PrintList() const
@@ -85,20 +89,119 @@ public:
             std::cout<<"There's nothing to print on Linked List"<<std::endl;
             return;
         }
-        LinkedList* cur = head->NextLink;
+        Node* cur = head->NextNode;
         while(cur != nullptr)
         {
             std::cout<<cur->Value<<" ";
-            cur = cur->NextLink;
+            cur = cur->NextNode;
         }
         std::cout<<std::endl;
     }
-
-    bool GetData()
+    int TotalSum()
     {
-        
+        Node * Cur = head;
+        int Sum = 0;
+        do{
+            Cur = Cur->NextNode;
+            Sum += Cur->Value;
+        } while(Cur->NextNode);
+        return Sum;
     }
-    void Insert(int Input_Value);
-    void Init(LinkedList ref);
-    int SetSortRule(LinkedList ref1, LinkedList ref2);
+    int Max()
+    {
+        Node * cur = head->NextNode;
+        int max = std::numeric_limits<int>::min();
+        while(cur)
+        {
+            if (max<cur->Value)
+            {
+                max = cur->Value;
+            }
+            cur = cur->NextNode;
+        }
+        return max;
+    }
+    
+    int Min()
+    {
+        Node * cur = head->NextNode;
+        int min = std::numeric_limits<int>::max();
+        while(cur)
+        {
+            if (min>cur->Value)
+            {
+                min = cur->Value;
+            }
+            cur = cur->NextNode;
+        }
+        return min;
+    }
+    
+    Node* Get(int TargetValue) const
+    {
+        Node * cur = head->NextNode;
+        while(cur)
+        {
+            if (cur->Value == TargetValue) //found the value
+            {
+                return cur;
+            }
+            cur = cur->NextNode;
+        }
+        return nullptr;
+    }
+
+    Node* Get_Improved(int TargetValue) //when found the target node, move it to the top of the link
+    {
+        Node * cur = head->NextNode;
+        Node * past = head;
+        
+        while(cur)
+        {
+            if (cur->Value == TargetValue) //found the value
+            {
+                if (cur == head->NextNode)
+                {
+                    return cur; //found on 1st node
+                }
+                else 
+                {
+                    past->NextNode = cur->NextNode; 
+                    cur->NextNode = head->NextNode;
+                    head->NextNode = cur;
+                    return cur; //found on elsewhere
+                }
+            }
+            past = cur;
+            cur = cur->NextNode;
+        }
+        return nullptr;
+    }
+    
+    void Insert(int Index, int NodeValue) //Index start from 0(empty)
+    {
+        if (Index>size) //check index is invalid
+        {
+            std::cout<<"Tried to insert node on invalid Index : "<<Index<<std::endl;
+        }
+        Node * cur = head->NextNode;
+        Node * NewNode = new Node(NodeValue);
+        
+        if (Index == 0) //case 1, index is 0
+        {
+            NewNode->NextNode = head->NextNode;
+            head->NextNode = NewNode;
+        }
+        else
+        {
+            for(int i = 1; i<Index; i++) //case 2, handle rest of indices
+            {
+                cur = cur->NextNode;
+            }
+            NewNode->NextNode = cur->NextNode;
+            cur->NextNode = NewNode;
+        }
+        size++;
+    }
+    int SetSortRule(Node ref1, Node ref2);
 };
