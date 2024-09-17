@@ -97,7 +97,7 @@ public:
         }
         std::cout<<std::endl;
     }
-    int TotalSum()
+    int TotalSum() const
     {
         Node * Cur = head;
         int Sum = 0;
@@ -107,7 +107,7 @@ public:
         } while(Cur->NextNode);
         return Sum;
     }
-    int Max()
+    int Max() const
     {
         Node * cur = head->NextNode;
         int max = std::numeric_limits<int>::min();
@@ -122,7 +122,7 @@ public:
         return max;
     }
     
-    int Min()
+    int Min() const
     {
         Node * cur = head->NextNode;
         int min = std::numeric_limits<int>::max();
@@ -136,7 +136,6 @@ public:
         }
         return min;
     }
-    
     Node* Get(int TargetValue) const
     {
         Node * cur = head->NextNode;
@@ -150,7 +149,6 @@ public:
         }
         return nullptr;
     }
-
     Node* Get_Improved(int TargetValue) //when found the target node, move it to the top of the link
     {
         Node * cur = head->NextNode;
@@ -202,6 +200,38 @@ public:
             cur->NextNode = NewNode;
         }
         size++;
+    }
+
+    int Delete(int TargetIndex) //Target Index starts from 0 (first element)
+    {
+        if (TargetIndex > size-1) //Check Target index is invalid
+        {
+            std::cout<<"Treid to search non-exist Index : "<<TargetIndex<<std::endl;
+            return std::_Min_limit<int>();
+        }
+
+        Node * cur = head->NextNode;
+        Node * past = head;
+        int DeletedNodeValue = 0;
+        if (TargetIndex == 0) //Case 1 : delete first node
+        {
+            head->NextNode = cur->NextNode;
+            DeletedNodeValue = cur->Value;
+            delete cur;
+        }
+        else //Case 2 : delete node that not first node.
+        {
+            for (int i = 1; i<TargetIndex; i++) //Get Target node
+            {
+                past = cur;
+                cur = cur->NextNode;
+            }
+            past->NextNode = cur->NextNode;
+            DeletedNodeValue = cur->Value;
+            delete cur;
+        }
+        size--;
+        return DeletedNodeValue;
     }
     int SetSortRule(Node ref1, Node ref2);
 };

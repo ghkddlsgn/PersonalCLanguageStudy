@@ -13,5 +13,7 @@ int main()
     A.Insert(0, 0);
     A.Insert(2,222222);
     A.PrintList();
+    A.Delete(4);
+    A.PrintList();    
     return 0;
 }
