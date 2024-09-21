@@ -208,7 +208,7 @@
     <ClCompile Include="CommonClass\InhuMath.cpp" />
     <ClCompile Include="CommonClass\Point.cpp" />
     <ClCompile Include="CommonClass\String.cpp" />
-    <ClCompile Include="DataStructure\Matrix\DiagonalMatrix.cpp" />
+    <ClCompile Include="DataStructure\Matrix\Matrix.cpp" />
     <ClCompile Include="DataStructure\Matrix\LowerTriangularMatrix.cpp" />
     <ClCompile Include="NameCard\NameCard.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -296,7 +296,7 @@
     <ClInclude Include="CommonClass\InhuMath.h" />
     <ClInclude Include="CommonClass\Point.h" />
     <ClInclude Include="CommonClass\String.h" />
-    <ClInclude Include="DataStructure\Matrix\DiagonalMatrix.h" />
+    <ClInclude Include="DataStructure\Matrix\Matrix.h" />
     <ClInclude Include="DataStructure\Matrix\LowerTriangularMatrix.h" />
     <ClInclude Include="NameCard\NameCard.h" />
     <ClInclude Include="Study.h" />

@@ -16,7 +16,7 @@ class InhuLinkedList
 {
 private:
     Node Dummy;
-    Node * head = &Dummy;
+    Node * head= &Dummy;
     int size = 0;
 public:
     InhuLinkedList(int a)
@@ -233,5 +233,53 @@ public:
         size--;
         return DeletedNodeValue;
     }
-    int SetSortRule(Node ref1, Node ref2);
+    bool IsSorted() const //Didn't check whether it's properly working or not
+    {
+        Node * cur = head->NextNode;
+        int PastValue = std::numeric_limits<int>::min();
+        while(cur)
+        {
+            if (PastValue<=cur->Value)
+            {
+                PastValue = cur->Value;
+                cur = cur->NextNode;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true; //if everything is alright until the end, then return true
+    }
+    void DeleteDuplicatedItems()
+    {
+        Node * cur = head->NextNode;
+        int PastValue;
+
+        while (cur)
+        {
+            
+        }
+    }
+    void ReverseElements()
+    {
+        Node * cur = head->NextNode;
+        Node * past = nullptr;
+        Node * next;
+
+        //step 1 : inverse the elements
+        while(cur)
+        {
+            //inverse the link
+            next = cur->NextNode;
+            cur->NextNode = past;
+
+            //move to next node
+            past = cur;
+            cur = next;
+        }
+
+        //step 2 : set dummy direct at the end of elements
+        head->NextNode = past;
+    }
 };
