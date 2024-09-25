@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <iostream>
 #include <limits>
+#include <vector>
 
 class InhuLinkedList;
 
@@ -18,6 +19,13 @@ private:
     Node Dummy;
     Node * head= &Dummy;
     int size = 0;
+protected:
+    void CopyPrivateValues(const InhuLinkedList & ref)
+    {
+        Dummy = ref.Dummy;
+        head = ref.head;
+        size = ref.size;
+    }
 public:
     InhuLinkedList(int a)
     {
@@ -32,6 +40,13 @@ public:
     InhuLinkedList(){}
     ~InhuLinkedList()
     {
+        DeleteAllNodes();
+    }
+    Node* GetHead() const {return head;}
+    Node* GetFirstNode() const {return head->NextNode;}
+
+    void DeleteAllNodes() //delete all nodes except dummy node.
+    {
         Node* cur = head->NextNode;
 
         while (cur!=nullptr)
@@ -40,6 +55,21 @@ public:
             delete cur;
             cur = Next;
         }
+    }
+    InhuLinkedList& operator=(const InhuLinkedList& ref)
+    {
+        if (&ref == this) //self assignment?
+        {
+            return *this;
+        }
+        
+        DeleteAllNodes();
+        
+        for(int a : ref.GetValues())
+        {
+            AddNewNode(a);
+        }
+        return *this;
     }
     
     void AddNewNode(int Input_Value) //Add new link on head
@@ -51,14 +81,13 @@ public:
         head->NextNode = NewList; //update dummy
         size++;
     }
-
+    
     template<typename... Args>
     void AddNewNode(int a, Args... args)
     {
         AddNewNode(a);
         AddNewNode(args...);
     }
-    
     void RemoveTargetValue(int Value)
     {
         Node * cur = head->NextNode;
@@ -121,7 +150,6 @@ public:
         }
         return max;
     }
-    
     int Min() const
     {
         Node * cur = head->NextNode;
@@ -149,7 +177,7 @@ public:
         }
         return nullptr;
     }
-    Node* Get_Improved(int TargetValue) //when found the target node, move it to the top of the link
+    Node* Get_Improved(int TargetValue) const //when found the target node, move it to the top of the link
     {
         Node * cur = head->NextNode;
         Node * past = head;
@@ -175,7 +203,6 @@ public:
         }
         return nullptr;
     }
-    
     void Insert(int Index, int NodeValue) //Index start from 0(empty)
     {
         if (Index>size) //check index is invalid
@@ -201,7 +228,6 @@ public:
         }
         size++;
     }
-
     int Delete(int TargetIndex) //Target Index starts from 0 (first element)
     {
         if (TargetIndex > size-1) //Check Target index is invalid
@@ -281,5 +307,83 @@ public:
 
         //step 2 : set dummy direct at the end of elements
         head->NextNode = past;
+    }
+    std::vector<int> GetValues() const
+    {
+        Node * cur = GetFirstNode();
+        std::vector<int> AllValues;
+        while(cur)
+        {
+            AllValues.push_back(cur->Value);
+            cur = cur->NextNode;
+        }
+        return AllValues;
+    }
+    bool IsLooping() const
+    {
+        return true;
+    }
+    void Concatenate(InhuLinkedList & ref) //this function will make other linked list as same as this class
+    {
+        //Find last node;
+        Node * This_LastNode = GetFirstNode();
+        while(This_LastNode)
+        {
+            This_LastNode = This_LastNode->NextNode;
+        }
+
+        if (This_LastNode == nullptr) // Is this list empty?
+        {
+            CopyPrivateValues(ref);
+        }
+        else
+        {
+            This_LastNode->NextNode = ref.GetFirstNode();
+            ref.CopyPrivateValues(*this);
+        }
+    }
+    void MergeSortedLinkedList(InhuLinkedList & ref)
+    {
+        Node * i = this->GetFirstNode();
+        Node * j = ref.GetFirstNode();
+        Node * cur = head;
+        
+        if(!!(this->IsSorted()&&ref.IsSorted())) //check everything is sorted
+        {
+            std::cout<<"Linked Lists are not sorted"<<std::endl;
+            return;
+        }
+
+        //update cur
+        while(i && j)
+        {
+            if (i->Value<=j->Value)
+            {
+                //add i to new list
+                cur->NextNode = i;
+                cur = i;
+                i = cur->NextNode;
+            }
+            else
+            {
+                //add j to new list
+                cur->NextNode = j;
+                cur = j;
+                j = cur->NextNode;
+            }
+        }
+
+        if (i != nullptr) //concatenate remain nodes
+        {
+            cur->NextNode = i;
+        }
+        else
+        {
+            cur->NextNode = j;
+        }
+
+        //update private values for both lists
+        size += ref.size;
+        ref.CopyPrivateValues(*this);
     }
 };

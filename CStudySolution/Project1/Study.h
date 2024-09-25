@@ -8,11 +8,14 @@ using namespace std;
 
 int main()
 {
-    InhuLinkedList A{10,20,30,-100,40,50,60,1000,70,80,90};
+    InhuLinkedList A{10, 90};
     A.PrintList();
-    A.ReverseElements();
+    InhuLinkedList B{1,2,15,78,111};
+    B.PrintList();
+
+    A.MergeSortedLinkedList(B);
     A.PrintList();
-    A.AddNewNode(10000);
-    A.PrintList();
+    B.PrintList();
+    
     return 0;
 }
