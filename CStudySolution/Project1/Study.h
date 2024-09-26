@@ -2,20 +2,14 @@
 
 #include <iostream>
 
-#include "CommonClass/InhuLinkedList.h"
+#include "DataStructure/List/InhuCircularList.h"
 
 using namespace std;
 
 int main()
 {
-    InhuLinkedList A{10, 90};
+    InhuCircularList A(10,20,30,40,50,60);
+    A.Insert(0,0);
     A.PrintList();
-    InhuLinkedList B{1,2,15,78,111};
-    B.PrintList();
-
-    A.MergeSortedLinkedList(B);
-    A.PrintList();
-    B.PrintList();
-    
     return 0;
 }
