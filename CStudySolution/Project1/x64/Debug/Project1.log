@@ -1,8 +1,29 @@
-﻿  SortAlgorithm.h
+﻿  Scanning sources for module dependencies...
+  SortAlgorithm.h
+  Compiling...
+  SortAlgorithm.h
+  Bank.cpp
+  NameCard.cpp
+  Running Code Analysis for C/C++...
+  Generating Code...
+  BoundCheckArray.cpp
+  CustomVector.cpp
+C:\Program1\PersonalCLanguageStudy\CStudySolution\Project1\CommonClass\CustomVector.h(274,20): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  InhuMath.cpp
+C:\Program1\PersonalCLanguageStudy\CStudySolution\Project1\CommonClass\InhuMath.h(4,14): warning C4091: 'static ': ignored on left of 'InhuMath' when no variable is declared
+  Point.cpp
+  String.cpp
+C:\Program1\PersonalCLanguageStudy\CStudySolution\Project1\CommonClass\String.h(103,37): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  InhuCircularList.cpp
+  LinkNode.cpp
+  Matrix.cpp
+  LowerTriangularMatrix.cpp
   SortAlgorithm.cpp
   Study.cpp
+  Running Code Analysis for C/C++...
+C:\Program1\PersonalCLanguageStudy\CStudySolution\Project1\CommonClass\InhuMath.h(4,14): warning C4091: 'static ': ignored on left of 'InhuMath' when no variable is declared
   Generating Code...
-x64\Debug\SortAlgorithm.obj : warning LNK4042: object specified more than once; extras ignored
-Study.obj : error LNK2019: unresolved external symbol "void __cdecl SelectSort(int * const,int,bool)" (?SelectSort@@YAXQEAHH_N@Z) referenced in function main
-Study.obj : error LNK2019: unresolved external symbol "void __cdecl PrintIntArray(int * const,int)" (?PrintIntArray@@YAXQEAHH@Z) referenced in function main
-E:\Program\PersonalCLanguageStudy\CStudySolution\x64\Debug\Project1.exe : fatal error LNK1120: 2 unresolved externals
+  InhuLinkedList.cpp
+C:\Program1\PersonalCLanguageStudy\CStudySolution\Project1\DataStructure\List\InhuLinkedList.h(277,13): warning C4101: 'PastValue': unreferenced local variable
+  Project1.vcxproj -> C:\Program1\PersonalCLanguageStudy\CStudySolution\x64\Debug\Project1.exe
+C:\Program1\PersonalCLanguageStudy\CStudySolution\Project1\CommonClass\InhuMath.h(19): warning C6001: Using uninitialized memory 'i'.
