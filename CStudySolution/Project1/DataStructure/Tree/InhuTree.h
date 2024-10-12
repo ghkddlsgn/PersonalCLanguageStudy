@@ -42,7 +42,7 @@ public:
     {
         DeleteAllNodesFromBelow(root);
     }
-
+    
     static void print_Preorder(const TreeNode * Node)
     {
         if (Node == nullptr) return;
@@ -57,7 +57,7 @@ public:
         std::cout<<Node->Value<<" ";
         print_Inorder(Node->RNode);
     }
-    void Insert(int NewValue)
+    void AddNewNode(int NewValue)
     {
         TreeNode * NewNode = new TreeNode;
         NewNode->Value = NewValue;
@@ -100,5 +100,116 @@ public:
             Parent->RNode = NewNode;
         }
         size++;
+    }
+    TreeNode* Search(int SearchValue, TreeNode* & ParentNode) const
+    {
+        TreeNode * TargetNode = root;
+        if (root == nullptr) //Check empty
+        {
+            std::cout<<"Tree is empty"<<std::endl;
+            return nullptr;
+        }
+
+        while(TargetNode) //Search
+        {
+            if (TargetNode->Value == SearchValue)
+            {
+                return TargetNode;
+            }
+            if (TargetNode->Value < SearchValue)
+            {
+                ParentNode = TargetNode;
+                TargetNode = TargetNode->LNode;
+            }
+            else
+            {
+                ParentNode = TargetNode;
+                TargetNode = TargetNode->RNode;
+            }
+        }
+
+        //there's no target node in a tree
+        std::cout<<"Target Node is not exist"<<std::endl;
+        return nullptr;
+    }
+    bool DeleteNode(int TargetValue)
+    {
+        TreeNode * TargetParentNode;
+        TreeNode * TargetNode = Search(TargetValue,TargetParentNode);
+        TreeNode * ReplaceNode;
+        TreeNode * ReplaceNode_Parent;
+
+        if(!TargetNode)
+        {
+            std::cout<<"TargetNode is not exist"<<std::endl;
+            return false;
+        }
+
+        //Choose the replace node
+        ReplaceNode = GetMinNodeInTree(TargetNode, ReplaceNode_Parent);
+        
+        //Move to Replace node to Target Node's location
+        // 1 : update Replace node's original Parent node pointer as null
+        if (ReplaceNode)
+        {
+            ReplaceNode_Parent->LNode = nullptr;
+        }
+        // 2 : If there's a parent node, update the pointer as replace node
+        if (TargetParentNode)
+        {
+            if (TargetParentNode->LNode == TargetNode)
+            {
+                TargetParentNode->LNode = ReplaceNode;
+            }
+            else
+            {
+                TargetParentNode->RNode = ReplaceNode;
+            }
+        }
+        // 3 : update replaceNode
+        ReplaceNode->RNode = TargetNode->RNode;
+        ReplaceNode->LNode = TargetNode->LNode;
+        
+        //Delete TargetNode
+        delete TargetNode;
+        size--;
+
+        return true;
+    }
+    TreeNode * GetMaxNodeInTree(TreeNode* RootNode, TreeNode* & SearchedNode_Parent) const
+    {
+        if (RootNode == nullptr)
+        {
+            std::cout<<"GetMaxNodeInTree : root is nullptr"<<std::endl;
+            return nullptr;
+        }
+        
+        SearchedNode_Parent = nullptr;
+        TreeNode * TargetNode = RootNode;
+        while(TargetNode->RNode != nullptr) //find rightest value
+        {
+            SearchedNode_Parent = TargetNode;
+            TargetNode = TargetNode->RNode;
+        }
+
+        return TargetNode;
+    }
+    TreeNode * GetMinNodeInTree(TreeNode* RootNode, TreeNode* & SearchedNode_Parent) const
+    {
+        if (RootNode == nullptr)
+        {
+            std::cout<<"GetMinNodeInTree : root is nullptr"<<std::endl;
+            return nullptr;
+        }
+
+        SearchedNode_Parent = nullptr;
+        TreeNode * TargetNode = RootNode;
+        while(TargetNode->LNode != nullptr) //find leftest value
+        {
+            SearchedNode_Parent = TargetNode;
+            TargetNode = TargetNode->LNode;
+        }
+
+        return TargetNode;
     }
 };
