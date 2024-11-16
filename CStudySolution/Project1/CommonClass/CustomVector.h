@@ -230,16 +230,9 @@ public:
         int RangeMaxIndex = size-1;
         int TreeSearchCount = 0;
         while(RangeMinIndex<=RangeMaxIndex)
-        {            
+        {
             TreeSearchCount++;
-            if ((RangeMaxIndex+RangeMinIndex)%2==1) //subtree length = even? 
-            {
-                RangeMid = ((RangeMaxIndex+RangeMinIndex)/2) + 1; //Handle odd length number, if i not add +1, then i'll lose right edge index in search range
-            }
-            else
-            {
-                 RangeMid = (RangeMaxIndex+RangeMinIndex)/2;
-            }
+            RangeMid = (RangeMaxIndex+RangeMinIndex)/2;
             
             std::cout<< TreeSearchCount <<"th Target Index : "<<RangeMid<<std::endl;
             
@@ -272,4 +265,28 @@ void PrintElements(std::vector<T> ref)
         std::cout<<ref[i]<<", ";
     }
     std::cout<<std::endl;
+}
+
+std::vector<int> CheckLinear(const std::vector<int> & ref)
+{
+    std::vector<int> Result; //Variable for return
+    
+    int VectorSize = ref.size();
+    int Diff = ref[0];
+
+    for (int i = 1; i<VectorSize; i++)
+    {
+        if (ref[i]-i != Diff)
+        {
+            Diff = ref[i]-i;
+            int EmptyValue = ref[i-1] + 1;
+            while(EmptyValue - i != Diff)
+            {
+                Result.push_back(EmptyValue);
+                EmptyValue++;
+            }
+        }
+    }
+
+    return Result;
 }
