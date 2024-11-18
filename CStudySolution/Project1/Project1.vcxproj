@@ -202,7 +202,6 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
-    <ClCompile Include="CommonClass\BinaryTree_List.cpp" />
     <ClCompile Include="CommonClass\BoundCheckArray.cpp" />
     <ClCompile Include="CommonClass\CustomVector.cpp" />
     <ClCompile Include="CommonClass\InhuMath.cpp" />
@@ -368,7 +367,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bank\Bank.h" />
-    <ClInclude Include="CommonClass\BinaryTree_List.h" />
     <ClInclude Include="CommonClass\BoundCheckArray.h" />
     <ClInclude Include="CommonClass\CustomVector.h" />
     <ClInclude Include="CommonClass\InhuMath.h" />

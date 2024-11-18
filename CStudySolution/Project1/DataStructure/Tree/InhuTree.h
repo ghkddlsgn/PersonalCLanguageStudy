@@ -35,7 +35,6 @@ protected:
         TreeNode * NewNode = nullptr;
         TreeNode * CompareTarget = nullptr;
         std::stack<TreeNode*> PointerStack;
-        
         if (1 <= Arr.size()) //Create Root
         {
             root = new TreeNode(Arr[0]);
