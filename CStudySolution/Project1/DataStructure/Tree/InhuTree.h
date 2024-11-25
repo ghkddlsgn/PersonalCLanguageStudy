@@ -27,45 +27,6 @@ private:
     TreeNode * root = nullptr;
     int size = 0;
 protected:
-
-    //ssibal
-    void CreateTreeFromPreOrder(std::vector<int> Arr)
-    {
-        DeleteAllNodesFromBelow(root);
-        TreeNode * NewNode = nullptr;
-        TreeNode * CompareTarget = nullptr;
-        std::stack<TreeNode*> PointerStack;
-        if (1 <= Arr.size()) //Create Root
-        {
-            root = new TreeNode(Arr[0]);
-            PointerStack.push(root);
-            CompareTarget = root;
-        }
-        
-        for (int i = 1; i<Arr.size(); i++)
-        {
-            NewNode = new TreeNode(Arr[i]);
-
-            if (NewNode->Value < CompareTarget->Value) // Put New node on left side
-            {
-                CompareTarget->LNode = NewNode;
-            }
-            else if (NewNode->Value < PointerStack.top()->Value) // put new node on right side
-            {
-                PointerStack.top()->RNode = NewNode;
-            }
-            else
-            {
-                //pop stack until it 
-                PointerStack.top()->RNode = NewNode;
-            }
-
-            PointerStack.push(CompareTarget);
-            CompareTarget = NewNode;
-            
-        }
-    }
-
     int GetMaxTreeNodeNum(int MaxLevel) const // return 2^(n-1)
     {
         int result = 1;
@@ -84,6 +45,20 @@ protected:
         delete node;
     }
 public:
+    //ssibal
+    void CreateTreeFromPreOrder(std::vector<int> Arr)
+    {
+        std::cout<<"Execute CreateTreeFromPreOrder"<<std::endl;
+
+        //init
+        DeleteAllNodesFromBelow(root);
+        size = Arr.size();
+
+        //variables
+        std::stack<TreeNode*> P_Stack;
+         
+        
+    }
     
     template <typename... Args>
     InhuTree(Args... Nodes)
@@ -282,7 +257,7 @@ public:
                 PrintTreeNode(node->LNode, indent + 4);
         }
     }
-
+    
 
     
     int GetNodeBalance(TreeNode * TargetNode)
