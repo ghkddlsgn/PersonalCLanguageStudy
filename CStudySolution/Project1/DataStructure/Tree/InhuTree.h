@@ -49,15 +49,58 @@ public:
     void CreateTreeFromPreOrder(std::vector<int> Arr)
     {
         std::cout<<"Execute CreateTreeFromPreOrder"<<std::endl;
-
+        
         //init
         DeleteAllNodesFromBelow(root);
         size = Arr.size();
 
         //variables
         std::stack<TreeNode*> P_Stack;
-         
-        
+        TreeNode * PastNode;
+        TreeNode * NewNode;
+        TreeNode * TargetNode;
+
+        //first
+        root = new TreeNode(Arr[0]);
+        PastNode = root;
+
+        //Main loop
+        for (int i = 1; i < Arr.size(); i++)
+        {
+            NewNode = new TreeNode(Arr[i]);
+            while(1)
+            {
+                //L Node Handle
+                if (NewNode->Value < PastNode->Value)
+                {
+                    if(!PastNode->LNode) //location empty?
+                    {
+                        PastNode->LNode = NewNode;
+                        break;
+                    }
+                    P_Stack.push(PastNode);
+                    PastNode = PastNode->LNode;
+                    continue;
+                }
+                else //R Node Handle
+                {
+                    if(P_Stack.top()->Value < NewNode->Value)
+                    {
+                         = P_Stack.pop();
+                        continue;
+                    }
+                    else
+                    {
+                        if (!PastNode->RNode)
+                        {
+                            
+                        }
+                        PastNode = PastNode->RNode;
+                        continue;
+                    }
+                }
+            }
+        }
     }
     
     template <typename... Args>
