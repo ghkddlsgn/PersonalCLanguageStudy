@@ -217,8 +217,6 @@ void InhuTree::DetachAndInsertNode(TreeNode* ToNode, TreeNode*& ToNode_Parent, T
     }
     
     //Attach FromNode to TargetNode's position
-
-
 }
 
 TreeNode* InhuTree::GetMaxNodeInTree(TreeNode* RootNode, TreeNode*& SearchedNode_Parent) const {
