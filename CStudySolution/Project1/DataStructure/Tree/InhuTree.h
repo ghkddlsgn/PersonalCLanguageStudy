@@ -33,13 +33,22 @@ public:
     TreeNode* GetRoot() const;
     static void print_Preorder(const TreeNode* Node);
     static void print_Inorder(const TreeNode* Node);
+    int count_node_below_node(TreeNode* Targetnode) const;
+    void PrintTreeNode(const TreeNode* node, int indent = 0) const;
+    TreeNode* GetClosestInorderNode(TreeNode* TargetNode, TreeNode*& ParentNode) const;
+    TreeNode* GetInorderSuccessor(TreeNode* TargetNode, TreeNode*& SuccessorParentNode) const;
+    TreeNode* GetInorderPredecessor(TreeNode* TargetNode, TreeNode*& PredecessorParentNode) const;
+    bool IsLeafNode(TreeNode* TargetNode) const;
+    bool IsLeftChild(TreeNode* TargetNode, TreeNode* ParentNode) const;
+
     void AddNewNode(int NewValue);
     TreeNode* Search(int SearchValue, TreeNode*& ParentNode) const;
-    bool DeleteNode(int TargetValue);
+    bool DeleteNode(int TargetValue, TreeNode* TargetNode = nullptr);
+    void DetachAndInsertNode(TreeNode* TargetNode, TreeNode*& TargetNode_Parent);
     TreeNode* GetMaxNodeInTree(TreeNode* RootNode, TreeNode*& SearchedNode_Parent) const;
     TreeNode* GetMinNodeInTree(TreeNode* RootNode, TreeNode*& SearchedNode_Parent) const;
-    void PrintTreeNode(const TreeNode* node, int indent = 0) const;
     int GetNodeBalance(TreeNode* TargetNode);
+    
     void LL_Rotation(TreeNode* L1_ParentNode, TreeNode* L1, TreeNode* L2);
     void RR_Rotation(TreeNode* R1_ParentNode, TreeNode* R1, TreeNode* R2);
     void LR_Rotation(TreeNode* R1_ParentNode, TreeNode* a, TreeNode* b, TreeNode* c);

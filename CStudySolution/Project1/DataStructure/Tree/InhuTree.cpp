@@ -94,6 +94,12 @@ void InhuTree::print_Inorder(const TreeNode* Node) {
     print_Inorder(Node->RNode);
 }
 
+int InhuTree::count_node_below_node(TreeNode* Targetnode) const
+{ 
+    if (!Targetnode) return 0;
+    return 1 + count_node_below_node(Targetnode->LNode) + count_node_below_node(Targetnode->RNode);
+}
+
 void InhuTree::AddNewNode(int NewValue) {
     TreeNode* NewNode = new TreeNode;
     NewNode->Value = NewValue;
@@ -156,39 +162,63 @@ TreeNode* InhuTree::Search(int SearchValue, TreeNode*& ParentNode) const {
     return nullptr;
 }
 
-bool InhuTree::DeleteNode(int TargetValue) {
+bool InhuTree::DeleteNode(int TargetValue, TreeNode* TargetNode = nullptr) {
     TreeNode* TargetParentNode;
-    TreeNode* TargetNode = Search(TargetValue, TargetParentNode);
-    TreeNode* ReplaceNode;
-    TreeNode* ReplaceNode_Parent;
+    if (TargetNode == nullptr) {
+        TargetNode = Search(TargetValue, TargetParentNode);
+    }
 
     if(!TargetNode) {
         std::cout << "TargetNode is not exist" << std::endl;
         return false;
     }
 
-    ReplaceNode = GetMinNodeInTree(TargetNode, ReplaceNode_Parent);
-    
-    if (ReplaceNode) {
-        ReplaceNode_Parent->LNode = nullptr;
+    //if targetnode is leaf node, just delete it
+    if (IsLeafNode(TargetNode)) {
+        delete TargetNode;
+        size--;
+        return true;
     }
-    
-    if (TargetParentNode) {
-        if (TargetParentNode->LNode == TargetNode) {
-            TargetParentNode->LNode = ReplaceNode;
-        }
-        else {
-            TargetParentNode->RNode = ReplaceNode;
-        }
-    }
-    
-    ReplaceNode->RNode = TargetNode->RNode;
-    ReplaceNode->LNode = TargetNode->LNode;
-    
+
+    TreeNode* ReplaceNode_Parent;
+    TreeNode* ReplaceNode = GetClosestInorderNode(TargetNode, ReplaceNode_Parent);
+    DetachAndInsertNode(TargetNode, TargetParentNode, ReplaceNode, ReplaceNode_Parent);
+
     delete TargetNode;
     size--;
 
     return true;
+}
+
+void InhuTree::DetachAndInsertNode(TreeNode* ToNode, TreeNode*& ToNode_Parent, TreeNode* FromNode, TreeNode*& FromNode_Parent)
+{
+    if (!FromNode) {
+        return;
+    }
+
+    bool ToNode_isLeftChild = IsLeftChild(ToNode, ToNode_Parent);
+    bool FromNode_isLeftChild = IsLeftChild(FromNode, FromNode_Parent);
+    
+
+
+    //Detach FromNode
+    if (IsLeafNode(FromNode)) {
+        if (FromNode_isLeftChild) {
+            FromNode_Parent->LNode = nullptr;
+        }
+        else {
+            FromNode_Parent->RNode = nullptr;
+        }
+    }
+    else{
+        TreeNode* ReplaceNode_Parent;
+        TreeNode* ReplaceNode = GetClosestInorderNode(FromNode, ReplaceNode_Parent);
+        DetachAndInsertNode(FromNode, FromNode_Parent, ReplaceNode, ReplaceNode_Parent);
+    }
+    
+    //Attach FromNode to TargetNode's position
+
+
 }
 
 TreeNode* InhuTree::GetMaxNodeInTree(TreeNode* RootNode, TreeNode*& SearchedNode_Parent) const {
@@ -235,6 +265,56 @@ void InhuTree::PrintTreeNode(const TreeNode* node, int indent) const {
         if (node->LNode)
             PrintTreeNode(node->LNode, indent + 4);
     }
+}
+
+TreeNode *InhuTree::GetClosestInorderNode(TreeNode *TargetNode, TreeNode *&ParentNode) const
+{
+    if (TargetNode == nullptr) {
+        std::cout << "Target Node is not exist" << std::endl;
+        return nullptr;
+    }
+
+    TreeNode * ReturnValue = GetInorderSuccessor(TargetNode, ParentNode);
+    if (ReturnValue == nullptr) {
+        ReturnValue = GetInorderPredecessor(TargetNode, ParentNode);
+    }
+    return ReturnValue;
+}
+
+TreeNode *InhuTree::GetInorderSuccessor(TreeNode *TargetNode, TreeNode *&SuccessorParentNode) const
+{
+    SuccessorParentNode = TargetNode;
+    TreeNode* ReturnValue = TargetNode->RNode;
+
+    if (ReturnValue == nullptr){
+        std::cout << "Inorder Successor is not exist" << std::endl;
+        return nullptr;
+    }
+
+    while(ReturnValue->LNode != nullptr)
+    {
+        SuccessorParentNode = ReturnValue;
+        ReturnValue = ReturnValue->LNode;
+    }
+    return ReturnValue;
+}
+
+TreeNode *InhuTree::GetInorderPredecessor(TreeNode *TargetNode, TreeNode *&PredecessorParentNode) const
+{
+    PredecessorParentNode = TargetNode;
+    TreeNode* ReturnValue = TargetNode->LNode;
+
+    if (ReturnValue == nullptr){
+        std::cout << "Inorder Predecessor is not exist" << std::endl;
+        return nullptr;
+    }
+
+    while(ReturnValue->RNode != nullptr)
+    {
+        PredecessorParentNode = ReturnValue;
+        ReturnValue = ReturnValue->RNode;
+    }
+    return ReturnValue;
 }
 
 int InhuTree::GetNodeBalance(TreeNode* TargetNode) {
