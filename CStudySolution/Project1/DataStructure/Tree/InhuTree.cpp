@@ -182,7 +182,7 @@ bool InhuTree::DeleteNode(int TargetValue, TreeNode* TargetNode = nullptr) {
 
     TreeNode* ReplaceNode_Parent;
     TreeNode* ReplaceNode = GetClosestInorderNode(TargetNode, ReplaceNode_Parent);
-    DetachAndInsertNode(TargetNode, TargetParentNode, ReplaceNode, ReplaceNode_Parent);
+    DetachAndInsertNode(TargetNode, TargetParentNode);
 
     delete TargetNode;
     size--;
@@ -190,33 +190,37 @@ bool InhuTree::DeleteNode(int TargetValue, TreeNode* TargetNode = nullptr) {
     return true;
 }
 
-void InhuTree::DetachAndInsertNode(TreeNode* ToNode, TreeNode*& ToNode_Parent, TreeNode* FromNode, TreeNode*& FromNode_Parent)
+void InhuTree::DetachAndInsertNode(TreeNode* TargetNode, TreeNode*& TargetNode_Parent)
 {
-    if (!FromNode) {
+    //if targetnode is leaf node, just delete it
+    if (IsLeafNode(TargetNode)) {
+        if (IsLeftChild(TargetNode, TargetNode_Parent)) {
+            TargetNode_Parent->LNode = nullptr;
+        }
+        else {
+            TargetNode_Parent->RNode = nullptr;
+        }
         return;
     }
 
-    bool ToNode_isLeftChild = IsLeftChild(ToNode, ToNode_Parent);
-    bool FromNode_isLeftChild = IsLeftChild(FromNode, FromNode_Parent);
-    
+    //find replace node
+    TreeNode* ReplaceNode_Parent;
+    TreeNode* ReplaceNode = GetClosestInorderNode(TargetNode, ReplaceNode_Parent);
+    //Detach TargetNode
+    bool TargetNode_isLeftChild = IsLeftChild(TargetNode, TargetNode_Parent);
 
+    DetachAndInsertNode(ReplaceNode, ReplaceNode_Parent);
 
-    //Detach FromNode
-    if (IsLeafNode(FromNode)) {
-        if (FromNode_isLeftChild) {
-            FromNode_Parent->LNode = nullptr;
-        }
-        else {
-            FromNode_Parent->RNode = nullptr;
-        }
+    //Attach ReplaceNode to TargetNode's position
+    if (TargetNode_isLeftChild) {
+        TargetNode_Parent->LNode = ReplaceNode;
     }
-    else{
-        TreeNode* ReplaceNode_Parent;
-        TreeNode* ReplaceNode = GetClosestInorderNode(FromNode, ReplaceNode_Parent);
-        DetachAndInsertNode(FromNode, FromNode_Parent, ReplaceNode, ReplaceNode_Parent);
+    else {
+        TargetNode_Parent->RNode = ReplaceNode;
     }
-    
-    //Attach FromNode to TargetNode's position
+
+    ReplaceNode->LNode = TargetNode->LNode;
+    ReplaceNode->RNode = TargetNode->RNode;
 }
 
 TreeNode* InhuTree::GetMaxNodeInTree(TreeNode* RootNode, TreeNode*& SearchedNode_Parent) const {

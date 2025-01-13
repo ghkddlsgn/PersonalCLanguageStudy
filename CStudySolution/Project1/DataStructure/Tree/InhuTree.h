@@ -44,7 +44,7 @@ public:
     void AddNewNode(int NewValue);
     TreeNode* Search(int SearchValue, TreeNode*& ParentNode) const;
     bool DeleteNode(int TargetValue, TreeNode* TargetNode = nullptr);
-    void DetachAndInsertNode(TreeNode* TargetNode, TreeNode*& TargetNode_Parent, TreeNode* FromNode, TreeNode*& FromNode_Parent);
+    void DetachAndInsertNode(TreeNode* TargetNode, TreeNode*& TargetNode_Parent);
     TreeNode* GetMaxNodeInTree(TreeNode* RootNode, TreeNode*& SearchedNode_Parent) const;
     TreeNode* GetMinNodeInTree(TreeNode* RootNode, TreeNode*& SearchedNode_Parent) const;
     int GetNodeBalance(TreeNode* TargetNode);
