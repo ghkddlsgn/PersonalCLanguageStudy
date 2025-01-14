@@ -162,7 +162,7 @@ TreeNode* InhuTree::Search(int SearchValue, TreeNode*& ParentNode) const {
     return nullptr;
 }
 
-bool InhuTree::DeleteNode(int TargetValue, TreeNode* TargetNode = nullptr) {
+bool InhuTree::DeleteNode(int TargetValue, TreeNode* TargetNode) {
     TreeNode* TargetParentNode;
     if (TargetNode == nullptr) {
         TargetNode = Search(TargetValue, TargetParentNode);
@@ -317,6 +317,22 @@ TreeNode *InhuTree::GetInorderPredecessor(TreeNode *TargetNode, TreeNode *&Prede
         ReturnValue = ReturnValue->RNode;
     }
     return ReturnValue;
+}
+
+bool InhuTree::IsLeafNode(TreeNode *TargetNode) const
+{
+    if (TargetNode->LNode == nullptr && TargetNode->RNode == nullptr) {
+        return true;
+    }
+    return false;
+}
+
+bool InhuTree::IsLeftChild(TreeNode *TargetNode, TreeNode *ParentNode) const
+{
+    if (ParentNode->LNode == TargetNode) {
+        return true;
+    }
+    return false;
 }
 
 int InhuTree::GetNodeBalance(TreeNode* TargetNode) {

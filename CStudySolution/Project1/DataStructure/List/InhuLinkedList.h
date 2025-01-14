@@ -226,8 +226,8 @@ public:
     {
         if (TargetIndex > size-1) //Check Target index is invalid
         {
-            std::cout<<"Treid to search non-exist Index : "<<TargetIndex<<std::endl;
-            return std::_Min_limit<int>();
+            std::cout<<"Tried to search non-existent Index: "<<TargetIndex<<std::endl;
+            return std::numeric_limits<int>::lowest();
         }
 
         Node * cur = head->NextNode;
