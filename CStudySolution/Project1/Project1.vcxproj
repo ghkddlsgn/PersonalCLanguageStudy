@@ -204,7 +204,6 @@
     </ClCompile>
     <ClCompile Include="CommonClass\BoundCheckArray.cpp" />
     <ClCompile Include="CommonClass\CustomVector.cpp" />
-    <ClCompile Include="CommonClass\InhuMath.cpp" />
     <ClCompile Include="CommonClass\Point.cpp" />
     <ClCompile Include="CommonClass\String.cpp" />
     <ClCompile Include="DataStructure\List\InhuCircularList.cpp" />
@@ -369,7 +368,6 @@
     <ClInclude Include="Bank\Bank.h" />
     <ClInclude Include="CommonClass\BoundCheckArray.h" />
     <ClInclude Include="CommonClass\CustomVector.h" />
-    <ClInclude Include="CommonClass\InhuMath.h" />
     <ClInclude Include="CommonClass\Point.h" />
     <ClInclude Include="CommonClass\String.h" />
     <ClInclude Include="DataStructure\List\InhuCircularList.h" />

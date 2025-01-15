@@ -1,29 +1,26 @@
 ﻿  Scanning sources for module dependencies...
   SortAlgorithm.h
-  Compiling...
   SortAlgorithm.h
   Bank.cpp
   NameCard.cpp
-  Running Code Analysis for C/C++...
   Generating Code...
   BoundCheckArray.cpp
   CustomVector.cpp
-C:\Program1\PersonalCLanguageStudy\CStudySolution\Project1\CommonClass\CustomVector.h(274,20): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+E:\Program\PersonalCLanguageStudy\CStudySolution\Project1\CommonClass\CustomVector.h(274,20): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   InhuMath.cpp
-C:\Program1\PersonalCLanguageStudy\CStudySolution\Project1\CommonClass\InhuMath.h(4,14): warning C4091: 'static ': ignored on left of 'InhuMath' when no variable is declared
+c1xx : fatal  error C1083: Cannot open source file: 'CommonClass\InhuMath.cpp': No such file or directory
   Point.cpp
   String.cpp
-C:\Program1\PersonalCLanguageStudy\CStudySolution\Project1\CommonClass\String.h(103,37): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+E:\Program\PersonalCLanguageStudy\CStudySolution\Project1\CommonClass\String.h(103,37): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   InhuCircularList.cpp
+  InhuLinkedList.cpp
+E:\Program\PersonalCLanguageStudy\CStudySolution\Project1\DataStructure\List\InhuLinkedList.h(277,13): warning C4101: 'PastValue': unreferenced local variable
   LinkNode.cpp
   Matrix.cpp
   LowerTriangularMatrix.cpp
+  InhuCircularQueue.cpp
+  InhuTree.cpp
+E:\Program\PersonalCLanguageStudy\CStudySolution\Project1\DataStructure\Tree\InhuTree.cpp(30,20): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   SortAlgorithm.cpp
-  Study.cpp
-  Running Code Analysis for C/C++...
-C:\Program1\PersonalCLanguageStudy\CStudySolution\Project1\CommonClass\InhuMath.h(4,14): warning C4091: 'static ': ignored on left of 'InhuMath' when no variable is declared
+  Main.cpp
   Generating Code...
-  InhuLinkedList.cpp
-C:\Program1\PersonalCLanguageStudy\CStudySolution\Project1\DataStructure\List\InhuLinkedList.h(277,13): warning C4101: 'PastValue': unreferenced local variable
-  Project1.vcxproj -> C:\Program1\PersonalCLanguageStudy\CStudySolution\x64\Debug\Project1.exe
-C:\Program1\PersonalCLanguageStudy\CStudySolution\Project1\CommonClass\InhuMath.h(19): warning C6001: Using uninitialized memory 'i'.
