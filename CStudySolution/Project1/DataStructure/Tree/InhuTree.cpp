@@ -167,7 +167,7 @@ void InhuTree::AddNewNode(int NewValue) {
 TreeNode* InhuTree::Search(int SearchValue, TreeNode*& ParentNode) const {
     TreeNode* TargetNode = root;
     if (root == nullptr) {
-        std::cout << "Tree is empty" << std::endl;
+        std::cout << "Search : Tree is empty" << std::endl;
         return nullptr;
     }
 
@@ -177,15 +177,15 @@ TreeNode* InhuTree::Search(int SearchValue, TreeNode*& ParentNode) const {
         }
         if (TargetNode->Value < SearchValue) {
             ParentNode = TargetNode;
-            TargetNode = TargetNode->LNode;
+            TargetNode = TargetNode->RNode;
         }
         else {
             ParentNode = TargetNode;
-            TargetNode = TargetNode->RNode;
+            TargetNode = TargetNode->LNode;
         }
     }
 
-    std::cout << "Target Node is not exist" << std::endl;
+    std::cout << "Search : Target Node is not exist" << std::endl;
     return nullptr;
 }
 
@@ -196,12 +196,18 @@ bool InhuTree::DeleteNode(int TargetValue, TreeNode* TargetNode) {
     }
 
     if(!TargetNode) {
-        std::cout << "TargetNode is not exist" << std::endl;
+        std::cout << "DeleteNode : TargetNode is not exist" << std::endl;
         return false;
     }
 
     //if targetnode is leaf node, just delete it
     if (IsLeafNode(TargetNode)) {
+        if (IsLeftChild(TargetNode, TargetParentNode)) {
+            TargetParentNode->LNode = nullptr;
+        }
+        else {
+            TargetParentNode->RNode = nullptr;
+        }
         delete TargetNode;
         size--;
         return true;

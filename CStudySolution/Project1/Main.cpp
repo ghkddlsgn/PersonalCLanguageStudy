@@ -10,5 +10,12 @@ int main()
     tree.PrintTreeSideways(4);
     std::cout << std::endl << "program End" << std::endl;
 
+    int delete_value = 15;
+    std::cout << std::endl << "Delete Node " << delete_value << std::endl;
+    tree.DeleteNode(delete_value);
+    tree.PrintTreeSideways(4);
+
+    TreeNode* ParentNode;
+    tree.Search(delete_value, ParentNode);
     return 0;
 }

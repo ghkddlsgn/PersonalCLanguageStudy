@@ -34,11 +34,10 @@ public:
 
     //-------------------print tree-------------------
     void PrintTreeSideways(int indentSize = 8) const;
-    void PrintTreeSidewaysHelper(const TreeNode* node, int level, int INDENT) const;
+    void PrintTreeSidewaysHelper(const TreeNode* node, int level, int indent) const;
     static void print_Preorder(const TreeNode* Node);
     static void print_Inorder(const TreeNode* Node);
     int count_node_below_node(TreeNode* Targetnode) const;
-    void PrintTreeNode(const TreeNode* node, int indent = 0) const;
     TreeNode* GetClosestInorderNode(TreeNode* TargetNode, TreeNode*& ParentNode) const;
     TreeNode* GetInorderSuccessor(TreeNode* TargetNode, TreeNode*& SuccessorParentNode) const;
     TreeNode* GetInorderPredecessor(TreeNode* TargetNode, TreeNode*& PredecessorParentNode) const;
