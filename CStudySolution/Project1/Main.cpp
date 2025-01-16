@@ -4,19 +4,15 @@
 
 int main()
 {
-    InhuTree tree{73, 15, 89, 42, 31, 67, 95, 8, 54, 23, 82, 47, 19, 63, 91};
+    InhuTree tree{50,30,60,20,40,35}; // Creates a tree that needs RL rotation
+    // tree.BalanceTree(tree.GetRoot());
     std::cout << "program Start" << std::endl;
     std::cout << std::endl;
     tree.PrintTreeSideways(4);
-    std::cout << std::endl << "program End" << std::endl;
 
-    int delete_value = 15;
-    std::cout << std::endl << "Delete Node " << delete_value << std::endl;
-    tree.DeleteNode(delete_value);
+    std::cout<<"Begin modify"<<std::endl;
+    tree.RL_Rotation(nullptr, tree.GetRoot(), tree.GetRoot()->LNode, tree.GetRoot()->LNode->RNode);
     tree.PrintTreeSideways(4);
-
-    TreeNode* ParentNode;
-    tree.Search(delete_value, ParentNode);
-    std::cout<<"balance : "<<tree.GetNodeHeight(tree.GetRoot())<<std::endl;
+    std::cout << std::endl << "program End" << std::endl;
     return 0;
 }

@@ -53,9 +53,10 @@ public:
     void DetachAndInsertNode(TreeNode* TargetNode, TreeNode*& TargetNode_Parent);
     TreeNode* GetMaxNodeInTree(TreeNode* RootNode, TreeNode*& SearchedNode_Parent) const;
     TreeNode* GetMinNodeInTree(TreeNode* RootNode, TreeNode*& SearchedNode_Parent) const;
-    
+
     void LL_Rotation(TreeNode* L1_ParentNode, TreeNode* L1, TreeNode* L2);
     void RR_Rotation(TreeNode* R1_ParentNode, TreeNode* R1, TreeNode* R2);
-    void LR_Rotation(TreeNode* R1_ParentNode, TreeNode* a, TreeNode* b, TreeNode* c);
-    void RL_Rotation(TreeNode* R1_ParentNode, TreeNode* a, TreeNode* b, TreeNode* c);
+    void LR_Rotation(TreeNode* a_ParentNode, TreeNode* a, TreeNode* b, TreeNode* c);
+    void RL_Rotation(TreeNode* a_ParentNode, TreeNode* a, TreeNode* b, TreeNode* c);
+    void BalanceTree(TreeNode* TargetNode, TreeNode* TargetNode_Parent = nullptr);
 };

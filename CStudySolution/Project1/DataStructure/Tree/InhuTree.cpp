@@ -382,7 +382,7 @@ bool InhuTree::IsLeftChild(TreeNode *TargetNode, TreeNode *ParentNode) const
     return false;
 }
 
-void InhuTree::LL_Rotation(TreeNode* L1_ParentNode = nullptr, TreeNode* L1, TreeNode* L2) {
+void InhuTree::LL_Rotation(TreeNode* L1_ParentNode, TreeNode* L1, TreeNode* L2) {
     //rearrange subtree related with l1,l2
     L1->LNode = L2->RNode;
     L2->RNode = L1;
@@ -402,7 +402,7 @@ void InhuTree::LL_Rotation(TreeNode* L1_ParentNode = nullptr, TreeNode* L1, Tree
     }
 }
 
-void InhuTree::RR_Rotation(TreeNode* R1_ParentNode = nullptr, TreeNode* R1, TreeNode* R2) {
+void InhuTree::RR_Rotation(TreeNode* R1_ParentNode, TreeNode* R1, TreeNode* R2) {
     //rearrange subtree related with R1,R2
     R1->RNode = R2->LNode;
     R2->LNode = R1;
@@ -422,13 +422,48 @@ void InhuTree::RR_Rotation(TreeNode* R1_ParentNode = nullptr, TreeNode* R1, Tree
     }
 }
 
-void InhuTree::LR_Rotation(TreeNode* a_ParentNode = nullptr, TreeNode* a, TreeNode* b, TreeNode* c) {
+void InhuTree::LR_Rotation(TreeNode* a_ParentNode, TreeNode* a, TreeNode* b, TreeNode* c) {
     RR_Rotation(a,b,c);
     LL_Rotation(a_ParentNode,a,c);
 }
 
-void InhuTree::RL_Rotation(TreeNode* a_ParentNode = nullptr, TreeNode* a, TreeNode* b, TreeNode* c) {
+void InhuTree::RL_Rotation(TreeNode* a_ParentNode, TreeNode* a, TreeNode* b, TreeNode* c) {
     LL_Rotation(a,c,b);
     RR_Rotation(a_ParentNode,a,b);
 }
-g
+
+void InhuTree::BalanceTree(TreeNode *TargetNode, TreeNode* TargetNode_Parent)
+{
+    if (!TargetNode) {
+        return;
+    }
+
+    //keep balance tree until balance value reaches -1, 0, 1
+    while(abs(GetNodeBalance(TargetNode)) >= 2) {
+        int Height_L = GetNodeHeight(TargetNode->LNode);
+        int Height_R = GetNodeHeight(TargetNode->RNode);
+        
+        if (Height_L > Height_R) {
+            if (!TargetNode->LNode->LNode) {
+                LR_Rotation(TargetNode_Parent, TargetNode, TargetNode->LNode, TargetNode->LNode->RNode);
+            }
+            else {
+                LL_Rotation(TargetNode_Parent, TargetNode, TargetNode->LNode);
+            }
+        }
+        else {
+            if (!TargetNode->RNode->RNode) {
+                RL_Rotation(TargetNode_Parent, TargetNode, TargetNode->RNode, TargetNode->RNode->LNode);
+            }
+            else {
+                RR_Rotation(TargetNode_Parent, TargetNode, TargetNode->RNode);
+            }
+        }
+    }
+
+    //recursivly check every node in the tree
+    BalanceTree(TargetNode->LNode, TargetNode);
+    BalanceTree(TargetNode->RNode, TargetNode);
+
+    return;
+}
