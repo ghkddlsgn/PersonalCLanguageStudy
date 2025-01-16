@@ -17,5 +17,6 @@ int main()
 
     TreeNode* ParentNode;
     tree.Search(delete_value, ParentNode);
+    std::cout<<"balance : "<<tree.GetNodeHeight(tree.GetRoot())<<std::endl;
     return 0;
 }
