@@ -4,11 +4,11 @@
 
 int main()
 {
-    InhuTree tree;
-    std::cout<<"program Start"<<std::endl;
-    tree.AddNewNode(1);
-    tree.PrintTreeNode(tree.GetRoot());
-    std::cout<<"program End"<<std::endl;
+    InhuTree tree{73, 15, 89, 42, 31, 67, 95, 8, 54, 23, 82, 47, 19, 63, 91};
+    std::cout << "program Start" << std::endl;
+    std::cout << std::endl;
+    tree.PrintTreeSideways(4);
+    std::cout << std::endl << "program End" << std::endl;
 
     return 0;
 }

@@ -31,6 +31,10 @@ public:
     ~InhuTree();
 
     TreeNode* GetRoot() const;
+
+    //-------------------print tree-------------------
+    void PrintTreeSideways(int indentSize = 8) const;
+    void PrintTreeSidewaysHelper(const TreeNode* node, int level, int INDENT) const;
     static void print_Preorder(const TreeNode* Node);
     static void print_Inorder(const TreeNode* Node);
     int count_node_below_node(TreeNode* Targetnode) const;

@@ -80,7 +80,34 @@ TreeNode* InhuTree::GetRoot() const {
     return root;
 }
 
-void InhuTree::print_Preorder(const TreeNode* Node) {
+void InhuTree::PrintTreeSideways(int indentSize) const
+{
+    if (!root) {
+            std::cout << "(empty tree)" << std::endl;
+            return;
+        }
+        PrintTreeSidewaysHelper(root, 0, indentSize);
+}
+
+void InhuTree::PrintTreeSidewaysHelper(const TreeNode* node, int level, int indent) const
+{
+    if (node == nullptr) {
+        return;
+    }
+
+    // 1) Print the right child first (above the current node)
+    PrintTreeSidewaysHelper(node->RNode, level + 1, indent);
+
+    // 2) Print the current node, indented according to level
+    // Each 'level' means we shift by (level * INDENT) spaces
+    std::cout << std::string(level * indent, ' ') << node->Value << std::endl;
+
+    // 3) Print the left child (below the current node)
+    PrintTreeSidewaysHelper(node->LNode, level + 1, indent);
+}
+
+void InhuTree::print_Preorder(const TreeNode *Node)
+{
     if (Node == nullptr) return;
     std::cout << Node->Value << " ";
     print_Preorder(Node->LNode);
@@ -254,21 +281,6 @@ TreeNode* InhuTree::GetMinNodeInTree(TreeNode* RootNode, TreeNode*& SearchedNode
     return TargetNode;
 }
 
-void InhuTree::PrintTreeNode(const TreeNode* node, int indent) const {
-    if (node != nullptr) {
-        if (node->RNode)
-            PrintTreeNode(node->RNode, indent + 4);
-        
-        if (indent)
-            std::cout << std::string(indent, ' ');
-        
-        std::cout << node->Value << std::endl;
-
-        if (node->LNode)
-            PrintTreeNode(node->LNode, indent + 4);
-    }
-}
-
 TreeNode *InhuTree::GetClosestInorderNode(TreeNode *TargetNode, TreeNode *&ParentNode) const
 {
     if (TargetNode == nullptr) {
@@ -340,7 +352,7 @@ int InhuTree::GetNodeBalance(TreeNode* TargetNode) {
         std::cout << "Target Node is not exist" << std::endl;
         return 0;
     }
-    return 0; // Note: Implementation seems incomplete in original code
+    return 0;
 }
 
 void InhuTree::LL_Rotation(TreeNode* L1_ParentNode, TreeNode* L1, TreeNode* L2) {
