@@ -16,6 +16,7 @@ class InhuTree {
 private:
     TreeNode* root = nullptr;
     int size = 0;
+    int modify_count = 0;
 
 protected:
     int GetMaxTreeNodeNum(int MaxLevel) const;
@@ -44,7 +45,7 @@ public:
     bool IsLeafNode(TreeNode* TargetNode) const;
     bool IsLeftChild(TreeNode* TargetNode, TreeNode* ParentNode) const;
     int count_node_below_node(TreeNode* Targetnode) const;
-    int GetNodeHeight(TreeNode* TargetNode) const;
+    int GetSubNodeLevel(TreeNode* TargetNode) const;
     int GetNodeBalance(TreeNode* TargetNode) const;
 
     void AddNewNode(int NewValue);
@@ -54,9 +55,11 @@ public:
     TreeNode* GetMaxNodeInTree(TreeNode* RootNode, TreeNode*& SearchedNode_Parent) const;
     TreeNode* GetMinNodeInTree(TreeNode* RootNode, TreeNode*& SearchedNode_Parent) const;
 
-    void LL_Rotation(TreeNode* L1_ParentNode, TreeNode* L1, TreeNode* L2);
-    void RR_Rotation(TreeNode* R1_ParentNode, TreeNode* R1, TreeNode* R2);
-    void LR_Rotation(TreeNode* a_ParentNode, TreeNode* a, TreeNode* b, TreeNode* c);
-    void RL_Rotation(TreeNode* a_ParentNode, TreeNode* a, TreeNode* b, TreeNode* c);
+    //-------------------rotation-------------------
+    //these functions return the new top node after rotation
+    TreeNode* LL_Rotation(TreeNode* L1_ParentNode, TreeNode* L1);
+    TreeNode* RR_Rotation(TreeNode* R1_ParentNode, TreeNode* R1);
+    TreeNode* LR_Rotation(TreeNode* a_ParentNode, TreeNode* a);
+    TreeNode* RL_Rotation(TreeNode* a_ParentNode, TreeNode* a);
     void BalanceTree(TreeNode* TargetNode, TreeNode* TargetNode_Parent = nullptr);
 };

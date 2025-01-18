@@ -127,12 +127,12 @@ int InhuTree::count_node_below_node(TreeNode* Targetnode) const
     return 1 + count_node_below_node(Targetnode->LNode) + count_node_below_node(Targetnode->RNode);
 }
 
-int InhuTree::GetNodeHeight(TreeNode *TargetNode) const
+int InhuTree::GetSubNodeLevel(TreeNode *TargetNode) const
 {
     if (!TargetNode){
-        return -1; //return -1 at the end, so init height can be 0
+        return 0; //return -1 at the end, so init height can be 0
     }
-    return 1 + std::max(GetNodeHeight(TargetNode->LNode), GetNodeHeight(TargetNode->RNode));
+    return 1 + std::max(GetSubNodeLevel(TargetNode->LNode), GetSubNodeLevel(TargetNode->RNode));
 }
 
 int InhuTree::GetNodeBalance(TreeNode *TargetNode) const
@@ -146,11 +146,11 @@ int InhuTree::GetNodeBalance(TreeNode *TargetNode) const
     int Height_R = 0;   
     if (TargetNode->LNode)
     {
-        Height_L = GetNodeHeight(TargetNode->LNode);
+        Height_L = GetSubNodeLevel(TargetNode->LNode);
     }
     if (TargetNode->RNode)
     {
-        Height_R = GetNodeHeight(TargetNode->RNode);
+        Height_R = GetSubNodeLevel(TargetNode->RNode);
     }
     
     return Height_L-Height_R;
@@ -382,7 +382,18 @@ bool InhuTree::IsLeftChild(TreeNode *TargetNode, TreeNode *ParentNode) const
     return false;
 }
 
-void InhuTree::LL_Rotation(TreeNode* L1_ParentNode, TreeNode* L1, TreeNode* L2) {
+TreeNode* InhuTree::LL_Rotation(TreeNode* L1_ParentNode, TreeNode* L1) {
+    //check valid
+    if (L1 == nullptr) {
+        std::cout << "LL_Rotation : L1 is nullptr" << std::endl;
+        return nullptr;
+    }
+    if (!L1->LNode) {
+        std::cout << "LL_Rotation : not valid" << std::endl;
+        return nullptr;
+    }
+    TreeNode* L2 = L1->LNode;
+
     //rearrange subtree related with l1,l2
     L1->LNode = L2->RNode;
     L2->RNode = L1;
@@ -390,7 +401,7 @@ void InhuTree::LL_Rotation(TreeNode* L1_ParentNode, TreeNode* L1, TreeNode* L2) 
     //rearrange higher tree
     if (L1 == root){
         root = L2;
-        return;
+        return L2;
     }
 
     bool isleft = IsLeftChild(L1, L1_ParentNode);
@@ -400,9 +411,21 @@ void InhuTree::LL_Rotation(TreeNode* L1_ParentNode, TreeNode* L1, TreeNode* L2) 
     else {
         L1_ParentNode->RNode = L2;
     }
+    return L2;
 }
 
-void InhuTree::RR_Rotation(TreeNode* R1_ParentNode, TreeNode* R1, TreeNode* R2) {
+TreeNode* InhuTree::RR_Rotation(TreeNode* R1_ParentNode, TreeNode* R1) {
+    //check valid
+    if (R1 == nullptr) {
+        std::cout << "RR_Rotation : R1 is nullptr" << std::endl;
+        return nullptr;
+    }
+    if (!R1->RNode) {
+        std::cout << "RR_Rotation : not valid" << std::endl;
+        return nullptr;
+    }
+    TreeNode* R2 = R1->RNode;
+    
     //rearrange subtree related with R1,R2
     R1->RNode = R2->LNode;
     R2->LNode = R1;
@@ -410,7 +433,7 @@ void InhuTree::RR_Rotation(TreeNode* R1_ParentNode, TreeNode* R1, TreeNode* R2) 
     //rearrange higher tree
     if (R1 == root){
         root = R2;
-        return;
+        return R2;
     }
 
     bool isleft = IsLeftChild(R1, R1_ParentNode);
@@ -420,16 +443,27 @@ void InhuTree::RR_Rotation(TreeNode* R1_ParentNode, TreeNode* R1, TreeNode* R2) 
     else {
         R1_ParentNode->RNode = R2;
     }
+    return R2;
 }
 
-void InhuTree::LR_Rotation(TreeNode* a_ParentNode, TreeNode* a, TreeNode* b, TreeNode* c) {
-    RR_Rotation(a,b,c);
-    LL_Rotation(a_ParentNode,a,c);
+TreeNode* InhuTree::LR_Rotation(TreeNode* a_ParentNode, TreeNode* a) {
+    if (!(a->LNode && a->LNode->RNode)) {
+        std::cout << "LR_Rotation : node is not exist" << std::endl;
+        return nullptr;
+    }
+    TreeNode* b = a->LNode;
+    RR_Rotation(a,b);
+    return LL_Rotation(a_ParentNode,a);
 }
 
-void InhuTree::RL_Rotation(TreeNode* a_ParentNode, TreeNode* a, TreeNode* b, TreeNode* c) {
-    LL_Rotation(a,c,b);
-    RR_Rotation(a_ParentNode,a,b);
+TreeNode* InhuTree::RL_Rotation(TreeNode* a_ParentNode, TreeNode* a) {
+    if (!(a->RNode && a->RNode->LNode)) {
+        std::cout << "RL_Rotation : node is not exist" << std::endl;
+        return nullptr;
+    }
+    TreeNode* b = a->RNode;
+    LL_Rotation(a,b);
+    return RR_Rotation(a_ParentNode,a);
 }
 
 void InhuTree::BalanceTree(TreeNode *TargetNode, TreeNode* TargetNode_Parent)
@@ -437,33 +471,66 @@ void InhuTree::BalanceTree(TreeNode *TargetNode, TreeNode* TargetNode_Parent)
     if (!TargetNode) {
         return;
     }
-
+    TreeNode* TopNode = TargetNode;
+    bool LSub_Sub_Node_Exist;
+    bool RSubNode_Exist;
+    int L_SubtreeHeight;
+    int R_SubtreeHeight;
     //keep balance tree until balance value reaches -1, 0, 1
-    while(abs(GetNodeBalance(TargetNode)) >= 2) {
-        int Height_L = GetNodeHeight(TargetNode->LNode);
-        int Height_R = GetNodeHeight(TargetNode->RNode);
-        
+    while(abs(GetNodeBalance(TopNode)) >= 2) {
+        //if this is true, that means we have at least 2 nodes in right or left subtree
+        int Height_L = GetSubNodeLevel(TopNode->LNode);
+        int Height_R = GetSubNodeLevel(TopNode->RNode);
         if (Height_L > Height_R) {
-            if (!TargetNode->LNode->LNode) {
-                LR_Rotation(TargetNode_Parent, TargetNode, TargetNode->LNode, TargetNode->LNode->RNode);
+            LSub_Sub_Node_Exist = TopNode->LNode->LNode ? true : false;
+            RSubNode_Exist = TopNode->LNode->RNode ? true : false;
+            //both left and right node exist
+            if (LSub_Sub_Node_Exist && RSubNode_Exist) {
+                L_SubtreeHeight = GetSubNodeLevel(TopNode->LNode->LNode);
+                R_SubtreeHeight = GetSubNodeLevel(TopNode->LNode->RNode);
+                if (L_SubtreeHeight > R_SubtreeHeight) {
+                    TopNode = LL_Rotation(TargetNode_Parent, TopNode);
+                }
+                else {
+                    TopNode = LR_Rotation(TargetNode_Parent, TopNode);
+                }
+            }
+            else if (!LSub_Sub_Node_Exist) {
+                TopNode = LR_Rotation(TargetNode_Parent, TopNode);
             }
             else {
-                LL_Rotation(TargetNode_Parent, TargetNode, TargetNode->LNode);
+                TopNode = LL_Rotation(TargetNode_Parent, TopNode);
             }
         }
         else {
-            if (!TargetNode->RNode->RNode) {
-                RL_Rotation(TargetNode_Parent, TargetNode, TargetNode->RNode, TargetNode->RNode->LNode);
+            RSubNode_Exist = TopNode->RNode->RNode ? true : false;
+            LSub_Sub_Node_Exist = TopNode->RNode->LNode ? true : false;
+            //both left and right node exist
+            if (LSub_Sub_Node_Exist && RSubNode_Exist) {
+                L_SubtreeHeight = GetSubNodeLevel(TopNode->RNode->LNode);
+                R_SubtreeHeight = GetSubNodeLevel(TopNode->RNode->RNode);
+                if (L_SubtreeHeight > R_SubtreeHeight) {
+                    TopNode = RL_Rotation(TargetNode_Parent, TopNode);
+                }
+                else {
+                    TopNode = RR_Rotation(TargetNode_Parent, TopNode);
+                }
+            }
+            else if (!RSubNode_Exist) {
+                TopNode = RL_Rotation(TargetNode_Parent, TopNode);
             }
             else {
-                RR_Rotation(TargetNode_Parent, TargetNode, TargetNode->RNode);
+                TopNode = RR_Rotation(TargetNode_Parent, TopNode);
             }
         }
+        std::cout<<"modify_count : "<<modify_count++<<std::endl;
+        PrintTreeSideways(4);
+        std::cout<<std::endl;
     }
 
     //recursivly check every node in the tree
-    BalanceTree(TargetNode->LNode, TargetNode);
-    BalanceTree(TargetNode->RNode, TargetNode);
+    BalanceTree(TopNode->LNode, TopNode);
+    BalanceTree(TopNode->RNode, TopNode);
 
     return;
 }
