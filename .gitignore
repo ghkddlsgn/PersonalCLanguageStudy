@@ -35,3 +35,4 @@
 *.cmake
 CStudySolution/build/
 CStudySolution/.idea/
+/build
