@@ -1,23 +1,21 @@
 #include <iostream>
 #include "InhuBTree.h"
-#include "Project1/SortAlgorithm.h"
 
 void InhuBTree::DeleteAllNodesFromBelow(TreeN_Node* node)
 {
     if (node == nullptr) return;
     for (int i = 0; i < node->len; i++)
     {
-        DeleteAllNodesFromBelow(node->ChildNode[i]);
+        DeleteAllNodesFromBelow(node->ChildNodeArr[i]);
     }
     delete node;
     size--;
 }
 
-void InhuBTree::SplitNode(TreeN_Node* node, int NewValue)
+void InhuBTree::SortNodeValue(TreeN_Node* node)
 {
-    TreeN_Node* NewNode = new TreeN_Node(node_size);
+    
 }
-
 //it return last searched node, so if i want to add new node, i can add at last searched node
 bool InhuBTree::SearchNode(int TargetValue, TreeN_Node *& LastSearchedNode) const
 {
@@ -39,12 +37,12 @@ bool InhuBTree::SearchNode(int TargetValue, TreeN_Node *& LastSearchedNode) cons
             if (TargetValue < LastSearchedNode->Value[i])
             {
                 //if there's no child node, i need to add new value on this node (LastSearchedNode)
-                if (LastSearchedNode->ChildNode[i] == nullptr) 
+                if (LastSearchedNode->ChildNodeArr[i] == nullptr) 
                 {
                     return false;
                 }
                 //if there's child node, go to the child node
-                LastSearchedNode = LastSearchedNode->ChildNode[i];
+                LastSearchedNode = LastSearchedNode->ChildNodeArr[i];
                 break;
             }
             if (LastSearchedNode->Value[i] == TargetValue)
@@ -56,12 +54,12 @@ bool InhuBTree::SearchNode(int TargetValue, TreeN_Node *& LastSearchedNode) cons
         if (i == node_len)
         {
             //if there's no child node, i need to add new value on this node (LastSearchedNode)
-            if (LastSearchedNode->ChildNode[node_len] == nullptr)
+            if (LastSearchedNode->ChildNodeArr[node_len] == nullptr)
             {
                 return false;
             }
             //if there's child node, go to the last child node
-            LastSearchedNode = LastSearchedNode->ChildNode[node_len];
+            LastSearchedNode = LastSearchedNode->ChildNodeArr[node_len];
         }
     }
 }
@@ -80,13 +78,24 @@ bool InhuBTree::AddNewValue(int NewValue)
     {
         //start split node
         
+        //sort value
+        int temp[TargetNode->len + 1];
+        for (int i = 0; i < TargetNode->len; i++)
+        {
+            temp[i] = TargetNode->Value[i];
+        }
+        //add new value to temp array
+        temp[TargetNode->len] = NewValue;
+        //sort temp array
+        SortNodeValue(TargetNode);
+
     }
     else
     {
         //add new value to target node's empty slot
         TargetNode->Value[TargetNode->len] = NewValue;
         TargetNode->len++;
-        SelectSort(TargetNode->Value, TargetNode->len, true); //function from SortAlgorithm.h
+        SortNodeValue(TargetNode);
         return true;
     }
 }
