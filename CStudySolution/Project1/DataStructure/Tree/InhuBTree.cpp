@@ -108,11 +108,11 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
     //process the the split node itself : add to parent
     if (ParentNode->len != node_size) //ParentNode is not full?
     {
-        InsertNewValueOnRemainSpace(ParentNode, , NewChildNode);
+        InsertNewValueOnRemainSpace(ParentNode, WholeValue[split_index], NewNode);
     }
     else //ParentNode is full
     {
-        SplitNode(ParentNode, , NewNode);
+        SplitNode(ParentNode, WholeValue[split_index], NewNode);
     }
 
     //process the left node (original) : clear values
