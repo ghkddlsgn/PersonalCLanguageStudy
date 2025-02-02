@@ -1,4 +1,4 @@
-#define NULLVALUE -9999999
+#define NULLVALUE 9999999
 struct TreeN_Node {
     int* Value;
     TreeN_Node** ChildNodeArr = nullptr;
@@ -31,10 +31,12 @@ private:
 protected:
     TreeN_Node* CreateNewNode();
     void DeleteAllNodesFromBelow(TreeN_Node* node);
-    void AddNewValueOnNode(TreeN_Node* node, int NewValue);
-    void SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNode=nullptr);
-    int GetInsertTargetIndex(int TargetValue, TreeN_Node* node) const;
+    void InsertNewValueOnRemainSpace(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNode = nullptr);
+    void GetNewValueAddedResultOnNode(const TreeN_Node* node, int NewValue, int*& ReturnValue, TreeN_Node**& ReturnNodeArr, TreeN_Node* NewChildNode = nullptr) const;
+    void SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNode = nullptr);
+    int GetInsertTargetIndex(const TreeN_Node* node, int TargetValue) const;
 public:
+
     template <typename... Args>
 
     InhuBTree(int NodeSize,Args... Nodes)

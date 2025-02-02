@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include "InhuBTree.h"
 #include "Project1/SortAlgorithm.h"
@@ -22,6 +21,55 @@ void InhuBTree::DeleteAllNodesFromBelow(TreeN_Node* node)
     size--;
 }
 
+//this function should be excuted if node is not full
+void InhuBTree::InsertNewValueOnRemainSpace(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNode)
+{
+    //node is full?
+    if (node->len == node_size)
+    {
+        std::cout << "InsertNewValueOnNode error : node is full, no space to insert" << std::endl;
+        return;
+    }
+
+    int insert_index = GetInsertTargetIndex(node, NewValue);
+    for (int i = node->len; i > insert_index; i--)
+    {
+        node->Value[i] = node->Value[i-1];
+        node->ChildNodeArr[i+1] = node->ChildNodeArr[i];
+    }
+    node->Value[insert_index] = NewValue;
+    node->ChildNodeArr[insert_index+1] = NewChildNode; //this can be nullptr
+    node->len++;
+}
+
+void InhuBTree::GetNewValueAddedResultOnNode(const TreeN_Node* node, int NewValue, int*& ReturnValue, TreeN_Node**& ReturnNodeArr, TreeN_Node* NewChildNode) const
+
+{
+    int insert_index = GetInsertTargetIndex(node, NewValue);
+    
+    delete ReturnValue;
+    delete ReturnNodeArr;
+
+    ReturnValue = new int[node->len + 1];
+    ReturnNodeArr = new TreeN_Node*[node->len + 2];
+
+    //fill the left part
+    for (int i = 0; i < insert_index; i++)
+    {
+        ReturnValue[i] = node->Value[i];
+        ReturnNodeArr[i] = node->ChildNodeArr[i];
+    }
+    //fill the right part
+    for (int i = insert_index + 1; i < node->len + 1; i++)
+    {
+        ReturnValue[i] = node->Value[i];
+        ReturnNodeArr[i+1] = node->ChildNodeArr[i];
+    }
+    //fill the insert part
+    ReturnValue[insert_index] = NewValue;
+    ReturnNodeArr[insert_index+1] = NewChildNode; //this can be nullptr
+}
+
 /*
 if NewChildNode is nullptr, it means i split leaf node
 if NewChildNode is not nullptr, it means i split internal node.
@@ -29,79 +77,73 @@ i need to put NewChildNode after Insert point
 */
 void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNode)
 {
-    //check node is full
-    if (node->len != node_size)
+    if (node->len!=node_size)
     {
-        std::cout << "Node is not full" << std::endl;
+        std::cout << "SplitNode error : node is not full" << std::endl;
         return;
     }
 
-    int i = 0;
+    //prepare new node and parent node
+    TreeN_Node* NewNode = CreateNewNode();
+    NewNode->ParentNode = node->ParentNode;
 
-    //prepare parent node
-    TreeN_Node* parentNode = node->ParentNode;
-    if (parentNode == nullptr)
+    TreeN_Node* ParentNode = node->ParentNode;
+    if (ParentNode == nullptr)
     {
-        parentNode = CreateNewNode();
-        parentNode->ChildNodeArr[0] = node;
-        node->ParentNode = parentNode;
-    }
-    //create new nodes for split
-    TreeN_Node* newNode = CreateNewNode();
-    newNode->ParentNode = parentNode;
-
-
-    int insert_index = GetInsertTargetIndex(NewValue, node);
-
-    //create whole node values and child nodes
-    int new_whole_node_values[node_size + 1];
-    TreeN_Node* new_whole_node_child_nodes[node_size + 2];
-
-    for (i = 0; i <insert_index - 1; i++)
-    {
-        new_whole_node_values[i] = node->Value[i];
-        new_whole_node_child_nodes[i] = node->ChildNodeArr[i];
-    }
-    new_whole_node_child_nodes[insert_index] = node->ChildNodeArr[insert_index];
-    new_whole_node_values[insert_index] = NewValue;
-    new_whole_node_child_nodes[insert_index + 1] = NewChildNode; //this could be nullptr
-
-    for (i = insert_index + 1; i < node_size + 1; i++)
-    {
-        new_whole_node_values[i] = node->Value[i];
-        new_whole_node_child_nodes[i+1] = node->ChildNodeArr[i];
+        ParentNode = CreateNewNode();
+        node->ParentNode = ParentNode;
+        NewNode->ParentNode = ParentNode;
     }
 
-    //initiate split node
-    int split_index = (node_size/2) - 1;
+    //get combined(node + new value, new child node) value and node array
+    int insert_index = GetInsertTargetIndex(node, NewValue);
+
+    int* WholeValue;
+    TreeN_Node** WholeChildNodeArr;
+    GetNewValueAddedResultOnNode(node, NewValue, WholeValue, WholeChildNodeArr, NewChildNode);
     
-    for (i = 0; i < split_index; i++)
+    //split node
+    int split_index = (node_size-1)/2;
+
+    //process the the split node itself : add to parent
+    if (ParentNode->len != node_size) //ParentNode is not full?
     {
-        node->Value[i] = new_whole_node_values[i];
-        node->ChildNodeArr[i] = new_whole_node_child_nodes[i];
+        InsertNewValueOnRemainSpace(ParentNode, , NewChildNode);
     }
-    for (i = split_index; i < node_size; i++)
+    else //ParentNode is full
+    {
+        SplitNode(ParentNode, , NewNode);
+    }
+
+    //process the left node (original) : clear values
+    for (int i = split_index + 1; i < node->len; i++)
     {
         node->Value[i] = NULLVALUE;
-        
+        node->ChildNodeArr[i + 1] = nullptr;
     }
+    node->len = split_index;
 
-    //add 1 value to parent node
-
+    //process the right node (new one) : fill values
     int j = 0;
-    for (i = split_index + 1; i < node_size + 1; i++)
+    for (int i = split_index + 1; i < node->len + 1; i++)
     {
-        newNode->Value[j] = new_whole_node_values[i];
-        newNode->ChildNodeArr[j] = new_whole_node_child_nodes[i];
+        NewNode->Value[j] = WholeValue[i];
+        NewNode->ChildNodeArr[j] = WholeChildNodeArr[i + 1];
         j++;
     }
+    NewNode->ChildNodeArr[j+1] = WholeChildNodeArr[node->len + 1]; //add the last ptr
+    NewNode->len = j;
+
+    delete[] WholeValue;
+    delete[] WholeChildNodeArr;
 }
 
-int InhuBTree::GetInsertTargetIndex(int TargetValue, TreeN_Node* node) const
+
+int InhuBTree::GetInsertTargetIndex(const TreeN_Node* node, int TargetValue) const
 {
     int len = node->len;
     
-    int insert_index =  len-1/2;
+    int insert_index = (len-1)/2;
     int min_index = 0;
     int max_index = len-1;
 
@@ -122,15 +164,11 @@ int InhuBTree::GetInsertTargetIndex(int TargetValue, TreeN_Node* node) const
         }
         insert_index = (min_index + max_index) / 2;
     }
-    
-    if (min_index != max_index) //logic error check
-    {
-        std::cout << "GetInsertTargetIndex error : min_index != max_index" << std::endl;
-        return -1;
-    }
 
     /*from now, min_index == max_index, so i need to figure out 
-    whether insert before or after insert_index*/
+    whether insert before or after insert_index
+    !!return index could be out of bound!!
+    */
     if (TargetValue < node->Value[insert_index])
     {
         return insert_index; //insert before
