@@ -10,7 +10,7 @@ private:
 protected:
     TreeN_Node* CreateNewNode();
     void DeleteAllNodesFromBelow(TreeN_Node* node);
-    void InsertNewValueOnRemainSpace(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNode = nullptr);
+    void InsertNewValueOnRemainSpace(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNode_1 = nullptr, TreeN_Node* NewChildNode_2 = nullptr);
     void GetNewValueAddedResultOnNode(const TreeN_Node* node, int NewValue, std::vector<int>& ReturnValue, std::vector<TreeN_Node*>& ReturnNodeArr, TreeN_Node* NewChildNode = nullptr) const;
     void SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNode = nullptr);
     int GetInsertTargetIndex(const TreeN_Node* node, int TargetValue) const;

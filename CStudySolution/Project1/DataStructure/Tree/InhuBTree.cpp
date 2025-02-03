@@ -1,6 +1,7 @@
 #include <iostream>
 //#include <algorithm>
 #include "InhuBTree.h"
+#include <algorithm>
 
 #define NULLVALUE 9999999
 
@@ -36,7 +37,7 @@ void InhuBTree::DeleteAllNodesFromBelow(TreeN_Node* node)
 }
 
 //this function should be excuted if node is not full
-void InhuBTree::InsertNewValueOnRemainSpace(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNode)
+void InhuBTree::InsertNewValueOnRemainSpace(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNode_1, TreeN_Node* NewChildNode_2)
 {
     //node is full?
     if (node->len == node_size)
@@ -52,7 +53,8 @@ void InhuBTree::InsertNewValueOnRemainSpace(TreeN_Node* node, int NewValue, Tree
         node->ChildNodeArr[i+1] = node->ChildNodeArr[i];
     }
     node->Value[insert_index] = NewValue;
-    node->ChildNodeArr[insert_index+1] = NewChildNode; //this can be nullptr
+    node->ChildNodeArr[insert_index] = NewChildNode_1; //this can be nullptr
+    node->ChildNodeArr[insert_index+1] = NewChildNode_2; //this can be nullptr
     node->len++;
 }
 
@@ -123,7 +125,7 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
     if (ParentNode->len != node_size) //ParentNode is not full?
     {
         //parent node's child arr also setted in this code
-        InsertNewValueOnRemainSpace(ParentNode, WholeValue[split_index], NewNode);
+        InsertNewValueOnRemainSpace(ParentNode, WholeValue[split_index], node, NewNode);
     }
     else //ParentNode is full
     {
@@ -131,7 +133,7 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
     }
 
     //process the left node (original) : clear values
-    for (int i = split_index + 1; i < node->len; i++)
+    for (int i = split_index; i < node->Value.size(); i++)
     {
         node->Value[i] = NULLVALUE;
         node->ChildNodeArr[i + 1] = nullptr;
@@ -140,7 +142,7 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
 
     //process the right node (new one) : fill values
     int j = 0;
-    for (int i = split_index + 1; i < node->len + 1; i++)
+    for (int i = split_index + 1; i < WholeValue.size(); i++)
     {
         NewNode->Value[j] = WholeValue[i];
         NewNode->ChildNodeArr[j] = WholeChildNodeArr[i + 1];
@@ -200,11 +202,11 @@ TreeN_Node* InhuBTree::SearchNode(int TargetValue) const
 
     TreeN_Node* LastSearchedNode = RootNode;
     
+
     int i = 0;
     while(1)
     {
-        int node_len = LastSearchedNode->len;
-
+        int node_len = LastSearchedNode->Value.size();
         if (node_len == 0) //handle empty node
         {
             return LastSearchedNode;
@@ -238,7 +240,7 @@ TreeN_Node* InhuBTree::SearchNode(int TargetValue) const
                 return LastSearchedNode;
             }
             //if there's child node, go to the last child node
-            LastSearchedNode = LastSearchedNode->ChildNodeArr[i + 1];
+            LastSearchedNode = LastSearchedNode->ChildNodeArr[i];
         }
     }
 }
@@ -288,9 +290,9 @@ void InhuBTree::PrintTree() const
         return;
     }
 
-    // Queue for level order traversal
-    std::vector<TreeN_Node*> queue;
-    queue.push_back(RootNode);
+    // Queue for level order traversal with node positions
+    std::vector<std::pair<TreeN_Node*, std::string>> queue;
+    queue.push_back({RootNode, "0"});
     
     int level = 0;
     while (!queue.empty())
@@ -302,10 +304,11 @@ void InhuBTree::PrintTree() const
         
         for (int i = 0; i < levelSize; i++)
         {
-            TreeN_Node* current = queue[i];
+            TreeN_Node* current = queue[i].first;
+            std::string position = queue[i].second;
             
-            // Print node values
-            std::cout << "[ ";
+            // Print node values with position
+            std::cout << position << ":[ ";
             for (int j = 0; j < current->len; j++)
             {
                 if (current->Value[j] != NULLVALUE)
@@ -315,12 +318,13 @@ void InhuBTree::PrintTree() const
             }
             std::cout << "] ";
             
-            // Add children to queue
+            // Add children to queue with their positions
             for (int j = 0; j <= current->len; j++)
             {
                 if (current->ChildNodeArr[j] != nullptr)
                 {
-                    queue.push_back(current->ChildNodeArr[j]);
+                    std::string childPosition = position + "-" + std::to_string(j);
+                    queue.push_back({current->ChildNodeArr[j], childPosition});
                 }
             }
         }
