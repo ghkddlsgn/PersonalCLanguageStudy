@@ -285,6 +285,7 @@
     <ClCompile Include="DataStructure\Matrix\Matrix.cpp" />
     <ClCompile Include="DataStructure\Matrix\LowerTriangularMatrix.cpp" />
     <ClCompile Include="DataStructure\Queue\InhuCircularQueue.cpp" />
+    <ClCompile Include="DataStructure\Tree\InhuBTree.cpp" />
     <ClCompile Include="DataStructure\Tree\InhuTree.cpp" />
     <ClCompile Include="NameCard\NameCard.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -376,6 +377,7 @@
     <ClInclude Include="DataStructure\Matrix\Matrix.h" />
     <ClInclude Include="DataStructure\Matrix\LowerTriangularMatrix.h" />
     <ClInclude Include="DataStructure\Queue\InhuCircularQueue.h" />
+    <ClInclude Include="DataStructure\Tree\InhuBTree.h" />
     <ClInclude Include="DataStructure\Tree\InhuTree.h" />
     <ClInclude Include="NameCard\NameCard.h" />
     <ClInclude Include="Main.h" />

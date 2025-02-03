@@ -219,7 +219,7 @@ TreeNode* InhuTree::Search(int SearchValue, TreeNode*& ParentNode) const {
 }
 
 bool InhuTree::DeleteNode(int TargetValue, TreeNode* TargetNode) {
-    TreeNode* TargetParentNode;
+    TreeNode* TargetParentNode{};
     if (TargetNode == nullptr) {
         TargetNode = Search(TargetValue, TargetParentNode);
     }
