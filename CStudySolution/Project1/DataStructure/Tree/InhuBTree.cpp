@@ -1,11 +1,25 @@
 #include <iostream>
+//#include <algorithm>
 #include "InhuBTree.h"
-#include "Project1/SortAlgorithm.h"
+
+#define NULLVALUE 9999999
+
+struct TreeN_Node {
+    std::vector<int> Value;
+    std::vector<TreeN_Node*> ChildNodeArr;
+    TreeN_Node* ParentNode = nullptr;
+    int Height = 0;
+    int len = 0; //current node value count
+    TreeN_Node(int NodeSize)
+    {
+        Value.resize(NodeSize, NULLVALUE);
+        ChildNodeArr.resize(NodeSize + 1, nullptr);
+    }
+};
 
 TreeN_Node* InhuBTree::CreateNewNode()
 {
     TreeN_Node* newNode = new TreeN_Node(node_size);
-    NodeArr[size] = newNode;
     size++;
     return newNode;
 }
@@ -42,16 +56,15 @@ void InhuBTree::InsertNewValueOnRemainSpace(TreeN_Node* node, int NewValue, Tree
     node->len++;
 }
 
-void InhuBTree::GetNewValueAddedResultOnNode(const TreeN_Node* node, int NewValue, int*& ReturnValue, TreeN_Node**& ReturnNodeArr, TreeN_Node* NewChildNode) const
-
+void InhuBTree::GetNewValueAddedResultOnNode(const TreeN_Node* node, int NewValue, std::vector<int>& ReturnValue, std::vector<TreeN_Node*>& ReturnNodeArr, TreeN_Node* NewChildNode) const
 {
     int insert_index = GetInsertTargetIndex(node, NewValue);
     
-    delete ReturnValue;
-    delete ReturnNodeArr;
-
-    ReturnValue = new int[node->len + 1];
-    ReturnNodeArr = new TreeN_Node*[node->len + 2];
+    ReturnValue.clear();
+    ReturnNodeArr.clear();
+    
+    ReturnValue.resize(node->len + 1);
+    ReturnNodeArr.resize(node->len + 2);
 
     //fill the left part
     for (int i = 0; i < insert_index; i++)
@@ -93,21 +106,23 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
         ParentNode = CreateNewNode();
         node->ParentNode = ParentNode;
         NewNode->ParentNode = ParentNode;
+        RootNode = ParentNode;
     }
 
     //get combined(node + new value, new child node) value and node array
     int insert_index = GetInsertTargetIndex(node, NewValue);
 
-    int* WholeValue;
-    TreeN_Node** WholeChildNodeArr;
+    std::vector<int> WholeValue;
+    std::vector<TreeN_Node*> WholeChildNodeArr;
     GetNewValueAddedResultOnNode(node, NewValue, WholeValue, WholeChildNodeArr, NewChildNode);
     
     //split node
     int split_index = (node_size-1)/2;
 
-    //process the the split node itself : add to parent
+    //process the the split node itself : promote to parent
     if (ParentNode->len != node_size) //ParentNode is not full?
     {
+        //parent node's child arr also setted in this code
         InsertNewValueOnRemainSpace(ParentNode, WholeValue[split_index], NewNode);
     }
     else //ParentNode is full
@@ -133,11 +148,7 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
     }
     NewNode->ChildNodeArr[j+1] = WholeChildNodeArr[node->len + 1]; //add the last ptr
     NewNode->len = j;
-
-    delete[] WholeValue;
-    delete[] WholeChildNodeArr;
 }
-
 
 int InhuBTree::GetInsertTargetIndex(const TreeN_Node* node, int TargetValue) const
 {
@@ -180,61 +191,71 @@ int InhuBTree::GetInsertTargetIndex(const TreeN_Node* node, int TargetValue) con
 }
 
 //it return last searched node, so if i want to add new node, i can add at last searched node
-bool InhuBTree::SearchNode(int TargetValue, TreeN_Node *& LastSearchedNode) const
+TreeN_Node* InhuBTree::SearchNode(int TargetValue) const
 {
     if (!RootNode)
     {
-        std::cout << "Tree is empty" << std::endl;
-        return false;
+        return nullptr;
     }
-    
-    LastSearchedNode = RootNode;
-    int node_len = 0;
-    int i = 0;
 
+    TreeN_Node* LastSearchedNode = RootNode;
+    
+    int i = 0;
     while(1)
     {
-        node_len = LastSearchedNode->len;
+        int node_len = LastSearchedNode->len;
+
+        if (node_len == 0) //handle empty node
+        {
+            return LastSearchedNode;
+        }
+
         for (i = 0; i < node_len; i++)
         {
-            if (TargetValue < LastSearchedNode->Value[i])
+            if (TargetValue < LastSearchedNode->Value[i]) //find proper place
             {
                 //if there's no child node, i need to add new value on this node (LastSearchedNode)
                 if (LastSearchedNode->ChildNodeArr[i] == nullptr) 
                 {
-                    return false;
+                    return LastSearchedNode;
                 }
                 //if there's child node, go to the child node
                 LastSearchedNode = LastSearchedNode->ChildNodeArr[i];
                 break;
             }
-            if (LastSearchedNode->Value[i] == TargetValue)
+            else if (LastSearchedNode->Value[i] == TargetValue) //check if value is already in this node
             {
-                return true;
+                return LastSearchedNode; //value is already in this node
             }
         }
         //if value is bigger than all value in node, check the last child node
-        if (i == node_len)
+        if (i >= node_len)
         {
             //if there's no child node, i need to add new value on this node (LastSearchedNode)
-            if (LastSearchedNode->ChildNodeArr[node_len] == nullptr)
+            if (LastSearchedNode->ChildNodeArr[i] == nullptr)
+
             {
-                return false;
+                return LastSearchedNode;
             }
             //if there's child node, go to the last child node
-            LastSearchedNode = LastSearchedNode->ChildNodeArr[node_len];
+            LastSearchedNode = LastSearchedNode->ChildNodeArr[i + 1];
         }
     }
 }
 
 //it always add new value on leaf node or split node 
-bool InhuBTree::AddNewValue(int NewValue)
+void InhuBTree::AddNewValue(int NewValue)
 {
     TreeN_Node* TargetNode;
-    if (SearchNode(NewValue, TargetNode))
+    if (RootNode == nullptr)
     {
-        std::cout << "Value already exists" << std::endl;
-        return false;
+
+        RootNode = CreateNewNode();
+        TargetNode = RootNode;
+    }
+    else
+    {
+        TargetNode = SearchNode(NewValue);
     }
 
     //Target node is full?
@@ -249,14 +270,65 @@ bool InhuBTree::AddNewValue(int NewValue)
         //add new value to target node's empty slot -> this will always happen on leaf node
         TargetNode->Value[TargetNode->len] = NewValue;
         TargetNode->len++;
-        SelectSort(TargetNode->Value, TargetNode->len, true);
+        std::sort(TargetNode->Value.begin(), TargetNode->Value.begin() + TargetNode->len);
     }
 }
 
 bool InhuBTree::DeleteNode(int TargetValue)
 {
+    std::cout<<"it's not implemented yet"<<std::endl;
+    return false;
 }
 
 void InhuBTree::PrintTree() const
 {
+    if (RootNode == nullptr)
+    {
+        std::cout << "Tree is empty" << std::endl;
+        return;
+    }
+
+    // Queue for level order traversal
+    std::vector<TreeN_Node*> queue;
+    queue.push_back(RootNode);
+    
+    int level = 0;
+    while (!queue.empty())
+    {
+        int levelSize = queue.size();
+        
+        // Print current level
+        std::cout << "Level " << level << ": ";
+        
+        for (int i = 0; i < levelSize; i++)
+        {
+            TreeN_Node* current = queue[i];
+            
+            // Print node values
+            std::cout << "[ ";
+            for (int j = 0; j < current->len; j++)
+            {
+                if (current->Value[j] != NULLVALUE)
+                {
+                    std::cout << current->Value[j] << " ";
+                }
+            }
+            std::cout << "] ";
+            
+            // Add children to queue
+            for (int j = 0; j <= current->len; j++)
+            {
+                if (current->ChildNodeArr[j] != nullptr)
+                {
+                    queue.push_back(current->ChildNodeArr[j]);
+                }
+            }
+        }
+        
+        std::cout << std::endl;
+        
+        // Remove processed nodes from queue
+        queue.erase(queue.begin(), queue.begin() + levelSize);
+        level++;
+    }
 }
