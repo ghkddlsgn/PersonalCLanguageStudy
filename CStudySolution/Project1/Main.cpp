@@ -4,5 +4,8 @@
 
 int main()
 {
+    InhuBTree Btree(3,1,2,3);
+    Btree.PrintTree();
+    std::cout << "Enter a value to delete: ";
     return 0;
 }

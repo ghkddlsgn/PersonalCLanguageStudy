@@ -19,7 +19,7 @@ void SelectSort(int arr[], int length, bool MinToMax)
 	}
 	if (length == 1)
 	{
-		std::cout<<"array length is 1, no need to sort";
+		//std::cout<<"array length is 1, no need to sort";
 	}
 
 	int i,j;
