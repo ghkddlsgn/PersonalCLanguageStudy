@@ -114,10 +114,9 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
     {
         ParentNode = CreateNewNode();
         node->ParentNode = ParentNode;
-        NewNode->ParentNode = ParentNode;
         RootNode = ParentNode;
     }
-    NewNode->ParentNode = node->ParentNode;
+    NewNode->ParentNode = ParentNode;
 
     //get combined(node + new value, new child node) value and node array
     int insert_index = GetInsertTargetIndex(node, NewValue);
@@ -128,17 +127,6 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
     
     //split node
     int split_index = (node_size-1)/2;
-
-    //process the the split node itself : promote to parent
-    if (ParentNode->len != node_size) //ParentNode is not full?
-    {
-        //parent node's child arr also setted in this code
-        InsertNewValueOnRemainSpace(ParentNode, WholeValue[split_index], node, NewNode);
-    }
-    else //ParentNode is full
-    {
-        SplitNode(ParentNode, WholeValue[split_index], NewNode);
-    }
 
     //process the left node (original)
     for (int i = 0; i < split_index; i++) //fill values
@@ -172,10 +160,21 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
     }
     NewNode->len = j;
 
-    NewNode->ChildNodeArr[j] = WholeChildNodeArr[node->len + 1]; //add the last ptr
+    NewNode->ChildNodeArr[j] = WholeChildNodeArr[WholeChildNodeArr.size() - 1]; //add the last ptr
     if (NewNode->ChildNodeArr[j] != nullptr)
     {
         NewNode->ChildNodeArr[j]->ParentNode = NewNode;
+    }
+
+    //process the the split node itself : promote to parent
+    if (ParentNode->len != node_size) //ParentNode is not full?
+    {
+        //parent node's child arr also setted in this code
+        InsertNewValueOnRemainSpace(ParentNode, WholeValue[split_index], node, NewNode);
+    }
+    else //ParentNode is full
+    {
+        SplitNode(ParentNode, WholeValue[split_index], NewNode);
     }
 }
 
@@ -275,13 +274,14 @@ TreeN_Node* InhuBTree::SearchNode(int TargetValue) const
 //it always add new value on leaf node or split node 
 void InhuBTree::AddNewValue(int NewValue)
 {
-    if (NewValue == 15)
+    if (NewValue == 100)
     {
         std::cout<<"add new value Start Debug"<<std::endl;
     }
     TreeN_Node* TargetNode;
     if (RootNode == nullptr)
     {
+
         RootNode = CreateNewNode();
         TargetNode = RootNode;
     }
