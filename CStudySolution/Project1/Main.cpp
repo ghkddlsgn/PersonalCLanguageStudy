@@ -4,8 +4,16 @@
 
 int main()
 {
-    InhuBTree Btree(3,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15);
-    Btree.PrintTree();
-    std::cout << "Enter a value to delete: ";
+    InhuBTree Btree(3);
+
+    for (int i = 1; i<=15; i++)
+    {
+        std::cout<<"Add new value: "<<i<<std::endl;
+        Btree.AddNewValue(i);
+        Btree.PrintTree();
+        std::cout<<"\n";
+        std::cout<<"\n";
+    }
+    std::cout<<"Enter a value to delete: ";
     return 0;
 }

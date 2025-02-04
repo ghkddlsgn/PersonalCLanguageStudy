@@ -69,20 +69,24 @@ void InhuBTree::GetNewValueAddedResultOnNode(const TreeN_Node* node, int NewValu
     ReturnNodeArr.resize(node->len + 2);
 
     //fill the left part
-    for (int i = 0; i < insert_index; i++)
+    int i = 0;
+    for (i = 0; i < insert_index; i++)
     {
         ReturnValue[i] = node->Value[i];
         ReturnNodeArr[i] = node->ChildNodeArr[i];
     }
+
+    //fill the insert part
+    ReturnValue[insert_index] = NewValue;
+    ReturnNodeArr[insert_index] = node->ChildNodeArr[insert_index];
+    ReturnNodeArr[insert_index+1] = NewChildNode; //this can be nullptr
+
     //fill the right part
-    for (int i = insert_index + 1; i < node->len + 1; i++)
+    for (i = insert_index + 1; i < node->len + 1; i++)
     {
         ReturnValue[i] = node->Value[i];
         ReturnNodeArr[i+1] = node->ChildNodeArr[i];
     }
-    //fill the insert part
-    ReturnValue[insert_index] = NewValue;
-    ReturnNodeArr[insert_index+1] = NewChildNode; //this can be nullptr
 }
 
 /*
@@ -138,17 +142,16 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
         node->Value[i] = NULLVALUE;
         node->ChildNodeArr[i + 1] = nullptr;
     }
-    node->len = split_index;
 
     //process the right node (new one) : fill values
     int j = 0;
-    for (int i = split_index + 1; i < WholeValue.size(); i++)
+    for (int i = split_index + 1; i < node->len + 1; i++)
     {
         NewNode->Value[j] = WholeValue[i];
-        NewNode->ChildNodeArr[j] = WholeChildNodeArr[i + 1];
+        NewNode->ChildNodeArr[j] = WholeChildNodeArr[i];
         j++;
     }
-    NewNode->ChildNodeArr[j+1] = WholeChildNodeArr[node->len + 1]; //add the last ptr
+    NewNode->ChildNodeArr[j] = WholeChildNodeArr[node->len + 1]; //add the last ptr
     NewNode->len = j;
 }
 
@@ -248,9 +251,14 @@ TreeN_Node* InhuBTree::SearchNode(int TargetValue) const
 //it always add new value on leaf node or split node 
 void InhuBTree::AddNewValue(int NewValue)
 {
+    if (NewValue == 10)
+    {
+        std::cout<<"add new value Start Debug"<<std::endl;
+    }
     TreeN_Node* TargetNode;
     if (RootNode == nullptr)
     {
+
 
         RootNode = CreateNewNode();
         TargetNode = RootNode;
