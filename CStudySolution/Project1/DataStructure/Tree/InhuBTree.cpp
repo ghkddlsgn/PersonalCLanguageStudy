@@ -65,29 +65,34 @@ void InhuBTree::GetNewValueAddedResultOnNode(const TreeN_Node* node, int NewValu
     ReturnValue.clear();
     ReturnNodeArr.clear();
     
-    ReturnValue.resize(node->len + 1);
-    ReturnNodeArr.resize(node->len + 2);
-
+    ReturnValue.reserve(node->len + 1);
+    ReturnNodeArr.reserve(node->len + 2);
+    
     //fill the left part
-    int i = 0;
-    for (i = 0; i < insert_index; i++)
+    for (int i = 0; i < insert_index; i++)
     {
-        ReturnValue[i] = node->Value[i];
-        ReturnNodeArr[i] = node->ChildNodeArr[i];
+        ReturnValue.push_back(node->Value[i]);
+    }
+    for (int j = 0; j <= insert_index; j++)
+    {
+        ReturnNodeArr.push_back(node->ChildNodeArr[j]);
     }
 
     //fill the insert part
-    ReturnValue[insert_index] = NewValue;
-    ReturnNodeArr[insert_index] = node->ChildNodeArr[insert_index];
-    ReturnNodeArr[insert_index+1] = NewChildNode; //this can be nullptr
+    ReturnValue.push_back(NewValue);
+    ReturnNodeArr.push_back(NewChildNode);
 
     //fill the right part
-    for (i = insert_index + 1; i < node->len + 1; i++)
+    for (int i = insert_index; i < node->len; i++)
     {
-        ReturnValue[i] = node->Value[i];
-        ReturnNodeArr[i+1] = node->ChildNodeArr[i];
+        ReturnValue.push_back(node->Value[i]);
+    }
+    for (int j = insert_index + 1; j < node->len + 1; j++)
+    {
+        ReturnNodeArr.push_back(node->ChildNodeArr[j]);
     }
 }
+
 
 /*
 if NewChildNode is nullptr, it means i split leaf node
@@ -96,7 +101,7 @@ i need to put NewChildNode after Insert point
 */
 void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNode)
 {
-    if (node->len!=node_size)
+    if (node->len!=node_size) //check node is full
     {
         std::cout << "SplitNode error : node is not full" << std::endl;
         return;
@@ -104,8 +109,6 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
 
     //prepare new node and parent node
     TreeN_Node* NewNode = CreateNewNode();
-    NewNode->ParentNode = node->ParentNode;
-
     TreeN_Node* ParentNode = node->ParentNode;
     if (ParentNode == nullptr)
     {
@@ -114,6 +117,7 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
         NewNode->ParentNode = ParentNode;
         RootNode = ParentNode;
     }
+    NewNode->ParentNode = node->ParentNode;
 
     //get combined(node + new value, new child node) value and node array
     int insert_index = GetInsertTargetIndex(node, NewValue);
@@ -136,23 +140,43 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
         SplitNode(ParentNode, WholeValue[split_index], NewNode);
     }
 
-    //process the left node (original) : clear values
-    for (int i = split_index; i < node->Value.size(); i++)
+    //process the left node (original)
+    for (int i = 0; i < split_index; i++) //fill values
+    {
+        node->Value[i] = WholeValue[i];
+    }
+    node->len = split_index;
+
+    for (int i = split_index; i < node_size; i++) //clear values
     {
         node->Value[i] = NULLVALUE;
         node->ChildNodeArr[i + 1] = nullptr;
+        if (node->ChildNodeArr[i] != nullptr)
+        {
+            node->ChildNodeArr[i]->ParentNode = node;
+        }
     }
 
     //process the right node (new one) : fill values
     int j = 0;
-    for (int i = split_index + 1; i < node->len + 1; i++)
+    for (int i = split_index + 1; i < node_size + 1; i++)
     {
         NewNode->Value[j] = WholeValue[i];
         NewNode->ChildNodeArr[j] = WholeChildNodeArr[i];
+
+        if (NewNode->ChildNodeArr[j] != nullptr)
+        {
+            NewNode->ChildNodeArr[j]->ParentNode = NewNode;
+        }
         j++;
     }
-    NewNode->ChildNodeArr[j] = WholeChildNodeArr[node->len + 1]; //add the last ptr
     NewNode->len = j;
+
+    NewNode->ChildNodeArr[j] = WholeChildNodeArr[node->len + 1]; //add the last ptr
+    if (NewNode->ChildNodeArr[j] != nullptr)
+    {
+        NewNode->ChildNodeArr[j]->ParentNode = NewNode;
+    }
 }
 
 int InhuBTree::GetInsertTargetIndex(const TreeN_Node* node, int TargetValue) const
@@ -251,15 +275,13 @@ TreeN_Node* InhuBTree::SearchNode(int TargetValue) const
 //it always add new value on leaf node or split node 
 void InhuBTree::AddNewValue(int NewValue)
 {
-    if (NewValue == 10)
+    if (NewValue == 15)
     {
         std::cout<<"add new value Start Debug"<<std::endl;
     }
     TreeN_Node* TargetNode;
     if (RootNode == nullptr)
     {
-
-
         RootNode = CreateNewNode();
         TargetNode = RootNode;
     }
@@ -298,7 +320,6 @@ void InhuBTree::PrintTree() const
         return;
     }
 
-    // Queue for level order traversal with node positions
     std::vector<std::pair<TreeN_Node*, std::string>> queue;
     queue.push_back({RootNode, "0"});
     
@@ -307,7 +328,6 @@ void InhuBTree::PrintTree() const
     {
         int levelSize = queue.size();
         
-        // Print current level
         std::cout << "Level " << level << ": ";
         
         for (int i = 0; i < levelSize; i++)
@@ -317,7 +337,7 @@ void InhuBTree::PrintTree() const
             
             // Print node values with position
             std::cout << position << ":[ ";
-            for (int j = 0; j < current->len; j++)
+            for (int j = 0; j < current->len; j++)  // Changed from Value.size() to len
             {
                 if (current->Value[j] != NULLVALUE)
                 {
@@ -326,8 +346,9 @@ void InhuBTree::PrintTree() const
             }
             std::cout << "] ";
             
+
             // Add children to queue with their positions
-            for (int j = 0; j <= current->len; j++)
+            for (int j = 0; j <= current->len; j++)  // Changed from Value.size() to len
             {
                 if (current->ChildNodeArr[j] != nullptr)
                 {
@@ -339,7 +360,6 @@ void InhuBTree::PrintTree() const
         
         std::cout << std::endl;
         
-        // Remove processed nodes from queue
         queue.erase(queue.begin(), queue.begin() + levelSize);
         level++;
     }
