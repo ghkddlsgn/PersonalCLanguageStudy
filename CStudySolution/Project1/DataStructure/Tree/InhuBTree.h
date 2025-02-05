@@ -11,9 +11,11 @@ protected:
     TreeN_Node* CreateNewNode();
     void DeleteAllNodesFromBelow(TreeN_Node* node);
     void InsertNewValueOnRemainSpace(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNode_1 = nullptr, TreeN_Node* NewChildNode_2 = nullptr);
+    void DeleteValueFromNode(TreeN_Node* node, int DeleteIndex);
     void GetNewValueAddedResultOnNode(const TreeN_Node* node, int NewValue, std::vector<int>& ReturnValue, std::vector<TreeN_Node*>& ReturnNodeArr, TreeN_Node* NewChildNode = nullptr) const;
     void SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNode = nullptr);
-    int GetInsertTargetIndex(const TreeN_Node* node, int TargetValue) const;
+    void MergeNode(TreeN_Node* node1, TreeN_Node* node2);
+    int GetInsertOrDeleteTargetIndex(const TreeN_Node* node, int TargetValue) const;
 public:
 
     template <typename... Args>
@@ -29,6 +31,6 @@ public:
     }
     TreeN_Node* SearchNode(int TargetValue) const;
     void AddNewValue(int NewValue);
-    bool DeleteNode(int TargetValue);
+    void DeleteNode(int TargetValue);
     void PrintTree() const;
 };

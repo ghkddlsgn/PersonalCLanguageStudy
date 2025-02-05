@@ -36,8 +36,30 @@ void InhuBTree::DeleteAllNodesFromBelow(TreeN_Node* node)
     size--;
 }
 
-//this function should be excuted if node is not full
+void InhuBTree::DeleteValueFromNode(TreeN_Node* node, int DeleteIndex)
+{
+    //step 1 : delete value on target node
+    //drag values left 1
+    for (int i = DeleteIndex; i < node->len - 1; i++)
+    {
+        node->Value[i] = node->Value[i+1];
+    }
+    //drag child nodes left 1
+    TreeN_Node* temp = node->ChildNodeArr[DeleteIndex];
+    for (int i = DeleteIndex; i < node->len; i++)
+    {
+        node->ChildNodeArr[i] = node->ChildNodeArr[i+1];
+    }
+    node->ChildNodeArr[node->len] = nullptr;
+    node->Value[node->len-1] = NULLVALUE; //remove the last value
+    node->len--;
+
+    //merge child nodes
+    MergeNode(temp, node->ChildNodeArr[DeleteIndex]);
+}
+
 void InhuBTree::InsertNewValueOnRemainSpace(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNode_1, TreeN_Node* NewChildNode_2)
+//this function should be excuted if node is not full
 {
     //node is full?
     if (node->len == node_size)
@@ -46,7 +68,7 @@ void InhuBTree::InsertNewValueOnRemainSpace(TreeN_Node* node, int NewValue, Tree
         return;
     }
 
-    int insert_index = GetInsertTargetIndex(node, NewValue);
+    int insert_index = GetInsertOrDeleteTargetIndex(node, NewValue);
     for (int i = node->len; i > insert_index; i--)
     {
         node->Value[i] = node->Value[i-1];
@@ -60,7 +82,7 @@ void InhuBTree::InsertNewValueOnRemainSpace(TreeN_Node* node, int NewValue, Tree
 
 void InhuBTree::GetNewValueAddedResultOnNode(const TreeN_Node* node, int NewValue, std::vector<int>& ReturnValue, std::vector<TreeN_Node*>& ReturnNodeArr, TreeN_Node* NewChildNode) const
 {
-    int insert_index = GetInsertTargetIndex(node, NewValue);
+    int insert_index = GetInsertOrDeleteTargetIndex(node, NewValue);
     
     ReturnValue.clear();
     ReturnNodeArr.clear();
@@ -93,14 +115,14 @@ void InhuBTree::GetNewValueAddedResultOnNode(const TreeN_Node* node, int NewValu
     }
 }
 
-
-/*
-if NewChildNode is nullptr, it means i split leaf node
-if NewChildNode is not nullptr, it means i split internal node.
-i need to put NewChildNode after Insert point
-*/
+//this function need to be fixed : NewValue -> NewIntArray
 void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNode)
 {
+    /*
+    if NewChildNode is nullptr, it means i split leaf node
+    if NewChildNode is not nullptr, it means i split internal node.
+    i need to put NewChildNode after Insert point
+    */
     if (node->len!=node_size) //check node is full
     {
         std::cout << "SplitNode error : node is not full" << std::endl;
@@ -119,7 +141,7 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
     NewNode->ParentNode = ParentNode;
 
     //get combined(node + new value, new child node) value and node array
-    int insert_index = GetInsertTargetIndex(node, NewValue);
+    int insert_index = GetInsertOrDeleteTargetIndex(node, NewValue);
 
     std::vector<int> WholeValue;
     std::vector<TreeN_Node*> WholeChildNodeArr;
@@ -178,14 +200,34 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
     }
 }
 
-int InhuBTree::GetInsertTargetIndex(const TreeN_Node* node, int TargetValue) const
+void InhuBTree::MergeNode(TreeN_Node* node1, TreeN_Node* node2)
+{
+    if (!node1 && !node2) //there's no node to merge?
+    {
+        return;
+    }
+
+    if (!node1 && node2)
+    {
+
+    }
+    
+    if (node1 && !node2)
+    {
+
+    }
+
+    TreeN_Node* ParentNode = node1->ParentNode;
+    
+}
+
+int InhuBTree::GetInsertOrDeleteTargetIndex(const TreeN_Node* node, int TargetValue) const
 {
     int len = node->len;
     
     int insert_index = (len-1)/2;
     int min_index = 0;
     int max_index = len-1;
-
 
     while(min_index <= max_index)
     {
@@ -227,7 +269,6 @@ TreeN_Node* InhuBTree::SearchNode(int TargetValue) const
     }
 
     TreeN_Node* LastSearchedNode = RootNode;
-    
 
     int i = 0;
     while(1)
@@ -274,10 +315,6 @@ TreeN_Node* InhuBTree::SearchNode(int TargetValue) const
 //it always add new value on leaf node or split node 
 void InhuBTree::AddNewValue(int NewValue)
 {
-    if (NewValue == 100)
-    {
-        std::cout<<"add new value Start Debug"<<std::endl;
-    }
     TreeN_Node* TargetNode;
     if (RootNode == nullptr)
     {
@@ -306,10 +343,21 @@ void InhuBTree::AddNewValue(int NewValue)
     }
 }
 
-bool InhuBTree::DeleteNode(int TargetValue)
+void InhuBTree::DeleteNode(int DeleteValue)
 {
-    std::cout<<"it's not implemented yet"<<std::endl;
-    return false;
+    //case 1 : simply delete no child, there's other value in same node : just delete the value
+    //case 2 : delete and merge no child, become empty node : begin merge -> Bring value from sibling or parent
+    //case 3 : borrow
+    
+    if (RootNode == nullptr)
+    {
+        std::cout<<"DeleteNode error : Tree is empty"<<std::endl;
+        return;
+    }
+    TreeN_Node* TargetNode = SearchNode(DeleteValue);
+    int DeleteIndex = GetInsertOrDeleteTargetIndex(TargetNode, DeleteValue);
+
+    DeleteValueFromNode(TargetNode, DeleteIndex);
 }
 
 void InhuBTree::PrintTree() const
@@ -346,7 +394,6 @@ void InhuBTree::PrintTree() const
             }
             std::cout << "] ";
             
-
             // Add children to queue with their positions
             for (int j = 0; j <= current->len; j++)  // Changed from Value.size() to len
             {
