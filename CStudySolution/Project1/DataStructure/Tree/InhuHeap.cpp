@@ -1,11 +1,18 @@
 #include "InhuHeap.h"
 #include <iostream>
 
+int InhuHeap::GetHeapSize() const
+{
+    return heapIndex;
+}
+
+
 void InhuHeap::AddNewValue(int NewValue)
 {
     heap.push_back(NewValue);
     SortAsHeap();
 }
+
 
 void InhuHeap::SortAsHeap()
 {
@@ -23,6 +30,64 @@ void InhuHeap::SortAsHeap()
         heap[targetIndex] = NewValue;
     }
     heapIndex = heap.size() - 1;
+}
+
+void InhuHeap::DeleteValue()
+{
+    if (heap.size() <= 1)
+    {
+        std::cout<<"DeleteValue : heap is empty"<<std::endl;
+        return;
+    }
+    
+    //i can only delete root
+    int ReplaceValue = heap.back();
+    heap.pop_back();
+    heapIndex--;
+
+    if (heap.size() == 1) //if heap become empty, finish (there's no node to replace)
+    {
+        return;
+    }
+    
+    //begin value replace
+    int Replace_Target_Index = 1;
+    //swap values until replaced value find proper node
+    
+    while(1)
+    {
+        heap[Replace_Target_Index] = ReplaceValue; //replace root as deleted value
+        int L_Child_Index = Replace_Target_Index * 2;
+        int R_Child_Index = Replace_Target_Index * 2 + 1;
+        int Child_Index;
+        
+        //check child nodes are exist;
+        if (R_Child_Index > heapIndex) //R node is not exist?
+        {
+            if (L_Child_Index > heapIndex) //L node is not exist too?
+            {
+                break; // end of swaping
+            }
+            else // only L node is exist?
+            {
+                Child_Index = L_Child_Index;
+            }
+        }
+        else //both childs are exist
+        {
+            Child_Index = (heap[L_Child_Index] > heap[R_Child_Index]) ? L_Child_Index : R_Child_Index; 
+        }
+        
+        if (heap[Child_Index] > ReplaceValue) //if child is more bigger, then begin swap
+        {
+            heap[Replace_Target_Index] = heap[Child_Index];
+            Replace_Target_Index = Child_Index;
+        }
+        else //if child is small, end swapping
+        {
+            break;
+        }
+    }
 }
 
 void InhuHeap::PrintHeap() const

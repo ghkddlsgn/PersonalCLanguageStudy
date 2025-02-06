@@ -12,6 +12,7 @@ class InhuHeap
         {
             heap.push_back(-1);
             (heap.push_back(args), ...);
+            SortAsHeap();
         }
         ~InhuHeap()
         {
@@ -21,8 +22,9 @@ class InhuHeap
         {
             return heap[index-1];
         }
+        int GetHeapSize() const;
         void AddNewValue(int NewValue);
         void SortAsHeap();
-        void DeleteValue(int TargetValue);
+        void DeleteValue();
         void PrintHeap() const;
 };

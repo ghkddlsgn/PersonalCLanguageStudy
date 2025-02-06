@@ -9,10 +9,13 @@ int main()
 
     InhuHeap heap(70,30,100,10,90,20,60,50,40,110,80);
     heap.PrintHeap();
-    heap.SortAsHeap();
-    heap.PrintHeap();
 
+    for (int i = 1; i < heap.GetHeapSize(); i++)
+    {
+        std::cout<<"Delete Attempt : "<<i<<std::endl;
+        heap.DeleteValue();
+        heap.PrintHeap();
+    }
     std::cout<<"end programming"<<std::endl;
     return 0;
-
 }
