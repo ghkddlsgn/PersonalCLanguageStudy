@@ -1,11 +1,18 @@
 #include "Main.h"
 #include <iostream>
-#include <vector>
-#include "DataStructure\Tree\InhuBTree.h"
+#include "DataStructure\Tree\InhuHeap.h"
+
 
 int main()
 {
-    InhuHeap heap(10,20,30,40,50,60,70,80,90,100,110);
+    std::cout<<"begin programming"<<std::endl;
+
+    InhuHeap heap(70,30,100,10,90,20,60,50,40,110,80);
     heap.PrintHeap();
+    heap.SortAsHeap();
+    heap.PrintHeap();
+
+    std::cout<<"end programming"<<std::endl;
     return 0;
+
 }

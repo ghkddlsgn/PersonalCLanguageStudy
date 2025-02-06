@@ -1,17 +1,17 @@
 #pragma once
-
-class vector;
+#include <vector>
 
 class InhuHeap
 {
     private:
         std::vector<int> heap;
+        int heapIndex = 0; //it include only heap range
     public:
         template <typename... Args>
         InhuHeap(Args... args)
         {
-            heap[0] = -1;
-            (AddNewValue(args), ...);
+            heap.push_back(-1);
+            (heap.push_back(args), ...);
         }
         ~InhuHeap()
         {
@@ -22,6 +22,7 @@ class InhuHeap
             return heap[index-1];
         }
         void AddNewValue(int NewValue);
+        void SortAsHeap();
         void DeleteValue(int TargetValue);
         void PrintHeap() const;
 };

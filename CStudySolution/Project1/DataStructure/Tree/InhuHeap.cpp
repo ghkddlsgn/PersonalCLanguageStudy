@@ -1,25 +1,33 @@
 #include "InhuHeap.h"
 #include <iostream>
-#include <vector>
 
 void InhuHeap::AddNewValue(int NewValue)
 {
     heap.push_back(NewValue);
-    int targetIndex = heap.size();
-    int parentIndex = targetIndex / 2;
+    SortAsHeap();
+}
 
-    while(0 < parentIndex && heap[parentIndex] < NewValue)
+void InhuHeap::SortAsHeap()
+{
+    for (int i = heapIndex + 1; i < heap.size(); i++)
     {
-        heap[targetIndex] = heap[parentIndex];
-        targetIndex = parentIndex;
-        parentIndex = targetIndex / 2;
+        int NewValue = heap[i];
+        int targetIndex = i;
+        int parentIndex = targetIndex / 2;
+        while(0 < parentIndex && heap[parentIndex] < NewValue)
+        {
+            heap[targetIndex] = heap[parentIndex];
+            targetIndex = parentIndex;
+            parentIndex = targetIndex / 2;
+        }
+        heap[targetIndex] = NewValue;
     }
-    heap[parentIndex] = NewValue;
+    heapIndex = heap.size() - 1;
 }
 
 void InhuHeap::PrintHeap() const
 {
-    if(heap.empty()) {
+    if(heap.size() <= 1) {
         std::cout << "Empty heap" << std::endl;
         return;
     }
@@ -28,7 +36,7 @@ void InhuHeap::PrintHeap() const
     int nodes_at_level = 1;
     int nodes_printed = 0;
 
-    for(int i = 0; i < heap.size(); i++)
+    for(int i = 1; i < heap.size(); i++)
     {
         // Print indentation for tree structure
         if(nodes_printed == 0) {
