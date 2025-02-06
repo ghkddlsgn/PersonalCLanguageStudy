@@ -18,9 +18,13 @@ struct TreeN_Node {
     }
 };
 
-TreeN_Node* InhuBTree::CreateNewNode()
+TreeN_Node* InhuBTree::CreateNewNode(int size)
 {
-    TreeN_Node* newNode = new TreeN_Node(node_size);
+    if (size == -1)
+    {
+        size = node_size;
+    }
+    TreeN_Node* newNode = new TreeN_Node(size);
     size++;
     return newNode;
 }
@@ -123,7 +127,7 @@ void InhuBTree::SplitNode(TreeN_Node* node, int NewValue, TreeN_Node* NewChildNo
     if NewChildNode is not nullptr, it means i split internal node.
     i need to put NewChildNode after Insert point
     */
-    if (node->len!=node_size) //check node is full
+    if (node->len!=node->Value.size()) //node is not full?
     {
         std::cout << "SplitNode error : node is not full" << std::endl;
         return;
@@ -332,7 +336,6 @@ void InhuBTree::AddNewValue(int NewValue)
     {
         //start split node
         SplitNode(TargetNode, NewValue);
-
     }
     else
     {
