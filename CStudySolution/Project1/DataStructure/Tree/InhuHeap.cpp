@@ -32,6 +32,62 @@ void InhuHeap::SortAsHeap()
     heapIndex = heap.size() - 1;
 }
 
+void InhuHeap::Sort_Heapify() //compare every node from the root
+{
+    //check valid : heap is empty?
+    if (heap.size() <= 1)
+    {
+        return;
+    }
+
+    int R_Child_idx;
+    int L_Child_idx;
+    int ReplaceChildIdx;
+
+    std::cout<<"tree structure before sort"<<std::endl;
+    PrintHeap();
+    std::cout<<std::endl;
+    for (int i = heap.size()/2; i >= 1; i--) //from non-leaf
+    {
+        int TargetIndex = i;
+        while(1)
+        {
+            R_Child_idx = TargetIndex * 2 + 1;
+            L_Child_idx = TargetIndex * 2;
+            
+            //which child should i need to compare
+            if ((L_Child_idx <= heap.size() - 1)) //Lchild is exist?
+            {
+                ReplaceChildIdx = L_Child_idx;
+                if (R_Child_idx <= heap.size() - 1) //Rchild is exist too?
+                {
+                    ReplaceChildIdx = (heap[L_Child_idx] > heap[R_Child_idx]) ? L_Child_idx : R_Child_idx; //chose the bigger one
+                }
+            }
+            else //if childs are not exist, then break;
+            {
+                break;
+            }
+            
+            // do i need to swap? : target is smaller then child?
+            if (heap[TargetIndex] < heap[ReplaceChildIdx]) 
+            {
+                //begin swap
+                std::swap(heap[TargetIndex], heap[ReplaceChildIdx]);
+
+                //update target index to child
+                TargetIndex = ReplaceChildIdx;                    
+            }
+            else
+            {
+                //if no need to swap, end compare for TargetIndex
+                break;
+            }
+        }
+
+    }
+}
+
 void InhuHeap::DeleteValue()
 {
     if (heap.size() <= 1)
