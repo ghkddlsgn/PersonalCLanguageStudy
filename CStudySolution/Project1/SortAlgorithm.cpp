@@ -2,12 +2,32 @@
 #include "SortAlgorithm.h"
 
 template <typename T>
-inline void SimpleSwap(T* a, T* b)
+inline void SimpleSwap(T& a, T& b)
 {
 	T temp;
-	temp = *a;
-	*a = *b;
-	*b = temp;
+	temp = a;
+	a = b;
+	b = temp;
+}
+
+void BubbleSort(int arr[], int length, bool MinToMax)
+{
+	for (int i = 0; i < length - 1; i++)
+	{
+		bool swap_done = false;
+		for (int j = i; j < length - 1; j++)
+		{
+			if (MinToMax ? arr[j] > arr[j+1] : arr[j] < arr[j+1])
+			{
+				SimpleSwap<int>(arr[j], arr[j+1]);
+				swap_done = true;
+			}
+		}
+		if (!swap_done)
+		{
+			break;
+		}
+	}
 }
 
 void SelectSort(int arr[], int length, bool MinToMax)
