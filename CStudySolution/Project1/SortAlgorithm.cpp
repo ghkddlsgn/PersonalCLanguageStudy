@@ -30,6 +30,28 @@ void BubbleSort(int arr[], int length, bool MinToMax)
 	}
 }
 
+void InsertSort(int arr[], int length, bool MinToMax)
+{
+	int i,j,k;
+	int temp;
+
+	for(i = 1; i<length; i++)
+	{
+		for(j = i-1; j >= 0; j--)
+		{
+			if (MinToMax ? arr[i] < arr[j] : arr[i] > arr[j]) //find insert point
+			{
+				break;
+			}
+		}
+		for(k = i; k > j; k--)
+		{
+			arr[j+1] = arr[j];
+		}
+		arr[j] = arr[i];
+	}
+}
+
 void SelectSort(int arr[], int length, bool MinToMax)
 {
 	if (arr == NULL || length <= 0)
@@ -66,7 +88,7 @@ void SelectSort(int arr[], int length, bool MinToMax)
 				}
 			}
 		}
-		SimpleSwap(&arr[TargetIndex], &arr[i]);
+		SimpleSwap(arr[TargetIndex], arr[i]);
 	}
 	
 	return;

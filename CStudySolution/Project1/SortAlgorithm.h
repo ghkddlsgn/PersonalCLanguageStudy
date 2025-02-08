@@ -3,8 +3,11 @@
 #include <vector>
 
 template <typename T>
-inline void SimpleSwap(T* a, T* b);
+inline void SimpleSwap(T& a, T& b);
 
+
+void BubbleSort(int arr[], int length, bool MinToMax);
+void InsertSort(int arr[], int length, bool MinToMax);
 void SelectSort(int arr[], int length, bool MinToMax);
 
 void PrintIntArray(int arr[], int length);
