@@ -10,6 +10,8 @@ void BubbleSort(int arr[], int length, bool MinToMax);
 void InsertSort(int arr[], int length, bool MinToMax);
 void SelectSort(int arr[], int length, bool MinToMax);
 
+void InsertSortVector(std::vector<int> arr, bool MinToMax);
+
 void PrintIntArray(int arr[], int length);
 
 int factorial(int n);

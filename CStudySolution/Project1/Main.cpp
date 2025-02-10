@@ -8,15 +8,21 @@ using namespace std;
 int main()
 {
     cout<<"begin programming"<<endl;
-    int a[] = {1,3,5,2};
+    const int length = 15;
+    int A[] = {67, 23, 89, 12, 45, 34, 78, 90, 55, 11, 22, 33, 44, 66, 99};
 
-    for(int i = 0; i < 4; i++) {
-        cout << a[i] << " ";
+    // Print original array
+    cout << "Original array: ";
+    for(int i = 0; i < length; i++) {
+        cout << A[i] << " ";
     }
     cout << endl;
-    InsertSort(a, 4, true);
-    for(int i = 0; i < 4; i++) {
-        cout << a[i] << " ";
+
+    // Sort and print sorted array
+    InsertSort(A, length, true);
+    cout << "Sorted array: ";
+    for(int i = 0; i < length; i++) {
+        cout << A[i] << " ";
     }
     cout << endl;
     cout<<"end programming"<<endl;

@@ -35,20 +35,28 @@ void InsertSort(int arr[], int length, bool MinToMax)
 	int i,j,k;
 	int temp;
 
-	for(i = 1; i<length; i++)
+	for (i = 1; i < length; i++)
 	{
-		for(j = i-1; j >= 0; j--)
+		std::cout<<"Current i "<<i<<std::endl;
+		if (i == 3)
 		{
-			if (MinToMax ? arr[i] < arr[j] : arr[i] > arr[j]) //find insert point
+			std::cout<<"Debug Start"<<std::endl;
+		}
+		temp = arr[i];
+		for (j = 0; j < i; j++) //find insertion point
+		{
+			if (MinToMax ? arr[i] < arr[j] : arr[i] > arr[j])
 			{
 				break;
 			}
 		}
-		for(k = i; k > j; k--)
+
+		for (k = i; k >= j + 1; k--) //shift right
 		{
-			arr[j+1] = arr[j];
+			arr[k] = arr[k-1];
 		}
-		arr[j] = arr[i];
+		arr[j] = temp; //deal with insertion point
+
 	}
 }
 
