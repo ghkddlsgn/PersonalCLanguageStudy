@@ -12,6 +12,7 @@ void SelectSort(int arr[], int length, bool MinToMax = true);
 
 void InsertSortVector(std::vector<int>& arr, bool MinToMax = true);
 void SelectSortVector(std::vector<int>& arr, bool MinToMax = true);
+void QuickSortVector(std::vector<int>& arr, int Range_L = 0, int Range_R = -1);
 
 void PrintIntArray(int arr[], int length);
 

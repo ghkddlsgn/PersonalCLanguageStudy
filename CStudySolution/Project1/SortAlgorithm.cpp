@@ -120,6 +120,11 @@ void SelectSortVector(std::vector<int>& arr, bool MinToMax)
 	}
 }
 
+void QuickSortVector(std::vector<int>& arr, int Range_L, int Range_R)
+{	
+	
+}
+
 void PrintIntArray(int arr[], int length)
 {
 	if (arr == NULL || length <= 0)

@@ -20,7 +20,8 @@ int main()
     cout<<"begin programming"<<endl;
     std::vector<int> a = {23, 45, 12, 67, 89, 34, 56, 78, 90, 11, 22, 33, 44, 55};
     printVector(a);
-    SelectSortVector(a);
+    cout<<"Begin sort"<<endl;
+    QuickSortVector(a);
     printVector(a);
     cout<<"end programming"<<endl;
     return 0;
