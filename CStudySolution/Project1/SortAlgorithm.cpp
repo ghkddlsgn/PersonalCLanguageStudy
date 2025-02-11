@@ -121,8 +121,52 @@ void SelectSortVector(std::vector<int>& arr, bool MinToMax)
 }
 
 void QuickSortVector(std::vector<int>& arr, int Range_L, int Range_R)
-{	
+{   
+	if (Range_R == INT_MAX) Range_R = arr.size()-1; //if default value, auto update
+	int SortTarget = Range_L;  // This should be the pivot position
+    int LeftTarget = Range_L + 1;
+    int RightTarget = Range_R;
+
+	if (LeftTarget > arr.size()-1) return; //left target is in boundary?
+	if (Range_L == Range_R) return;
+	if (LeftTarget > RightTarget)
+	{
+		return;
+	}
+
+	while(LeftTarget <= RightTarget)
+	{
+		while (LeftTarget < Range_R && arr[LeftTarget] < arr[SortTarget]) //find LeftTarget
+		{
+			LeftTarget++;
+		}
+		while (RightTarget >= Range_L && arr[RightTarget] > arr[SortTarget]) //find RightTarget
+		{
+			RightTarget--;
+		}
+		
+		if (LeftTarget >= RightTarget) //i need to finish compare process?
+		{
+			break;
+		}
+		else
+		{
+			std::swap(arr[LeftTarget], arr[RightTarget]);
+			LeftTarget++;
+			RightTarget--;
+		}
+	}
 	
+	std::swap(arr[RightTarget], arr[SortTarget]);
+
+	if (RightTarget > 0) //RightTarget = Pivot
+	{
+		QuickSortVector(arr, Range_L, RightTarget-1); //left partition
+	}
+	if (RightTarget < arr.size()-1)
+	{
+		QuickSortVector(arr, SortTarget+1, Range_R); //right partition
+	}
 }
 
 void PrintIntArray(int arr[], int length)
