@@ -6,11 +6,12 @@ template <typename T>
 inline void SimpleSwap(T& a, T& b);
 
 
-void BubbleSort(int arr[], int length, bool MinToMax);
-void InsertSort(int arr[], int length, bool MinToMax);
-void SelectSort(int arr[], int length, bool MinToMax);
+void BubbleSort(int arr[], int length, bool MinToMax = true);
+void InsertSort(int arr[], int length, bool MinToMax = true);
+void SelectSort(int arr[], int length, bool MinToMax = true);
 
-void InsertSortVector(std::vector<int> arr, bool MinToMax);
+void InsertSortVector(std::vector<int>& arr, bool MinToMax = true);
+void SelectSortVector(std::vector<int>& arr, bool MinToMax = true);
 
 void PrintIntArray(int arr[], int length);
 

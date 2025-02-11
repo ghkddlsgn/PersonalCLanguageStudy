@@ -102,6 +102,24 @@ void SelectSort(int arr[], int length, bool MinToMax)
 	return;
 }
 
+void SelectSortVector(std::vector<int>& arr, bool MinToMax)
+{
+	int i,j,k;
+
+	for (i = 0; i < arr.size(); i++)
+	{
+		k = i;
+		for (j = i+1; j<arr.size(); j++)
+		{
+			if (MinToMax ? arr[j] < arr[k] : arr[j] > arr[k])
+			{
+				k = j;
+			}
+		}
+		std::swap(arr[i], arr[k]);
+	}
+}
+
 void PrintIntArray(int arr[], int length)
 {
 	if (arr == NULL || length <= 0)

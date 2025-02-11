@@ -1,30 +1,27 @@
+#pragma once
 #include "Main.h"
 #include <iostream>
+#include <vector>
 #include "DataStructure\Tree\InhuHeap.h"
 #include "SortAlgorithm.h"
 
 using namespace std;
 
+template<typename T>
+void printVector(const std::vector<T>& vec) {
+    for(const auto& element : vec) {
+        cout << element << " ";
+    }
+    cout << endl;
+}
+
 int main()
 {
     cout<<"begin programming"<<endl;
-    const int length = 15;
-    int A[] = {67, 23, 89, 12, 45, 34, 78, 90, 55, 11, 22, 33, 44, 66, 99};
-
-    // Print original array
-    cout << "Original array: ";
-    for(int i = 0; i < length; i++) {
-        cout << A[i] << " ";
-    }
-    cout << endl;
-
-    // Sort and print sorted array
-    InsertSort(A, length, true);
-    cout << "Sorted array: ";
-    for(int i = 0; i < length; i++) {
-        cout << A[i] << " ";
-    }
-    cout << endl;
+    std::vector<int> a = {23, 45, 12, 67, 89, 34, 56, 78, 90, 11, 22, 33, 44, 55};
+    printVector(a);
+    SelectSortVector(a);
+    printVector(a);
     cout<<"end programming"<<endl;
     return 0;
 }
