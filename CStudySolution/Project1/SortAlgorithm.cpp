@@ -169,6 +169,44 @@ void QuickSortVector(std::vector<int>& arr, int Range_L, int Range_R)
 	}
 }
 
+std::vector<int> Merge2SortedVector(std::vector<int>& arr1, std::vector<int>& arr2)
+{
+	if (arr1.size() == 0 || arr2.size() == 0)
+	{
+		std::cout<<"Merge2SortedVector : empty vector inputed"<<std::endl;
+	}
+
+	//assume 2 arrays are sorted
+	int i = 0;
+	int j = 0;
+	std::vector<int> arr_return;
+
+	while(i < arr1.size() || j < arr2.size())
+	{
+		if(arr1[i] < arr2[j])
+		{
+			arr_return.push_back(arr1[i]);
+			i++;
+		}
+		else
+		{
+			arr_return.push_back(arr2[j]);
+			j++;
+		}
+	}
+
+	for(; j<arr2.size(); j++)
+	{
+		arr_return.push_back(arr2[j]);
+	}
+
+	for(; i<arr1.size(); i++)
+	{
+		arr_return.push_back(arr1[i]);
+	}
+	return arr_return;
+}
+
 void PrintIntArray(int arr[], int length)
 {
 	if (arr == NULL || length <= 0)

@@ -18,11 +18,11 @@ void printVector(const std::vector<T>& vec) {
 int main()
 {
     cout<<"begin programming"<<endl;
-    std::vector<int> a = {23, 45, 12, 67, 89, 34, 56, 78, 90, 11};
-    printVector(a);
+    std::vector<int> a = {7, 9, 11, 23, 45, 56, 78, 90};
+    std::vector<int> b = {1, 3, 12, 67, 89, 345};
+
     cout<<"Begin sort"<<endl;
-    QuickSortVector(a);
-    printVector(a);
+    printVector(Merge2SortedVector(a,b));
     cout<<"end programming"<<endl;
     return 0;
 }
