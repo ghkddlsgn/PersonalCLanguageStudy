@@ -206,6 +206,55 @@ std::vector<int> Merge2SortedVector(std::vector<int>& arr1, std::vector<int>& ar
 	}
 	return arr_return;
 }
+void MergeSortVector_Iterate(std::vector<int>&arr)
+{
+	if (arr.size() == 0) //array is empty?
+	{
+		return;
+	}
+	bool odd = arr.size() % 2 ? true:false;
+
+	int i,j;
+	for(i = 2; i < arr.size(); i*2)
+	{
+		for(j = 0; j < )
+	}
+
+}
+
+void SingleMergeSortVector(std::vector<int>&arr, int l = -1, int mid = -1, int h = -1)
+{
+	int i = l;
+	int j = mid + 1;
+	std::vector<int> arr_result;
+	
+	while(i <= mid && j <= h)
+	{
+		if (arr[i] < arr[j])
+		{
+			arr_result.push_back(arr[i]);
+			i++;
+		}
+		else
+		{
+			arr_result.push_back(arr[j]);
+			j++;
+		}
+	}
+
+	for(; i<=mid; i++)
+	{
+		arr_result.push_back(arr[i]);
+		i++;
+	}
+	for(; j<=mid; j++)
+	{
+		arr_result.push_back(arr[j]);
+		j++;
+	}
+
+	arr = arr_result;
+}
 
 void PrintIntArray(int arr[], int length)
 {

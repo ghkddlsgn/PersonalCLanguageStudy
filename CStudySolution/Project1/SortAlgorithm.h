@@ -14,6 +14,8 @@ void InsertSortVector(std::vector<int>& arr, bool MinToMax = true);
 void SelectSortVector(std::vector<int>& arr, bool MinToMax = true);
 void QuickSortVector(std::vector<int>& arr, int Range_L = 0, int Range_R = INT_MAX);
 std::vector<int> Merge2SortedVector(std::vector<int>& arr1, std::vector<int>& arr2);
+void MergeSortVector_Iterate(std::vector<int>&arr);
+void SingleMergeSortVector(std::vector<int>&arr, int l = -1, int mid = -1, int h = -1);
 
 void PrintIntArray(int arr[], int length);
 
