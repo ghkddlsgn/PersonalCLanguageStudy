@@ -1,4 +1,5 @@
 #include <iostream>
+#include <list>
 #include "SortAlgorithm.h"
 
 template <typename T>
@@ -305,6 +306,72 @@ void SingleMergeSortVector(std::vector<int>&arr, int l, int mid, int h)
     {
         arr[l + k] = arr_result[k];
     }
+}
+
+void CountSort(std::vector<int>&arr)
+{
+	//assume that arr has only positive values
+	int max = 0;
+	for(int i = 0; i <arr.size(); i++) //find max value
+	{
+		max = std::max(arr[i], max);
+	}
+
+	std::vector<int> CountArr(max + 1, 0);
+
+	for(int i = 0; i<arr.size(); i++) //fill counter array
+	{
+		CountArr[arr[i]]++;
+	}
+
+	arr.resize(arr.size(), 0);
+	int j = 0;
+	for(int i = 0; i < CountArr.size(); i++) //sort
+	{
+		for(int k = 0; k < CountArr[i]; k++)
+		{
+			arr[j] = i;
+			j++;
+		}
+	}
+}
+
+//Assume that every elements are positive
+void RadixSort(std::vector<int>&arr)
+{
+	std::list<int> RadixArr[10] = {};
+	
+	int i,j;
+	int Index; //index to RadixArr
+	int Max = INT_MIN;
+	int Decimal = 1;
+
+	for(i = 0; i<arr.size(); i++)
+	{
+		Max = std::max(Max, arr[i]);
+	}
+
+	while (Max / Decimal > 0)
+	{
+		for(i = 0; i<arr.size(); i++) //input elements in RadixArr
+		{
+			Index = (arr[i]/Decimal) % 10;
+			RadixArr[Index].push_back(arr[i]);
+		}
+
+		j = 0; //sort index for arr
+		for(i = 0; i <= 9; i++)
+		{
+			std::list<int>& TargetList = RadixArr[i];
+			while(!TargetList.empty())
+			{
+				arr[j] = TargetList.front();
+				TargetList.pop_front();
+				j++;
+			}
+		}
+		Decimal = Decimal * 10;
+	}
 }
 
 void PrintIntArray(int arr[], int length)
