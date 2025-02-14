@@ -212,22 +212,24 @@ void MergeSortVector_Iterate(std::vector<int>&arr)
 	{
 		return;
 	}
-	bool odd = arr.size() % 2 ? true:false;
 
 	int i,j,SortedChunkEndIndex;
 	int RemainElementSize;
 	int Sort_interval;
 	int Chunk_1_StartIndex, Chunk_1_EndIndex, Chunk_2_EndIndex;
-	for(i = 2; i < arr.size(); i *= 2)
+	for(i = 2; i <= arr.size(); i *= 2) // i = merge partition scale
 	{
-		for(j = 0; j <= arr.size(); j += i)
+		for(j = 0; j + i<= arr.size(); j += i)
 		{
-			SingleMergeSortVector(arr, j, ((2*j)+i-1)/2, j + i - 1); // mid = (low + high) / 2
+			//j : start index of current chunk
+			int end = j + i - 1;
+			int mid = (j + end) / 2;
+			SingleMergeSortVector(arr, j, mid, end); // mid = (low + high) / 2
 		}
 		RemainElementSize = arr.size() % i;
 		if(RemainElementSize > 0) //is there any remain element that not merged?
 		{
-			SortedChunkEndIndex = arr.size() - RemainElementSize; //end index of currently sorted range
+			SortedChunkEndIndex = arr.size() - RemainElementSize - 1; //end index of currently sorted range
 			Sort_interval = i;
 			Chunk_1_StartIndex = SortedChunkEndIndex + 1;
 
@@ -251,6 +253,8 @@ void MergeSortVector_Iterate(std::vector<int>&arr)
 			{
 				SingleMergeSortVector(arr, Chunk_1_StartIndex, k-1, k);
 			}
+
+			SingleMergeSortVector(arr, SortedChunkEndIndex-i+1, SortedChunkEndIndex, arr.size()-1); //merge chunk with sorted chunk
 		}
 	}
 }
