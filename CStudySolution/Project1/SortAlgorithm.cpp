@@ -214,46 +214,93 @@ void MergeSortVector_Iterate(std::vector<int>&arr)
 	}
 	bool odd = arr.size() % 2 ? true:false;
 
-	int i,j;
-	for(i = 2; i < arr.size(); i*2)
+	int i,j,SortedChunkEndIndex;
+	int RemainElementSize;
+	int Sort_interval;
+	int Chunk_1_StartIndex, Chunk_1_EndIndex, Chunk_2_EndIndex;
+	for(i = 2; i < arr.size(); i *= 2)
 	{
-		for(j = 0; j < )
-	}
+		for(j = 0; j <= arr.size(); j += i)
+		{
+			SingleMergeSortVector(arr, j, ((2*j)+i-1)/2, j + i - 1); // mid = (low + high) / 2
+		}
+		RemainElementSize = arr.size() % i;
+		if(RemainElementSize > 0) //is there any remain element that not merged?
+		{
+			SortedChunkEndIndex = arr.size() - RemainElementSize; //end index of currently sorted range
+			Sort_interval = i;
+			Chunk_1_StartIndex = SortedChunkEndIndex + 1;
 
+			while(Sort_interval >= 1)
+			{
+				Sort_interval = Sort_interval/2;
+				if(SortedChunkEndIndex + Sort_interval <= arr.size()-1) //is chunk1EndIndex in boundary?
+				{
+					Chunk_1_EndIndex = SortedChunkEndIndex + Sort_interval;
+					if(Chunk_1_EndIndex + Sort_interval/2 <= arr.size()-1) //is NextChunk in boundary?
+					{
+						Chunk_2_EndIndex = Chunk_1_EndIndex + Sort_interval/2;
+						SingleMergeSortVector(arr, Chunk_1_StartIndex, Chunk_1_EndIndex, Chunk_2_EndIndex);
+						Chunk_1_EndIndex = Chunk_2_EndIndex; //shift chunk1 end index to right
+					}
+
+				}
+			}
+
+			for(int k = Chunk_1_EndIndex + 1; k <= arr.size()-1; k++) //if interval is lower then 1, merge rest partition one by one
+			{
+				SingleMergeSortVector(arr, Chunk_1_StartIndex, k-1, k);
+			}
+		}
+	}
 }
 
-void SingleMergeSortVector(std::vector<int>&arr, int l = -1, int mid = -1, int h = -1)
+void SingleMergeSortVector(std::vector<int>&arr, int l, int mid, int h)
 {
-	int i = l;
-	int j = mid + 1;
-	std::vector<int> arr_result;
-	
-	while(i <= mid && j <= h)
-	{
-		if (arr[i] < arr[j])
-		{
-			arr_result.push_back(arr[i]);
-			i++;
-		}
-		else
-		{
-			arr_result.push_back(arr[j]);
-			j++;
-		}
-	}
+    // Init
+    if (l == -1) l = 0;
+    if (h == -1) h = arr.size() - 1;
+	if (mid == -1) mid = (l + h) / 2;
 
-	for(; i<=mid; i++)
-	{
-		arr_result.push_back(arr[i]);
-		i++;
-	}
-	for(; j<=mid; j++)
-	{
-		arr_result.push_back(arr[j]);
-		j++;
-	}
+    if (l >= h) return;
+    
 
-	arr = arr_result;
+    int i = l;
+    int j = mid + 1;
+    std::vector<int> arr_result;
+
+    // Merge the two sorted halves
+    while(i <= mid && j <= h)
+    {
+        if (arr[i] < arr[j])
+        {
+            arr_result.push_back(arr[i]);
+            i++;
+        }
+        else
+        {
+            arr_result.push_back(arr[j]);
+            j++;
+        }
+    }
+
+    // Copy remaining elements from first half
+    for(; i <= mid; i++)
+    {
+        arr_result.push_back(arr[i]);
+    }
+
+    // Copy remaining elements from second half
+    for(; j <= h; j++)
+    {
+        arr_result.push_back(arr[j]);
+    }
+
+    // Copy back to original array in the correct range
+    for(int k = 0; k < arr_result.size(); k++)
+    {
+        arr[l + k] = arr_result[k];
+    }
 }
 
 void PrintIntArray(int arr[], int length)
