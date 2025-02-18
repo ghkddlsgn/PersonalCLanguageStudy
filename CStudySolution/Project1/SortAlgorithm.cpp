@@ -374,6 +374,37 @@ void RadixSort(std::vector<int>&arr)
 	}
 }
 
+void ShellSort(std::vector<int>&arr)
+{
+	int Gap = arr.size();
+	int TargetIndex = 0;
+	int a1, a2;
+	for(Gap = arr.size()/2; Gap > 0; Gap = Gap/2)
+	{
+		for(TargetIndex = 0;  TargetIndex + Gap< arr.size(); TargetIndex++)
+		{
+			a1 = TargetIndex;
+			a2 = TargetIndex + Gap;
+			while(0 <= a1)
+			{
+				if (arr[a1] < arr[a2]) //need to swap?
+				{
+					break;
+				}
+				else //i have to swap
+				{
+					//swap and shift indices to left by gab
+					std::swap(arr[a1], arr[a2]);
+					a2 = a1;
+					a1 = a1 - Gap;
+					continue;
+				}
+			}
+		}
+	}
+	
+}
+
 void PrintIntArray(int arr[], int length)
 {
 	if (arr == NULL || length <= 0)

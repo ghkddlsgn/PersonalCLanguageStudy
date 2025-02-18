@@ -17,6 +17,7 @@ void MergeSortVector_Iterate(std::vector<int>&arr);
 void SingleMergeSortVector(std::vector<int>&arr, int l = -1, int mid = -1, int h = -1);
 void CountSort(std::vector<int>&arr);
 void RadixSort(std::vector<int>&arr);
+void ShellSort(std::vector<int>&arr);
 
 void PrintIntArray(int arr[], int length);
 

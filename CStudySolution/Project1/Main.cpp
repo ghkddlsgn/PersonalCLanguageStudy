@@ -24,7 +24,7 @@ int main()
     printVector(c);
     
     cout<<"Begin sort"<<endl;
-    RadixSort(c);
+    ShellSort(c);
     printVector(c);
     cout<<"end programming"<<endl;
 
