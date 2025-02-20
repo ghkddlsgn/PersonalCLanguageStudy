@@ -2,8 +2,7 @@
 #include "Main.h"
 #include <iostream>
 #include <vector>
-#include "DataStructure\Tree\InhuHeap.h"
-#include "SortAlgorithm.h"
+#include "Hashing/Chain.h"
 
 using namespace std;
 
@@ -18,14 +17,20 @@ void printVector(const std::vector<T>& vec) {
 int main()
 {
     cout<<"begin programming"<<endl;
-    std::vector<int> a = {7, 9, 11, 23, 45, 56, 78, 90};
-    std::vector<int> b = {1, 3, 12, 67, 89, 345};
-    std::vector<int> c = {4721, 892, 6543, 12, 9876, 3456, 7890, 23, 5, 8901, 4567, 1789, 6789, 3210, 9012};
-    printVector(c);
+
+    HashChain a(1,2,3,4,5,6,7,8,9,10,11,22,33,44,55,66,77,88,99,100);
+    a.PrintChainList();
     
-    cout<<"Begin sort"<<endl;
-    ShellSort(c);
-    printVector(c);
+    // Test Insert
+    a.Insert(15);
+    cout << "After inserting 15:" << endl;
+    a.PrintChainList();
+
+    a.Delete(15);
+    a.Delete(77);
+    a.Delete(7);
+
+    a.PrintChainList();
     cout<<"end programming"<<endl;
 
     return 0;
