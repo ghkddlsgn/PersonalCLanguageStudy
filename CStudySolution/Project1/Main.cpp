@@ -1,8 +1,7 @@
-#pragma once
 #include "Main.h"
 #include <iostream>
 #include <vector>
-#include "Hashing/Chain.h"
+#include "DataStructure/Graph/InhuGraph.h"
 
 using namespace std;
 
@@ -18,19 +17,17 @@ int main()
 {
     cout<<"begin programming"<<endl;
 
-    HashChain a(1,2,3,4,5,6,7,8,9,10,11,22,33,44,55,66,77,88,99,100);
-    a.PrintChainList();
-    
-    // Test Insert
-    a.Insert(15);
-    cout << "After inserting 15:" << endl;
-    a.PrintChainList();
+    InhuGraph a;
+    a.Insert(1);
+    a.Insert(2,{1});
+    a.Insert(4,{1});
+    a.Insert(3,{1,2,4});
+    a.Insert(5,{4,3});
+    a.Insert(6,{5});
+    a.Insert(7,{5});
 
-    a.Delete(15);
-    a.Delete(77);
-    a.Delete(7);
+    printVector<int>(a.Bfs(1));
 
-    a.PrintChainList();
     cout<<"end programming"<<endl;
 
     return 0;

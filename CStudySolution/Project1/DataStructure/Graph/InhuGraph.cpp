@@ -1,6 +1,5 @@
-#include "Project1/DataStructure/Graph/InhuGraph.h"
+#include "DataStructure/Graph/InhuGraph.h"
 #include <iostream>
-#include <queue>
 #include <stack>
 
 bool InhuGraph::Find(int FindValue, std::vector<int> TargetVector) const
@@ -18,7 +17,15 @@ bool InhuGraph::Find(int FindValue, std::vector<int> TargetVector) const
 
 bool InhuGraph::Find(int FindValue, std::queue<int> TargetQueue) const
 {
-    while()
+    while (!TargetQueue.empty())
+    {
+        if (FindValue == TargetQueue.front())
+        {
+            return true;
+        }
+        TargetQueue.pop();
+    }
+    return false;
 }
 
 
@@ -78,23 +85,22 @@ std::vector<int> InhuGraph::Bfs(int StartValue) const
     std::vector<int> ReturnValue; //find out values
 
     //find start index from start value
-    int StartIndex = -1;
+    int TargetIndex = -1;
     for(int i = 0; i<elements.size(); i++)
     {
         if (elements[i].front() == StartValue)
         {
-            StartIndex = i;
+            TargetIndex = i;
             break;
         }
     }
     
-    if (StartIndex == -1) //Start index is valid?
+    if (TargetIndex == -1) //Start index is valid?
     {
         std::cout<<"there's no Value for "<<StartValue<<std::endl;
         return std::vector<int>();
     }
 
-    int TargetIndex = StartIndex;
     while(ReturnValue.size() >= elements.size())
     {
         //check we already found this element
@@ -114,7 +120,14 @@ std::vector<int> InhuGraph::Bfs(int StartValue) const
         std::list<int>::const_iterator it = elements[TargetIndex].begin()++;
         while(it != elements[TargetIndex].end())
         {
-            if(Find(*it, RemainElements))
+            if(Find(*it, RemainElements)) //if we already added, skip
+            {
+                continue;
+            }
+            else
+            {
+                RemainElements.push(*it); //if not, add it
+            }
         }
 
         ReturnValue.push_back(TargetValue);
