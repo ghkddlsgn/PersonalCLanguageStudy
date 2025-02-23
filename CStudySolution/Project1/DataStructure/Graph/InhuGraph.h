@@ -1,6 +1,7 @@
 #pragma once
 #include <list>
 #include <vector>
+#include <queue>
 
 class InhuGraph
 {
@@ -12,8 +13,10 @@ public:
 
     }
     
+    bool Find(int FindValue, std::vector<int> TargetVector) const;
+    bool Find(int FindValue, std::queue<int> TargetQueue) const;
     void Insert(int Value, std::vector<int> AdjacentValues);
     void Remove(int Value);
-    std::list<int> Bfs(int Value) const;
+    std::vector<int> Bfs(int StartValue) const;
     void print();
 };
