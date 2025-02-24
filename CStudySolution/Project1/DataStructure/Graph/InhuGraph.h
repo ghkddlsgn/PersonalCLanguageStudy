@@ -3,20 +3,29 @@
 #include <vector>
 #include <queue>
 
+struct S_Element
+{
+    int Value;
+    std::list<int> AdjacentElementsIndexList;
+};
+
 class InhuGraph
 {
 private:
-    std::vector<std::list<int>> elements;
+    std::vector<S_Element> Elements;
+protected:
+    int GetElementIndexFromValue(int TargetValue) const;
 public:
     InhuGraph()
     {
 
     }
     
-    bool Find(int FindValue, std::vector<int> TargetVector) const;
-    bool Find(int FindValue, std::queue<int> TargetQueue) const;
     void Insert(int Value, std::vector<int> AdjacentValues);
     void Remove(int Value);
     std::vector<int> Bfs(int StartValue) const;
     void print();
 };
+
+bool Find(int FindValue, std::vector<int> TargetVector);
+bool Find(int FindValue, std::queue<int> TargetQueue);

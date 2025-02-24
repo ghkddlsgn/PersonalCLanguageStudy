@@ -18,7 +18,7 @@ int main()
     cout<<"begin programming"<<endl;
 
     InhuGraph a;
-    a.Insert(1);
+    a.Insert(1, {});
     a.Insert(2,{1});
     a.Insert(4,{1});
     a.Insert(3,{1,2,4});

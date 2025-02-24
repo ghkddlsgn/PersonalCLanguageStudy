@@ -1,8 +1,8 @@
-#include "DataStructure/Graph/InhuGraph.h"
+#include "Project1/DataStructure/Graph/InhuGraph.h"
 #include <iostream>
 #include <stack>
 
-bool InhuGraph::Find(int FindValue, std::vector<int> TargetVector) const
+bool Find(int FindValue, std::vector<int> TargetVector)
 {
     for (int i = 0; i < TargetVector.size(); i++)
     {
@@ -15,7 +15,7 @@ bool InhuGraph::Find(int FindValue, std::vector<int> TargetVector) const
     return false;
 }
 
-bool InhuGraph::Find(int FindValue, std::queue<int> TargetQueue) const
+bool Find(int FindValue, std::queue<int> TargetQueue)
 {
     while (!TargetQueue.empty())
     {
@@ -28,110 +28,105 @@ bool InhuGraph::Find(int FindValue, std::queue<int> TargetQueue) const
     return false;
 }
 
+int InhuGraph::GetElementIndexFromValue(int TargetValue) const
+{
+    for(int i = 0; i<Elements.size(); i++)
+    {
+        if (Elements[i].Value == TargetValue)
+        {
+            return i;
+        }
+    }
+
+    std::cout<<"GetElementIndexFromValue : Invalid TargetValue Search"<<std::endl;
+    return -1;
+}
 
 void InhuGraph::Insert(int Value, std::vector<int> AdjacentValues)
 {
     //assume that AdjacentValues only containe valid values
     
-    //add values to opponent elements
-    for(int i = 0; i<elements.size(); i++)
-    {
-        for(int j = 0; j<AdjacentValues.size(); j++)
-        {
-            if(elements[i].front() == AdjacentValues[j])
-            {
-                elements[i].push_back(Value);
-                break;
-            }
-        }
-    }
-
     //make new list
-    std::list<int> NewList = {Value};
+    S_Element NewElement;
+    NewElement.Value = Value;
+    Elements.push_back(NewElement);
+    int NewElementIndex = Elements.size() - 1;
     for(int i = 0; i<AdjacentValues.size(); i++)
     {
-        NewList.push_back(AdjacentValues[i]);
+        if (Elements[i].Value == NewElement.Value)
+        {
+            continue;
+        }
+
+        int AdjacentElementIndex = GetElementIndexFromValue(AdjacentValues[i]);
+        //add adjacentElement's ptr on element
+        NewElement.AdjacentElementsIndexList.push_back(AdjacentElementIndex);
+
+        //Add NewElement's ptr on AdjacentElement
+        Elements[AdjacentElementIndex].AdjacentElementsIndexList.push_back(NewElementIndex);
     }
-    elements.push_back(NewList);
 }
 
 void InhuGraph::Remove(int Value)
 {
-    for(int i = 0; i<elements.size(); i++)
+    for (int i = 0; i < Elements.size(); i++)
     {
-        if (elements[i].front() == Value) //is target value list?
+        if (Elements[i].Value == Value) // is target value list?
         {
-            elements.erase(elements.begin() + i);
-            break;
-        }
-
-        //delete value that exist in opponent list
-        std::list<int>::iterator it = elements[i].begin()++;
-        while(it != elements[i].end())
-        {
-            if(*it == Value)
+            // Get adjacent element indices
+            std::list<int>::iterator it = Elements[i].AdjacentElementsIndexList.begin();
+            while (it != Elements[i].AdjacentElementsIndexList.end())
             {
-                elements[i].erase(it);
-                break;
+                int opponentIndex = *it;
+                // Remove target value's index from opponent element's adjacent list
+                std::list<int>& opponentAdjList = Elements[opponentIndex].AdjacentElementsIndexList;
+                opponentAdjList.remove(i);
+                ++it;
             }
-            it++;
+            // Remove the element itself from the graph
+            Elements.erase(Elements.begin() + i);
+            break;
         }
     }
 }
 
 std::vector<int> InhuGraph::Bfs(int StartValue) const
 {
-    std::queue<int> RemainElements; //element indices that i need to check
+    std::queue<int> RemainElementsIndex; //element indices that i need to check
+    std::vector<int> FinishedElementIndex;
     std::vector<int> ReturnValue; //find out values
 
     //find start index from start value
-    int TargetIndex = -1;
-    for(int i = 0; i<elements.size(); i++)
-    {
-        if (elements[i].front() == StartValue)
-        {
-            TargetIndex = i;
-            break;
-        }
-    }
-    
-    if (TargetIndex == -1) //Start index is valid?
+    RemainElementsIndex.push(GetElementIndexFromValue(StartValue));
+
+    if (RemainElementsIndex.front() == -1) //Start index is valid?
     {
         std::cout<<"there's no Value for "<<StartValue<<std::endl;
         return std::vector<int>();
     }
 
-    while(ReturnValue.size() >= elements.size())
+    int TargetIndex;
+    while(RemainElementsIndex.size() > 0)
     {
-        //check we already found this element
-        int TargetValue = elements[TargetIndex].front();
+        //begin to search every adjacent element
+        TargetIndex = RemainElementsIndex.front();
 
-        if(Find(TargetValue, ReturnValue)) //if we already found it, then skip to next
+        //find every adjacent element and add to RemainElementIndex queue
+        std::list<int> TargetList = Elements[TargetIndex].AdjacentElementsIndexList;
+        std::list<int>::const_iterator it = TargetList.begin();
+        while(it != TargetList.end())//prevent overlap
         {
-            if(RemainElements.size() > 0)
+            if (!Find(*it, FinishedElementIndex) && !Find(*it, RemainElementsIndex))//new value?
             {
-                TargetIndex = RemainElements.front();
-                RemainElements.pop();
+                RemainElementsIndex.push(*it);
             }
-            continue;
+            it++;
         }
 
-        //add new values on RemainElements
-        std::list<int>::const_iterator it = elements[TargetIndex].begin()++;
-        while(it != elements[TargetIndex].end())
-        {
-            if(Find(*it, RemainElements)) //if we already added, skip
-            {
-                continue;
-            }
-            else
-            {
-                RemainElements.push(*it); //if not, add it
-            }
-        }
-
-        ReturnValue.push_back(TargetValue);
+        //move and store value for next loop
+        RemainElementsIndex.pop();
+        FinishedElementIndex.push_back(TargetIndex);
+        ReturnValue.push_back(Elements[TargetIndex].Value);
     }
-    
-    return std::vector<int>();
+    return ReturnValue;
 }
