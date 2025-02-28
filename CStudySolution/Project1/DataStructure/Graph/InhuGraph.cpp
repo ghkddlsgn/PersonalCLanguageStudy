@@ -1,8 +1,8 @@
-#include "Project1/DataStructure/Graph/InhuGraph.h"
+#include "InhuGraph.h"
 #include <iostream>
 #include <stack>
 
-bool Find(int FindValue, std::vector<int> TargetVector)
+bool find(int FindValue, std::vector<int> TargetVector)
 {
     for (int i = 0; i < TargetVector.size(); i++)
     {
@@ -42,29 +42,44 @@ int InhuGraph::GetElementIndexFromValue(int TargetValue) const
     return -1;
 }
 
-void InhuGraph::Insert(int Value, std::vector<int> AdjacentValues)
+std::vector<S_Path> InhuGraph::GetAllPathFromElement(const S_Element& TargetElement) const
+{
+    std::vector<S_Path> ReturnValue;
+    std::list<S_Path*>::iterator it = TargetElement.PathPtrArr.front();
+    while(it != TargetElement.PathPtrArr.end())
+    {
+        ReturnValue.push_back(**it);
+    }
+    return ReturnValue;
+}
+
+
+void InhuGraph::Insert(int Value, std::vector<int> AdjacentValues, std::vector<int> PathCosts)
 {
     //assume that AdjacentValues only containe valid values
+    //valid check
+    if(AdjacentValues.size() != PathCosts.size())
+    {
+        std::cout<<"Insert : AdjacentValues and Pathcosts sizes are different"<<std::endl;
+    }
     
-    //make new list
+    int Index1 = Elements.size() - 1; //index for new element
+
+    //init for new Element
     S_Element NewElement;
     NewElement.Value = Value;
-    Elements.push_back(NewElement);
-    int NewElementIndex = Elements.size() - 1;
-    for(int i = 0; i<AdjacentValues.size(); i++)
+    for(int i = 0; i,AdjacentValues.size(); i++)
     {
-        if (Elements[i].Value == NewElement.Value)
-        {
-            continue;
-        }
+        int Index2 = GetElementIndexFromValue(AdjacentValues[i]);
+        //push new path data on variable : Paths
+        Paths.push_front(S_Path(Index1, Index2, PathCosts[i]));
 
-        int AdjacentElementIndex = GetElementIndexFromValue(AdjacentValues[i]);
-        //add adjacentElement's ptr on element
-        NewElement.AdjacentElementsIndexList.push_back(AdjacentElementIndex);
-
-        //Add NewElement's ptr on AdjacentElement
-        Elements[AdjacentElementIndex].AdjacentElementsIndexList.push_back(NewElementIndex);
+        //store New path data
+        S_Path* NewPathPtr = &Paths.front();
+        NewElement.PathPtrArr.push_back(NewPathPtr); //store at new lement
+        Elements[Index2].PathPtrArr.push_front(NewPathPtr); //store at adjacent element
     }
+    Elements.push_back(NewElement);
 }
 
 void InhuGraph::Remove(int Value)
@@ -74,12 +89,13 @@ void InhuGraph::Remove(int Value)
         if (Elements[i].Value == Value) // is target value list?
         {
             // Get adjacent element indices
-            std::list<int>::iterator it = Elements[i].AdjacentElementsIndexList.begin();
-            while (it != Elements[i].AdjacentElementsIndexList.end())
+            std::list<S_Path*>::iterator it = Elements[i].PathPtrArr.front();
+            while (it != Elements[i].PathPtrArr.end())
             {
-                int opponentIndex = *it;
+                S_Path OpponentInfo = *it;
+                int opponentIndex = OpponentInfo.Index1;
                 // Remove target value's index from opponent element's adjacent list
-                std::list<int>& opponentAdjList = Elements[opponentIndex].AdjacentElementsIndexList;
+                std::list<S_Path>& opponentAdjList = Elements[opponentIndex].PathPtrArr;
                 opponentAdjList.remove(i);
                 ++it;
             }
@@ -88,6 +104,8 @@ void InhuGraph::Remove(int Value)
             break;
         }
     }
+
+    std::cout<<"Remove : Invalid value"<<std::endl;
 }
 
 std::vector<int> InhuGraph::Bfs(int StartValue) const
@@ -112,13 +130,15 @@ std::vector<int> InhuGraph::Bfs(int StartValue) const
         TargetIndex = RemainElementsIndex.front();
 
         //find every adjacent element and add to RemainElementIndex queue
-        std::list<int> TargetList = Elements[TargetIndex].AdjacentElementsIndexList;
-        std::list<int>::const_iterator it = TargetList.begin();
+        std::list<S_Path> TargetList = *(Elements[TargetIndex].PathPtrArr);
+        std::list<S_Path>::const_iterator it = TargetList.begin();
         while(it != TargetList.end())//prevent overlap
         {
-            if (!Find(*it, FinishedElementIndex) && !Find(*it, RemainElementsIndex))//new value?
+            S_Path TargetInfo = *it;
+            int Index1 = TargetInfo.Index1;
+            if (!find(Index1, FinishedElementIndex) && !Find(Index1, RemainElementsIndex))//new value?
             {
-                RemainElementsIndex.push(*it);
+                RemainElementsIndex.push(Index1);
             }
             it++;
         }
@@ -129,4 +149,46 @@ std::vector<int> InhuGraph::Bfs(int StartValue) const
         ReturnValue.push_back(Elements[TargetIndex].Value);
     }
     return ReturnValue;
+}
+
+std::vector<int> InhuGraph::prim() const
+{
+    //find smallest path cost
+    S_Element head1;
+    S_Element head2;
+    int MinCost = -1;
+
+    std::vector<S_Element> LinkedElement;
+    std::vector<S_Path> LinkedPath;
+    LinkedElement.resize(Elements.size());
+    LinkedPath.resize(Elements.size());
+
+    std::list<S_Path>::iterator it = Paths.front();
+    for(int i = 0; i<Paths.size(); i++)
+    {
+        //need to find head and tail    
+    }
+
+    while(LinkedElement.size() < Elements.size())
+    {
+        std::vector<S_Path> PathsFromHeads;
+        std::vector<S_Path> Head1Paths = GetAllPathFromElement(head1);
+        std::vector<S_Path> Head2Paths = GetAllPathFromElement(head2);
+        PathsFromHeads.resize(Head1Paths.size() + Head2Paths.size());
+
+        //get all path from heads
+        for(int i = 0; i<Head1Paths.size(); i++)
+        {
+            PathsFromHeads.push_back(Head1Paths[i]);
+            PathsFromHeads.push_back(Head2Paths[i]);
+        }
+        
+        //exclude path that head to already added element
+        for(int i = 0; i<PathsFromHeads.size(); i++)
+        {
+
+            if(find<S_Element>(PathsFromHeads[i].Index1, LinkedElement))
+        }
+        //get the smallest cost path
+    }
 }
