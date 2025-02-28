@@ -206,6 +206,7 @@
     <ClCompile Include="CommonClass\CustomVector.cpp" />
     <ClCompile Include="CommonClass\Point.cpp" />
     <ClCompile Include="CommonClass\String.cpp" />
+    <ClCompile Include="DataStructure\Graph\InhuGraph.cpp" />
     <ClCompile Include="DataStructure\List\InhuCircularList.cpp" />
     <ClCompile Include="DataStructure\List\InhuLinkedList.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -371,6 +372,7 @@
     <ClInclude Include="CommonClass\CustomVector.h" />
     <ClInclude Include="CommonClass\Point.h" />
     <ClInclude Include="CommonClass\String.h" />
+    <ClInclude Include="DataStructure\Graph\InhuGraph.h" />
     <ClInclude Include="DataStructure\List\InhuCircularList.h" />
     <ClInclude Include="DataStructure\List\InhuLinkedList.h" />
     <ClInclude Include="DataStructure\List\LinkNode.h" />
