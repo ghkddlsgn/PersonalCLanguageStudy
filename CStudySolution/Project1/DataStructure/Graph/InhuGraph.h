@@ -24,6 +24,15 @@ struct S_Element
 {
     int Value;
     std::list<S_Path*> PathPtrArr;
+
+    bool operator==(const S_Element& other) const
+    {
+        if (Value == other.Value && PathPtrArr == other.PathPtrArr)
+        {
+            return true;
+        }
+        return false;
+    }
 };
 
 class InhuGraph
@@ -35,16 +44,29 @@ protected:
     int GetElementIndexFromValue(int TargetValue) const;
     std::vector<S_Path> GetAllPathFromElement(const S_Element& TargetElement) const;
     template <typename T>
-    bool find(T FindValue, std::vector<T> TargetVector)
+    bool find(T FindValue, std::vector<T> TargetVector) const
     {
-    for(int i = 0; i<TargetVector.size(); i++)
-    {
-        if (FindValue == TargetVector[i])
+        for(int i = 0; i<TargetVector.size(); i++)
         {
-            return true;
+            if (FindValue == TargetVector[i])
+            {
+                return true;
+            }
         }
+        return false;
     }
-    return false;
+    template <typename T>
+    bool find(T FindValue, std::queue<T> TargetQueue) const
+    {
+        while(TargetQueue.size() > 0)
+        {
+            if (FindValue == TargetQueue.front())
+            {
+                return true;
+            }
+            TargetQueue.pop();
+        }
+        return false;
     }
 public:
     InhuGraph()

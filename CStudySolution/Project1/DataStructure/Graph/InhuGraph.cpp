@@ -45,7 +45,7 @@ int InhuGraph::GetElementIndexFromValue(int TargetValue) const
 std::vector<S_Path> InhuGraph::GetAllPathFromElement(const S_Element& TargetElement) const
 {
     std::vector<S_Path> ReturnValue;
-    std::list<S_Path*>::iterator it = TargetElement.PathPtrArr.front();
+    std::list<S_Path*>::const_iterator it = TargetElement.PathPtrArr.begin();
     while(it != TargetElement.PathPtrArr.end())
     {
         ReturnValue.push_back(**it);
@@ -84,28 +84,26 @@ void InhuGraph::Insert(int Value, std::vector<int> AdjacentValues, std::vector<i
 
 void InhuGraph::Remove(int Value)
 {
-    for (int i = 0; i < Elements.size(); i++)
+    int TargetIndex = GetElementIndexFromValue(Value);
+
+    if (TargetIndex == -1) //valid check
     {
-        if (Elements[i].Value == Value) // is target value list?
-        {
-            // Get adjacent element indices
-            std::list<S_Path*>::iterator it = Elements[i].PathPtrArr.front();
-            while (it != Elements[i].PathPtrArr.end())
-            {
-                S_Path OpponentInfo = *it;
-                int opponentIndex = OpponentInfo.Index1;
-                // Remove target value's index from opponent element's adjacent list
-                std::list<S_Path>& opponentAdjList = Elements[opponentIndex].PathPtrArr;
-                opponentAdjList.remove(i);
-                ++it;
-            }
-            // Remove the element itself from the graph
-            Elements.erase(Elements.begin() + i);
-            break;
-        }
+        std::cout<<"Remove : Invalid value"<<std::endl;
+        return;
     }
 
-    std::cout<<"Remove : Invalid value"<<std::endl;
+    // Get adjacent element indices
+    std::list<S_Path*>::iterator it = Elements[TargetIndex].PathPtrArr.begin();
+    while (it != Elements[TargetIndex].PathPtrArr.end())
+    {
+        int opponentIndex = (*it)->Index1 == TargetIndex ? (*it)->Index2 : (*it)->Index1;
+        // Remove target value's index from opponent element's adjacent list
+        std::list<S_Path*>& opponentAdjList = Elements[opponentIndex].PathPtrArr;
+        opponentAdjList.remove(*it);
+        ++it;
+    }
+    // Remove the element itself from the graph
+    Elements.erase(Elements.begin() + TargetIndex);
 }
 
 std::vector<int> InhuGraph::Bfs(int StartValue) const
@@ -130,13 +128,12 @@ std::vector<int> InhuGraph::Bfs(int StartValue) const
         TargetIndex = RemainElementsIndex.front();
 
         //find every adjacent element and add to RemainElementIndex queue
-        std::list<S_Path> TargetList = *(Elements[TargetIndex].PathPtrArr);
-        std::list<S_Path>::const_iterator it = TargetList.begin();
+        std::list<S_Path*> TargetList = Elements[TargetIndex].PathPtrArr;
+        std::list<S_Path*>::iterator it = TargetList.begin();
         while(it != TargetList.end())//prevent overlap
         {
-            S_Path TargetInfo = *it;
-            int Index1 = TargetInfo.Index1;
-            if (!find(Index1, FinishedElementIndex) && !Find(Index1, RemainElementsIndex))//new value?
+            int Index1 = (*it)->Index1;
+            if (!find<int>(Index1, FinishedElementIndex) && !find<int>(Index1, RemainElementsIndex))//new value?
             {
                 RemainElementsIndex.push(Index1);
             }
@@ -153,42 +150,88 @@ std::vector<int> InhuGraph::Bfs(int StartValue) const
 
 std::vector<int> InhuGraph::prim() const
 {
-    //find smallest path cost
+    //find smallest path cost and set init heads
     S_Element head1;
     S_Element head2;
-    int MinCost = -1;
+    int MinCost = INT_MAX;
 
+    std::vector<int> ReturnValue;
     std::vector<S_Element> LinkedElement;
     std::vector<S_Path> LinkedPath;
     LinkedElement.resize(Elements.size());
     LinkedPath.resize(Elements.size());
 
-    std::list<S_Path>::iterator it = Paths.front();
+    std::list<S_Path>::const_iterator it = Paths.begin();
     for(int i = 0; i<Paths.size(); i++)
     {
-        //need to find head and tail    
+        S_Path CurrentPath = *it;
+        if (CurrentPath.Cost < MinCost)
+        {
+            MinCost = CurrentPath.Cost;
+            head1 = Elements[CurrentPath.Index1];
+            head2 = Elements[CurrentPath.Index2];
+        }
+        it++;
     }
 
     while(LinkedElement.size() < Elements.size())
     {
-        std::vector<S_Path> PathsFromHeads;
-        std::vector<S_Path> Head1Paths = GetAllPathFromElement(head1);
-        std::vector<S_Path> Head2Paths = GetAllPathFromElement(head2);
-        PathsFromHeads.resize(Head1Paths.size() + Head2Paths.size());
+        std::vector<S_Path> Paths_Total;
+        std::vector<S_Path> Paths_Head1 = GetAllPathFromElement(head1);
+        std::vector<S_Path> Paths_Head2 = GetAllPathFromElement(head2);
+        Paths_Total.resize(Paths_Head1.size() + Paths_Head2.size());
+
+        MinCost = INT_MAX; //reset min cost
+        S_Path MinPath;
 
         //get all path from heads
-        for(int i = 0; i<Head1Paths.size(); i++)
+        for(int i = 0; i<Paths_Head1.size(); i++)
         {
-            PathsFromHeads.push_back(Head1Paths[i]);
-            PathsFromHeads.push_back(Head2Paths[i]);
+            Paths_Total.push_back(Paths_Head1[i]);
+            Paths_Total.push_back(Paths_Head2[i]);
         }
         
         //exclude path that head to already added element
-        for(int i = 0; i<PathsFromHeads.size(); i++)
+        for(int i = 0; i<Paths_Total.size(); i++)
         {
-
-            if(find<S_Element>(PathsFromHeads[i].Index1, LinkedElement))
+            if(find<S_Element>(Elements[Paths_Total[i].Index1], LinkedElement))
+            {
+                Paths_Total.erase(Paths_Total.begin() + i);
+            }
+            if(find<S_Element>(Elements[Paths_Total[i].Index2], LinkedElement))
+            {
+                Paths_Total.erase(Paths_Total.begin() + i);
+            }
         }
-        //get the smallest cost path
+
+        //push previous heads to LinkedElement Array
+        if(!find<S_Element>(head1, LinkedElement))
+        {
+            LinkedElement.push_back(head1);
+        }
+        if(!find<S_Element>(head2, LinkedElement))
+        {
+            LinkedElement.push_back(head2);
+        }
+
+        //find the smallest cost path and set new heads for next loop
+        for(int i = 0; i<Paths_Total.size(); i++)
+        {
+            if(Paths_Total[i].Cost < MinCost)
+            {
+                MinCost = Paths_Total[i].Cost;
+                MinPath = Paths_Total[i];
+                head1 = Elements[Paths_Total[i].Index1];
+                head2 = Elements[Paths_Total[i].Index2];
+            }
+        }
+
+        LinkedPath.push_back(MinPath); //store the smallest cost path
     }
+
+    for(int i = 0; i<LinkedElement.size(); i++)
+    {
+        ReturnValue.push_back(LinkedElement[i].Value);
+    }
+    return ReturnValue;
 }
