@@ -3,6 +3,7 @@
 #include <vector>
 #include <queue>
 
+
 struct S_Path
 {
     int Index1 = -1;
@@ -18,6 +19,22 @@ struct S_Path
     S_Path(int Index1, int Index2, int cost)
     :Index1(Index1), Index2(Index2), Cost(cost)
     {}
+
+    S_Path()
+    {
+        Index1 = -1;
+        Index2 = -1;
+        Cost = 1000000;
+    }
+
+    bool operator==(const S_Path& other) const
+    {
+        if(Index1 == other.Index1 && Index2 == other.Index2 && Cost == other.Cost)
+        {
+            return true;
+        }
+        return false;
+    }
 };
 
 struct S_Element
@@ -43,6 +60,7 @@ private:
 protected:
     int GetElementIndexFromValue(int TargetValue) const;
     std::vector<S_Path> GetAllPathFromElement(const S_Element& TargetElement) const;
+    int GetOppositeElementIndex(const S_Path& TargetPath, const S_Element& TargetElement) const;
     template <typename T>
     bool find(T FindValue, std::vector<T> TargetVector) const
     {
@@ -74,7 +92,8 @@ public:
 
     }
     
-    void Insert(int Value, std::vector<int> AdjacentValues, std::vector<int> PathCosts);
+    void Insert_Element(int Value);
+    void Insert_Path(int Index1, int Index2, int Cost);
     void Remove(int Value);
     std::vector<int> Bfs(int StartValue) const;
     std::vector<int> prim() const;
