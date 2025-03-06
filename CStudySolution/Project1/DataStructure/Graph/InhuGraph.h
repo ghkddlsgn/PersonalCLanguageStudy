@@ -61,6 +61,7 @@ protected:
     int GetElementIndexFromValue(int TargetValue) const;
     std::vector<S_Path> GetAllPathFromElement(const S_Element& TargetElement) const;
     int GetOppositeElementIndex(const S_Path& TargetPath, const S_Element& TargetElement) const;
+    bool IsPathMakeCircle(std::vector<S_Path>& linkedPaths, S_Path FromPath) const;
     template <typename T>
     bool find(T FindValue, std::vector<T> TargetVector) const
     {
@@ -96,9 +97,7 @@ public:
     void Insert_Path(int Index1, int Index2, int Cost);
     void Remove(int Value);
     std::vector<int> Bfs(int StartValue) const;
-    std::vector<int> prim() const;
+    std::vector<int> prim_line() const;
+    std::vector<int> kruskal() const;
     void print();
 };
-
-bool find(int FindValue, std::vector<int> TargetVector);
-bool Find(int FindValue, std::queue<int> TargetQueue);

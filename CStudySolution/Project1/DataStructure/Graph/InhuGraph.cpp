@@ -2,33 +2,6 @@
 #include <iostream>
 #include <stack>
 
-
-bool find(int FindValue, std::vector<int> TargetVector)
-{
-    for (int i = 0; i < TargetVector.size(); i++)
-    {
-        if(FindValue == TargetVector[i])
-        {
-            return true;
-        }
-    }
-    
-    return false;
-}
-
-bool Find(int FindValue, std::queue<int> TargetQueue)
-{
-    while (!TargetQueue.empty())
-    {
-        if (FindValue == TargetQueue.front())
-        {
-            return true;
-        }
-        TargetQueue.pop();
-    }
-    return false;
-}
-
 int InhuGraph::GetElementIndexFromValue(int TargetValue) const
 {
     for(int i = 0; i<Elements.size(); i++)
@@ -57,6 +30,40 @@ std::vector<S_Path> InhuGraph::GetAllPathFromElement(const S_Element& TargetElem
 int InhuGraph::GetOppositeElementIndex(const S_Path& TargetPath, const S_Element& TargetElement) const
 {
     return Elements[TargetPath.Index1] == TargetElement ? TargetPath.Index2 : TargetPath.Index1;
+}
+
+//check linkedpaths make circle
+bool InhuGraph::IsPathMakeCircle(std::vector<S_Path> linkedPaths) const
+{
+    //it record how many times the Paths are visited, if it's not circling, every element should be 1 at the end of search
+    std::vector<int> visitedTimeMap(linkedPaths.size(), 0);
+
+    S_Path StartPath = linkedPaths[0];
+    int head1 = StartPath.Index1;
+    int head2 = StartPath.Index2;
+
+    bool result1 = IsPathMakeCircle_Iterative(linkedPaths, visitedTimeMap, StartPath, head1);
+    bool result2 = IsPathMakeCircle_Iterative(linkedPaths, visitedTimeMap, StartPath, head2);
+    return result1 || result2;
+}
+
+bool InhuGraph::IsPathMakeCircle_Iterative(const std::vector<S_Path>& linkedPaths, std::vector<int>& visitedTimeMap, S_Path FromPath, int FromIndex) const
+{
+    int Index_CurrentHead = FromPath.Index1 == FromIndex ? FromPath.Index2 : FromPath.Index1;
+    
+    //find paths that connected with current head
+    for(int i = 0; i<linkedPaths.size(); i++)
+    {
+        if (linkedPaths[i].Index1 == Index_CurrentHead || linkedPaths[i].Index2 == Index_CurrentHead && linkedPaths[i] != FromPath)
+        {
+            visitedTimeMap[i]++;
+            if (visitedTimeMap[i] > 1) //i visited the same path more than once?
+            {
+                return true; //that means the graph is circling
+            }
+        }
+    }
+    return false; //if search finished without find circling, it's not circling at this search branch
 }
 
 void InhuGraph::Insert_Element(int Value)
@@ -146,7 +153,7 @@ std::vector<int> InhuGraph::Bfs(int StartValue) const
     return ReturnValue;
 }
 
-std::vector<int> InhuGraph::prim() const
+std::vector<int> InhuGraph::prim_line() const
 {
     //valid check
     if (Elements.size() <= 1)
@@ -256,4 +263,15 @@ std::vector<int> InhuGraph::prim() const
         ReturnValue.push_back(LinkedElement[i].Value);
     }
     return ReturnValue;
+}
+
+std::vector<int> InhuGraph::kruskal() const
+{
+    if(Elements.size() <= 1)
+    {
+        std::cout<<"There's no element to link"<<std::endl;
+        return std::vector<int>();
+    }
+
+    std::vector<int> ReturnValue;   
 }

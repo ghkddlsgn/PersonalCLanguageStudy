@@ -36,7 +36,7 @@ int main()
     a.Insert_Path(6,3,14);
     a.Insert_Path(3,2,8);
 
-    printVector<int>(a.prim());
+    printVector<int>(a.prim_line());
 
     cout<<"end programming"<<endl;
 
