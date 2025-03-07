@@ -292,17 +292,39 @@ std::vector<int> InhuGraph::prim_line() const
     return ReturnValue;
 }
 
-std::vector<int> InhuGraph::kruskal() const
+std::vector<S_Path> InhuGraph::kruskal() const
 {
     if(Elements.size() <= 1)
     {
         std::cout<<"There's no element to link"<<std::endl;
-        return std::vector<int>();
+        return std::vector<S_Path>();
     }
 
-    std::list<S_Path> RemainPaths = Paths;
-    
-    
+    int MaxSize = Elements.size() - 1; //How much paths can be linked?
+    std::vector<S_Path> RemainPaths;
+    std::vector<S_Path> LinkedPaths;
+    RemainPaths.reserve(Paths.size());
+    LinkedPaths.reserve(MaxSize);
 
-    std::vector<int> ReturnValue;
+    //convert list to vector
+    for(std::list<S_Path>::const_iterator it = Paths.begin(); it != Paths.end(); ++it)
+    {
+        RemainPaths.push_back(*it);
+    }
+    
+    //sort the remain paths to find the minimal cost path
+    std::sort(RemainPaths.begin(), RemainPaths.end(), 
+              [](const S_Path& a, const S_Path& b) { return a.Cost < b.Cost; });
+
+    //find valid paths to link from smallest cost path
+    for(int i = 0; i<RemainPaths.size() && LinkedPaths.size() < MaxSize; i++)
+    {
+        LinkedPaths.push_back(RemainPaths[i]);
+        if (IsPathMakeCircle(LinkedPaths)) //Is it make circle?
+        {
+            LinkedPaths.pop_back(); //then do not connect
+        }
+    }
+
+    return LinkedPaths;
 }
