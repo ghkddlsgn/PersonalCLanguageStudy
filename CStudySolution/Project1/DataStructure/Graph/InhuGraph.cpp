@@ -33,33 +33,60 @@ int InhuGraph::GetOppositeElementIndex(const S_Path& TargetPath, const S_Element
 }
 
 //check linkedpaths make circle
-bool InhuGraph::IsPathMakeCircle(std::vector<S_Path> linkedPaths) const
+bool InhuGraph::IsPathMakeCircle(std::vector<S_Path> TargetPaths) const
 {
+    //this recored remain paths that not searched. if link is disconnected, it won't be searched in one recursive
+    std::vector<S_Path> remainPaths = TargetPaths;
     //it record how many times the Paths are visited, if it's not circling, every element should be 1 at the end of search
-    std::vector<int> visitedTimeMap(linkedPaths.size(), 0);
+    std::vector<int> visitedTimeMap;
+    
+    while(!remainPaths.empty())
+    {
+        visitedTimeMap.resize(remainPaths.size(), 0);
 
-    S_Path StartPath = linkedPaths[0];
-    int head1 = StartPath.Index1;
-    int head2 = StartPath.Index2;
+        S_Path StartPath = remainPaths[0];
+        int head1 = StartPath.Index1;
+        int head2 = StartPath.Index2;
+        //begin search from the path both direction
+        bool result1 = IsPathMakeCircle_Recursive(remainPaths, visitedTimeMap, StartPath, head1);
+        bool result2 = IsPathMakeCircle_Recursive(remainPaths, visitedTimeMap, StartPath, head2);
 
-    bool result1 = IsPathMakeCircle_Iterative(linkedPaths, visitedTimeMap, StartPath, head1);
-    bool result2 = IsPathMakeCircle_Iterative(linkedPaths, visitedTimeMap, StartPath, head2);
-    return result1 || result2;
+        if(result1||result2) //if we found there's an circle in this loop, we don't need to search anymore
+        {
+            return true;
+        }
+
+        for(int i = remainPaths.size() - 1; i >= 0; i--) //find out is there any unsearched path bc it's not connected
+        {
+            if(visitedTimeMap[i] == 1) //remove already searched path
+            {
+                remainPaths.erase(remainPaths.begin() + i); // it will contain only unsearched paths
+            }
+        }
+    }
+    return false;
 }
 
-bool InhuGraph::IsPathMakeCircle_Iterative(const std::vector<S_Path>& linkedPaths, std::vector<int>& visitedTimeMap, S_Path FromPath, int FromIndex) const
+bool InhuGraph::IsPathMakeCircle_Recursive(const std::vector<S_Path>& linkedPaths, std::vector<int>& visitedTimeMap, S_Path FromPath, int FromIndex) const
 {
-    int Index_CurrentHead = FromPath.Index1 == FromIndex ? FromPath.Index2 : FromPath.Index1;
-    
-    //find paths that connected with current head
+    int FromIdx = FromPath.Index1 == FromIndex ? FromPath.Index2 : FromPath.Index1;
+    int ToIdx;
+
     for(int i = 0; i<linkedPaths.size(); i++)
     {
-        if (linkedPaths[i].Index1 == Index_CurrentHead || linkedPaths[i].Index2 == Index_CurrentHead && linkedPaths[i] != FromPath)
+        if ((linkedPaths[i].Index1 == FromIdx || linkedPaths[i].Index2 == FromIdx) && linkedPaths[i] != FromPath)
         {
+            //find paths that connected with current head
             visitedTimeMap[i]++;
+            ToIdx = linkedPaths[i].Index1 == FromIdx ? linkedPaths[i].Index2 : linkedPaths[i].Index1;
             if (visitedTimeMap[i] > 1) //i visited the same path more than once?
             {
                 return true; //that means the graph is circling
+            }
+            //find deeper paths from current path
+            if (IsPathMakeCircle_Recursive(linkedPaths, visitedTimeMap, linkedPaths[i], ToIdx))
+            {
+                return true;
             }
         }
     }
@@ -273,5 +300,9 @@ std::vector<int> InhuGraph::kruskal() const
         return std::vector<int>();
     }
 
-    std::vector<int> ReturnValue;   
+    std::list<S_Path> RemainPaths = Paths;
+    
+    
+
+    std::vector<int> ReturnValue;
 }

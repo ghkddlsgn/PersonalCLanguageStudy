@@ -61,7 +61,8 @@ protected:
     int GetElementIndexFromValue(int TargetValue) const;
     std::vector<S_Path> GetAllPathFromElement(const S_Element& TargetElement) const;
     int GetOppositeElementIndex(const S_Path& TargetPath, const S_Element& TargetElement) const;
-    bool IsPathMakeCircle(std::vector<S_Path>& linkedPaths, S_Path FromPath) const;
+    bool IsPathMakeCircle(std::vector<S_Path> linkedPaths) const;
+    bool IsPathMakeCircle_Recursive(const std::vector<S_Path>& linkedPaths, std::vector<int>& visitedTimeMap, S_Path FromPath, int FromIndex) const;
     template <typename T>
     bool find(T FindValue, std::vector<T> TargetVector) const
     {
