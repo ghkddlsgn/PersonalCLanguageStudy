@@ -99,6 +99,6 @@ public:
     void Remove(int Value);
     std::vector<int> Bfs(int StartValue) const;
     std::vector<int> prim_line() const;
-    std::vector<int> kruskal() const;
+    std::vector<S_Path> kruskal() const;
     void print();
 };
