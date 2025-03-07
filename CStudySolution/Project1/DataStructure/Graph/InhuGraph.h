@@ -61,8 +61,11 @@ protected:
     int GetElementIndexFromValue(int TargetValue) const;
     std::vector<S_Path> GetAllPathFromElement(const S_Element& TargetElement) const;
     int GetOppositeElementIndex(const S_Path& TargetPath, const S_Element& TargetElement) const;
+
+
     bool IsPathMakeCircle(std::vector<S_Path> linkedPaths) const;
     bool IsPathMakeCircle_Recursive(const std::vector<S_Path>& linkedPaths, std::vector<int>& visitedTimeMap, S_Path FromPath, int FromIndex) const;
+    
     template <typename T>
     bool find(T FindValue, std::vector<T> TargetVector) const
     {
@@ -100,5 +103,6 @@ public:
     std::vector<int> Bfs(int StartValue) const;
     std::vector<int> prim_line() const;
     std::vector<S_Path> kruskal() const;
+    std::vector<S_Path> kruskal_with_union() const;
     void print();
 };

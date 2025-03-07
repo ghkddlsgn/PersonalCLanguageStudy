@@ -328,3 +328,34 @@ std::vector<S_Path> InhuGraph::kruskal() const
 
     return LinkedPaths;
 }
+
+std::vector<S_Path> InhuGraph::kruskal_with_union() const
+{
+    if (Paths.size() <= 1)
+    {
+        std::cout<<"There's no paths to connect"<<std::endl;
+    }
+
+    std::vector<S_Path> PathArr;
+    PathArr.reserve(Paths.size());
+
+    std::vector<int> UnionMap(Elements.size(), -1);
+
+    //convert list to vector
+    for(std::list<S_Path>::const_iterator it = Paths.begin(); it != Paths.end(); it++)
+    {
+        PathArr.push_back(*it);
+    }
+
+    //sort by cost
+    std::sort(PathArr[0], PathArr[PathArr.size() - 1], [](const S_Path& a, const S_Path& b){return a.Cost < b.Cost;});
+    
+    //init
+    
+
+    for(int i = 0; i<PathArr.size(); i++)
+    {
+        int index1 = PathArr[i].Index1;
+        int index2 = PathArr[i].Index2;
+    }
+}
