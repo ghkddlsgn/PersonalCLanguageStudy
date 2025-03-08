@@ -93,6 +93,47 @@ bool InhuGraph::IsPathMakeCircle_Recursive(const std::vector<S_Path>& linkedPath
     return false; //if search finished without find circling, it's not circling at this search branch
 }
 
+//sub function of kruskal_with_union
+void InhuGraph::Merge_Subsets(std::vector<std::list<int>>& UnionMap, int Head_ParentIndex, int Head_NewChildIndex) const
+{
+    int Head_NewChildValue = UnionMap[Head_NewChildIndex].front();
+    int Head_ParentValue = UnionMap[Head_ParentIndex].front();
+
+    //merge head
+    UnionMap[Head_ParentIndex].front() = Head_ParentValue + Head_NewChildValue;
+    UnionMap[Head_NewChildIndex].front() = Head_ParentIndex;
+
+    // Process remain childs
+    auto it = UnionMap[Head_NewChildIndex].begin();
+    while(it != UnionMap[Head_NewChildIndex].end())
+    {
+        if (*it != -1)  // Skip the head value
+        {
+            // Let child element direct to new head
+            int childValue = *it;
+            UnionMap[Head_ParentIndex].push_back(childValue);
+            it = UnionMap[Head_NewChildIndex].erase(it);  // Safe way to remove while iterating
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
+
+void InhuGraph::GetHeadOfSubsets(const std::vector<std::list<int>>& UnionMap, int& index1, int& index2) const
+{
+    if(UnionMap[index1].front() > 0) //index 1 is child?
+    {
+        index1 = UnionMap[index1].front(); //then, find it's head index
+    }
+    if(UnionMap[index2].front() > 0) //index 1 is child?
+    {
+        index2 = UnionMap[index2].front(); //then, find it's head index
+    }
+}
+
+
 void InhuGraph::Insert_Element(int Value)
 {
     S_Element NewElement;
@@ -331,31 +372,50 @@ std::vector<S_Path> InhuGraph::kruskal() const
 
 std::vector<S_Path> InhuGraph::kruskal_with_union() const
 {
-    if (Paths.size() <= 1)
+    if (Elements.size() <= 1)
     {
         std::cout<<"There's no paths to connect"<<std::endl;
+        return std::vector<S_Path>();
     }
 
+    std::vector<S_Path> LinkedPath;
+    LinkedPath.reserve(Elements.size()-1);
+
+    //prepare index map for union
+    std::vector<std::list<int>> UnionMap(Elements.size());
+    for(int i = 0; i < UnionMap.size(); i++)
+    {
+        UnionMap[i].push_back(-1);
+    }
+    
+    //convert list to vector
     std::vector<S_Path> PathArr;
     PathArr.reserve(Paths.size());
-
-    std::vector<int> UnionMap(Elements.size(), -1);
-
-    //convert list to vector
-    for(std::list<S_Path>::const_iterator it = Paths.begin(); it != Paths.end(); it++)
+    for(const auto& path: Paths)
     {
-        PathArr.push_back(*it);
+        PathArr.push_back(path);
     }
 
     //sort by cost
-    std::sort(PathArr[0], PathArr[PathArr.size() - 1], [](const S_Path& a, const S_Path& b){return a.Cost < b.Cost;});
-    
-    //init
-    
+    std::sort(PathArr.begin(), PathArr.end(), [](const S_Path& a, const S_Path& b) { return a.Cost < b.Cost; });
 
-    for(int i = 0; i<PathArr.size(); i++)
+    for(int i = 0; i < PathArr.size() && LinkedPath.size() < Elements.size()-1; i++)
     {
         int index1 = PathArr[i].Index1;
         int index2 = PathArr[i].Index2;
+
+        GetHeadOfSubsets(UnionMap, index1, index2);
+
+        if(index1 == index2) //if it's in same head, that means we should not add
+        {
+            continue;
+        }
+        else
+        {
+            Merge_Subsets(UnionMap, index1, index2);
+            LinkedPath.push_back(PathArr[i]);
+        }
     }
+
+    return LinkedPath;
 }
