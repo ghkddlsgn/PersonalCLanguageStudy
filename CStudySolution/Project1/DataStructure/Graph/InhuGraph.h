@@ -66,6 +66,7 @@ protected:
     bool IsPathMakeCircle(std::vector<S_Path> linkedPaths) const;
     bool IsPathMakeCircle_Recursive(const std::vector<S_Path>& linkedPaths, std::vector<int>& visitedTimeMap, S_Path FromPath, int FromIndex) const;
     void Merge_Subsets(std::vector<std::list<int>>& UnionMap, int NewParentIndex, int MergeTargetIndex) const;
+    void GetHeadOfSubsets(const std::vector<std::list<int>>& UnionMap, int& index1, int& index2) const;
 
     template <typename T>
     bool find(T FindValue, std::vector<T> TargetVector) const
