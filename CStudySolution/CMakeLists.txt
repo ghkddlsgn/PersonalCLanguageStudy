@@ -14,6 +14,7 @@ file(GLOB_RECURSE PROJECT_SOURCES
     "${CMAKE_SOURCE_DIR}/Project1/DataStructure/Queue/*.cpp"
     "${CMAKE_SOURCE_DIR}/Project1/DataStructure/Tree/*.cpp"
     "${CMAKE_SOURCE_DIR}/Project1/DataStructure/Graph/*.cpp"
+    "${CMAKE_SOURCE_DIR}/Project1/LeetCode/*.cpp"
 )
 
 add_executable(Project1 ${PROJECT_SOURCES})
