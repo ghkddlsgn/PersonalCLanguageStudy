@@ -5,7 +5,7 @@ using namespace std;
 int main()
 {
     Solution a;
-    cout<<a.myPow(2, -2)<<endl;
+    cout<<a.myPow(2, 10)<<endl;
 
     return 0;
 }
