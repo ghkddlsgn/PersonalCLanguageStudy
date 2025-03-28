@@ -6,9 +6,10 @@ int main()
 {
     Solution a;
     int exp = 1;
-    for (int i = 1; i < 10; i++)
-    {
-        a.printBinary(i);
-    }
+    // for (int i = 1; i < 10; i++)
+    // {
+    //     a.printBinary(i);
+    // }
+    a.printBinary(3);
     return 0;
 }
