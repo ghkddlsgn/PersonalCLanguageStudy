@@ -1,19 +1,8 @@
 #include <iostream>
-#include <vector>
-#include <bitset>
 
 class Solution {
 public:
     int kthGrammar(int n, int k) {
-        if (n == 0)
-        {
-            return 0;
-        }
-        if (k == 0)
-        {
-            return 0;
-        }
-
         return recursive(k) % 2 == 0 ? 0 : 1; //even : odd
     }
 
