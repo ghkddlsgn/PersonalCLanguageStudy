@@ -9,33 +9,25 @@ public:
         {
             return 0;
         }
-        int size = (1 << n-1);
-        int inverse_idx = size-k+1; //it counts from right. starts from 1
-        if (inverse_idx == 0)
+        if (k == 0)
         {
             return 0;
         }
-        return recursive(inverse_idx) % 2 == 0 ? 0 : 1; //even : odd
+
+        return recursive(k) % 2 == 0 ? 0 : 1; //even : odd
     }
 
-    int recursive(int inverse_idx) //how many times it switch?
+    int recursive(int idx) //how many times it switch?
     {
-        if (inverse_idx == 1)   return 0;
-        if (inverse_idx <= 0)   return -1; //error
+        if (idx <= 1) return 0;
+        int b = 0;
 
-        //inverse_idx should be lower of this value
-        int max_2pow_value = 1; 
-        int max_2pow_exp = 0;
-        
-        while(inverse_idx > max_2pow_value) //find the minimum 2 power value that larger then idx
+        //find a,b value that satisfy 2^(b-1) < idx <= 2^b
+        while(idx > 1<<b)
         {
-            max_2pow_value *= 2;
-            max_2pow_exp++;
+            b++;
         }
-
-        int gap = max_2pow_value - inverse_idx;
-        
-        return gap == 0 ? max_2pow_exp : max_2pow_exp + recursive(gap);
+        return 1 + recursive(idx - (1<<(b-1)));
     }
     
     void printBinary(int n)
@@ -49,28 +41,3 @@ public:
         std::cout<<std::endl;
     }
 };
-
-#include <math.h>
-class Solution2 {
-public:
-    int recursion(int n, int k) {
-        // First row will only have one symbol '0'.
-        if (n == 1) {
-            return 0;
-        }
-
-        int totalElements = pow(2, (n - 1));
-        int halfElements = totalElements / 2;
-
-        // If the target is present in the right half, we switch to the respective left half symbol.
-        if (k > halfElements) {
-            return 1 - kthGrammar(n, k - halfElements);
-        }
-
-        // Otherwise, we switch to the previous row.
-        return recursion(n - 1, k);
-    }
-
-    int kthGrammar(int n, int k) {
-        return recursion(n, k);
-    };
