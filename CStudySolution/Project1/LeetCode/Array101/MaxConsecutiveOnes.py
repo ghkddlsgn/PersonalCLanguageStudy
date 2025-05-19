@@ -10,7 +10,7 @@ class Solution:
                 currentConsecutive = 0
             else:
                 currentConsecutive += 1
-        
-        # Add final comparison for the case where array ends with 1s
+
+        #edge case : handle last one        
         maxConsecutive = max(maxConsecutive, currentConsecutive)
         return maxConsecutive
