@@ -25,9 +25,9 @@ class MyHashSet:
     #  ---------my custom function end----------
 
     def add(self, key: int) -> None:
-        find, hash, idx = self.get2Didx(key)
+        find = self.contains(key)
         if not find:
-            self.container[hash].append(key)
+            self.container[self.hash(key)].append(key)
 
     def remove(self, key: int) -> None:
         find, hash, idx = self.get2Didx(key)
