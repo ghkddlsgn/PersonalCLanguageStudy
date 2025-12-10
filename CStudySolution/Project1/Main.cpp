@@ -1,16 +1,15 @@
-#include "Project1/LeetCode/KthSymbolinGrammar.cpp"
+#include "Project1/LeetCode/Trie/MapSumPairs.h"
 #include <iostream>
 using namespace std;
 
 int main()
 {
-    Solution a;
-    int exp = 1;
-    for (int i = 1; i < 10; i++)
-    {
-        a.printBinary(i);
-    }
-    a.printBinary(3);
-    cout<<a.recursive(3);
+    MapSum a;
+    a.insert("apple", 3);
+    cout << a.sum("ap") << endl;
+    a.insert("app", 2);
+    
+    cout << a.sum("ap") << endl;
+
     return 0;
 }
