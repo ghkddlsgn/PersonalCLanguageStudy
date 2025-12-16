@@ -1,15 +1,15 @@
-#include "Project1/LeetCode/Trie/MapSumPairs.h"
+#include "Project1/LeetCode/Trie/MaximumXORofTwoNumbersinanArray.h"
 #include <iostream>
 using namespace std;
 
 int main()
 {
-    MapSum a;
-    a.insert("apple", 3);
-    cout << a.sum("ap") << endl;
-    a.insert("app", 2);
+    Solution a;
+    // std::vector<int> nums = {3, 10, 5, 25, 2, 8};
+    std::vector<int> nums = {3,10};
+
     
-    cout << a.sum("ap") << endl;
+    int result = a.findMaximumXOR(nums);
 
     return 0;
 }
