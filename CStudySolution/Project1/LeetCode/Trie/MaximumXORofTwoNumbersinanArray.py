@@ -23,9 +23,10 @@ class Solution:
         self.max_val = 0
         self.max_val_num2 = nums[0]
 
-        for num in nums:
-            self.add_new_TrieNode(num)
-            self.findMaxXor_recur(num)
+        self.add_new_TrieNode(nums[0])
+        for i in range(1, len(nums)):
+            self.add_new_TrieNode(nums[i])
+            self.findMaxXor_recur(nums[i])
         
         return self.max_val
         
@@ -44,7 +45,7 @@ class Solution:
         bit_str = bin(num)[2:]
         cur_bit_str = bit_str[cur_bit_idx]
         if cur_bit_str != cur_node.bit:
-            local_max += 1
+            local_max += (1<<cur_bit_idx)
         
         if local_max > self.max_val:
             self.update_max_val(local_max, num, cur_node.stored_decimal_num)
@@ -70,7 +71,7 @@ class Solution:
         cur_bit_idx += 1
         for bit_idx in range(cur_bit_idx, len(bit_str)):
             if bit_str[bit_idx] == '1':
-                local_max += (1 << bit_idx)
+                local_max += (1 << len(bit_str) - bit_idx - 1)
         
         if local_max > self.max_val:
             self.update_max_val(local_max, num, num2)
@@ -116,5 +117,6 @@ class Solution:
 
 if __name__ == "__main__":
     s = Solution()
-    nums = [3, 10, 5, 25, 2, 8]
+    # nums = [3, 10, 5, 25, 2, 8]
+    nums = [5,25]
     print("Maximum XOR is:", s.findMaximumXOR(nums))
