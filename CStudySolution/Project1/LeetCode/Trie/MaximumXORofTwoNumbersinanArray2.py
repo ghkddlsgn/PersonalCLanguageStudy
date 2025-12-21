@@ -7,7 +7,6 @@ class TrieNode():
         self.original_decimal_num = -1
         self.next:list[Optional[TrieNode]] = [None, None]
 
-
 class Solution:
     def __init__(self) -> None:
         self.root = TrieNode('', -1)
